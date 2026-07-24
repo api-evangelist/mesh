@@ -1,0 +1,874 @@
+openapi: 3.0.1
+info:
+  title: Mesh Connect Integration Assets Self Managed Account Authentication API
+  description: '
+
+    Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: Self Managed Account Authentication
+  description: Not recommended approach. Using this approach, the API client is responsible for handling multiple authentication flows and supporting future updates and changes.
+paths:
+  /api/v1/authenticationSchemes:
+    get:
+      tags:
+      - Self Managed Account Authentication
+      summary: Get authentication schemes
+      description: "Get authentication schemes of available integrations to perform authentication programmatically (not using\r\nthe Web Catalog UI)."
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrokerAuthenticationSchemeIReadOnlyCollectionApiResult'
+              example:
+                content:
+                - brokerType: coinbasePro
+                  authenticationSchemeType: apiKey
+                  initialAuthenticationModel:
+                    fields:
+                    - name: Username
+                      description: API key
+                    - name: Password
+                      description: Secret key
+                    - name: AuthToken
+                      description: Passphrase
+                    - name: Type
+                      description: CoinbasePro
+                  mfaSchemes: []
+                  instructionsUrl: https://help.coinbase.com/en/pro/other-topics/api/how-do-i-create-an-api-key-for-coinbase-pro
+                status: ok
+                message: ''
+                errorType: ''
+  /api/v1/authenticate:
+    post:
+      tags:
+      - Self Managed Account Authentication
+      summary: Authenticate user's account
+      description: Authenticate user's brokerage/exchange account programmatically (not using the Web Catalog UI)
+      parameters:
+      - name: userId
+        in: query
+        description: Id of the end-user
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Authentication request.
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/B2BBrokerAuthRequest'
+            example:
+              username: username
+              password: password
+              mfaCode: '000000'
+              mfaType: phone
+              type: robinhood
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerAuthResponseApiResult'
+              example:
+                content:
+                  status: succeeded
+                  expiresInSeconds: 7200
+                  accountTokens:
+                  - account:
+                      meshAccountId: 00000000-0000-0000-0000-000000000000
+                      frontAccountId: 00000000-0000-0000-0000-000000000000
+                      accountId: Id of the account
+                      accountName: Name of the account
+                    accessToken: Access token, allowing access to the integration
+                    refreshToken: Optional refresh token, allowing to refresh the access token
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Server Error
+        '503':
+          description: Server Error
+  /api/v1/authenticate/{brokerType}:
+    get:
+      tags:
+      - Self Managed Account Authentication
+      summary: Get OAuth authentication link
+      description: Get OAuth link for the integrations with `OAuth` AuthenticationSchemeType
+      parameters:
+      - name: brokerType
+        in: path
+        description: Type of the integration to connect
+        required: true
+        schema:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+      - name: userId
+        in: query
+        description: Id of the end-user
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerAuthPromptResponseApiResult'
+              example:
+                content:
+                  status: redirect
+                  redirectLink: https://web.meshconnect.com/broker-connect/callback
+                  linkToken: Link to the integration's site
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+components:
+  schemas:
+    BrokerFiatBalance:
+      type: object
+      properties:
+        symbol:
+          type: string
+          description: Account balance currency
+          nullable: true
+        buyingPower:
+          type: number
+          description: "BuyingPower indicates total amount of money the user can spend for buying stock. Always includes cash and\r\ncan also include margin"
+          format: double
+          nullable: true
+        cryptoBuyingPower:
+          type: number
+          description: BuyingPower indicates total amount of money the user can spend for buying crypto.
+          format: double
+          nullable: true
+        cash:
+          type: number
+          description: Account cash indicates total amount of money
+          format: double
+          nullable: true
+      additionalProperties: false
+    CountryInfo:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          nullable: true
+        countryNumber:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrokerAuthenticationSchemeIReadOnlyCollectionApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerAuthenticationScheme'
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAuthRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+        phone:
+          type: string
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        tradePin:
+          type: string
+          nullable: true
+        countryInfo:
+          allOf:
+          - $ref: '#/components/schemas/CountryInfo'
+          nullable: true
+        challengeId:
+          type: string
+          nullable: true
+        challengeCode:
+          type: string
+          nullable: true
+        challengeAnswer:
+          type: string
+          description: Used to provide answers to security questions
+          nullable: true
+        mfaCode:
+          type: string
+          nullable: true
+        mfaType:
+          enum:
+          - phone
+          - email
+          - totp
+          - phoneAndEmail
+          - requireNextSecurityQuestion
+          - readEmail
+          - face
+          allOf:
+          - $ref: '#/components/schemas/MfaType'
+        deviceInfo:
+          type: string
+          nullable: true
+        authFlowStep:
+          allOf:
+          - $ref: '#/components/schemas/AuthFlowStep'
+          nullable: true
+        key:
+          type: string
+          nullable: true
+        authToken:
+          type: string
+          nullable: true
+        redirectLink:
+          type: string
+          nullable: true
+        confirmationEmail:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrokerBrandInfo:
+      type: object
+      properties:
+        brokerLogo:
+          type: string
+          nullable: true
+        brokerPrimaryColor:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrokerAccount:
+      type: object
+      properties:
+        meshAccountId:
+          type: string
+          format: uuid
+        frontAccountId:
+          type: string
+          format: uuid
+          readOnly: true
+          deprecated: true
+        accountId:
+          type: string
+          nullable: true
+        accountName:
+          type: string
+          nullable: true
+        fund:
+          type: number
+          description: "Buying power of the account. Typically consists of cash plus available margin.\r\nFor non-margin accounts fund contains cash only"
+          format: double
+          nullable: true
+        cash:
+          type: number
+          description: Cash balance in USD
+          format: double
+          nullable: true
+        isReconnected:
+          type: boolean
+          description: "Indicates if this account was already connected by the current user and device.\r\nCan be null."
+          nullable: true
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerFiatBalance'
+          description: The list of all asset balances of account
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAuthPromptResponse:
+      type: object
+      properties:
+        status:
+          enum:
+          - failed
+          - redirect
+          - openInBrokerModule
+          allOf:
+          - $ref: '#/components/schemas/BrokerAuthPromptStatus'
+        redirectLink:
+          type: string
+          nullable: true
+        linkToken:
+          type: string
+          nullable: true
+        oAuthToken:
+          type: string
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+        displayMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrokerAccountTokens:
+      type: object
+      properties:
+        account:
+          allOf:
+          - $ref: '#/components/schemas/BrokerAccount'
+          nullable: true
+        accessToken:
+          type: string
+          nullable: true
+        refreshToken:
+          type: string
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAuthResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAuthResponse'
+          nullable: true
+      additionalProperties: false
+    AuthenticationFieldDescription:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the field, as expected from the API
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      type: string
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    BrokerAuthStatus:
+      enum:
+      - failed
+      - challengeFailed
+      - succeeded
+      - challengeIssued
+      - mfaRequired
+      - openInBrokerModule
+      - delayed
+      - deviceConfirmationRequired
+      - emailVerification
+      - emailReceived
+      - captchaChallenge
+      - faceVerification
+      type: string
+    BrokerAuthPromptStatus:
+      enum:
+      - failed
+      - redirect
+      - openInBrokerModule
+      type: string
+    MfaScheme:
+      enum:
+      - mfaCode
+      - challenge
+      - deviceConfirmation
+      - securityQuestion
+      type: string
+    MfaType:
+      enum:
+      - phone
+      - email
+      - totp
+      - phoneAndEmail
+      - requireNextSecurityQuestion
+      - readEmail
+      - face
+      type: string
+    AuthenticationModel:
+      type: object
+      properties:
+        authResponse:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAuthResponse'
+          nullable: true
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticationFieldDescription'
+          description: Set of fields that are expected to be provided based on the status of the AuthResponse
+          nullable: true
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
+    AuthenticationSchemeType:
+      enum:
+      - usernamePassword
+      - oAuth
+      - apiKey
+      - blockchainAddress
+      type: string
+    B2BBrokerAuthResponse:
+      type: object
+      properties:
+        status:
+          enum:
+          - failed
+          - challengeFailed
+          - succeeded
+          - challengeIssued
+          - mfaRequired
+          - openInBrokerModule
+          - delayed
+          - deviceConfirmationRequired
+          - emailVerification
+          - emailReceived
+          - captchaChallenge
+          - faceVerification
+          allOf:
+          - $ref: '#/components/schemas/BrokerAuthStatus'
+          description: Status of the request
+        mfaType:
+          allOf:
+          - $ref: '#/components/schemas/MfaType'
+          nullable: true
+        authFlowStep:
+          allOf:
+          - $ref: '#/components/schemas/AuthFlowStep'
+          description: The AuthFlowStep is used to determine which state the authentication is in, for initial requests without MFA verification the value should be LoginPassword and when calling with MFA code it should be MfaFlow (currently used for BinanceInternationalDirect only).
+          nullable: true
+        qrCode:
+          type: string
+          description: Qr code used to scan and solve facial verification (currently used for BinanceInternationalDirect only).
+          nullable: true
+        qrCodeLink:
+          type: string
+          nullable: true
+        challengeId:
+          type: string
+          description: Id of the challenge, relevant when the status is `ChallengeIssued`
+          nullable: true
+        challengeText:
+          type: string
+          nullable: true
+        challengeExpiresInSeconds:
+          type: integer
+          description: Life span of the challenge
+          format: int32
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+        displayMessage:
+          type: string
+          nullable: true
+        accessToken:
+          type: string
+          nullable: true
+          deprecated: true
+        refreshToken:
+          type: string
+          nullable: true
+          deprecated: true
+        expiresInSeconds:
+          type: integer
+          format: int32
+          nullable: true
+        refreshTokenExpiresInSeconds:
+          type: integer
+          format: int32
+          nullable: true
+        account:
+          allOf:
+          - $ref: '#/components/schemas/BrokerAccount'
+          nullable: true
+          deprecated: true
+        brokerBrandInfo:
+          allOf:
+          - $ref: '#/components/schemas/BrokerBrandInfo'
+          nullable: true
+        accountTokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerAccountTokens'
+          nullable: true
+        requiresReauthentication:
+          type: boolean
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        allocatedIPAddress:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrokerAuthenticationScheme:
+      type: object
+      properties:
+        brokerType:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+        authenticationSchemeType:
+          enum:
+          - usernamePassword
+          - oAuth
+          - apiKey
+          - blockchainAddress
+          allOf:
+          - $ref: '#/components/schemas/AuthenticationSchemeType'
+          description: Type of authentication for the integration.
+        initialAuthenticationModel:
+          allOf:
+          - $ref: '#/components/schemas/AuthenticationModel'
+          description: Set of fields that should be provided in the initial POST `authenticate` request.
+          nullable: true
+        authenticationSteps:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticationModel'
+          description: Set of fields that should be provided depending on the status of the response of the first POST `authenticate` request.
+          nullable: true
+        mfaSchemes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MfaScheme'
+          description: Supported MFA schemes, can be none or multiple.
+          nullable: true
+        instructionsUrl:
+          type: string
+          description: Optional URL with the instructions explaining how to create a set of API key/secret for the integration, can be shown to the end user.
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAuthPromptResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAuthPromptResponse'
+          nullable: true
+      additionalProperties: false
+    AuthFlowStep:
+      enum:
+      - loginPassword
+      - mfaFlow
+      - faceVerification
+      type: string
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

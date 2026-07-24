@@ -1,0 +1,1473 @@
+openapi: 3.0.1
+info:
+  title: Mesh Connect Integration Assets Managed Account Authentication API
+  description: '
+
+    Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: Managed Account Authentication
+  description: The recommended approach for account authentication. Front manages multiple authentication flows and handles all authentication steps such as MFA codes and OAuth redirect through our web and mobile SDKs.
+paths:
+  /api/v1/cataloglink:
+    get:
+      tags:
+      - Managed Account Authentication
+      summary: Get catalog link
+      description: Get personalized catalog link for client
+      parameters:
+      - name: UserId
+        in: query
+        description: "A unique Id representing the end user. Typically this will be a user Id from the\r\nclient application. Personally identifiable information, such as an email address or phone number,\r\nshould not be used. 50 characters length maximum."
+        required: true
+        schema:
+          maxLength: 50
+          type: string
+      - name: BrokerType
+        in: query
+        description: "Type of integration to redirect to. Will redirect to catalog if not provided.\r\nNot supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet."
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+      - name: EnableTransfers
+        in: query
+        description: "Link Configuration identifier - an optional paramater for used configuration.\r\nIf not provided default configuration with all avaialbe integrations will be used."
+        schema:
+          type: boolean
+      - name: RestrictMultipleAccounts
+        in: query
+        description: "The final screen of Link allows users to “continue” back to your app or “Link another account.”\r\nIf this param is present then this button will be hidden."
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Catalog link created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogLinkApiResult'
+              example:
+                content:
+                  url: https://web.meshconnect.com/broker-connect?auth_code={authCode}
+                  iFrameUrl: https://web.meshconnect.com/b2b-iframe/{clientId}/broker-connect?auth_code={authCode}
+                status: ok
+                message: ''
+                errorType: ''
+        '404':
+          description: API Client not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: notFound
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '400':
+          description: "BadRequest can happen in following cases:\r\n<list type=\"number\"><item><description>userId parameter not specified</description></item><item><description>Callback url parameter is invalid</description></item><item><description>Client does not have callback url specified</description></item></list>"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+      deprecated: true
+    post:
+      tags:
+      - Managed Account Authentication
+      summary: Get catalog link with parameters
+      description: Get personalized catalog link for client supplying parameters for Link actions, such as transfers
+      parameters:
+      - name: UserId
+        in: query
+        description: "A unique Id representing the end user. Typically this will be a user Id from the\r\nclient application. Personally identifiable information, such as an email address or phone number,\r\nshould not be used. 50 characters length maximum."
+        required: true
+        schema:
+          maxLength: 50
+          type: string
+      - name: BrokerType
+        in: query
+        description: "Type of integration to redirect to. Will redirect to catalog if not provided.\r\nNot supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet."
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+      - name: EnableTransfers
+        in: query
+        description: "Link Configuration identifier - an optional paramater for used configuration.\r\nIf not provided default configuration with all avaialbe integrations will be used."
+        schema:
+          type: boolean
+      - name: RestrictMultipleAccounts
+        in: query
+        description: "The final screen of Link allows users to “continue” back to your app or “Link another account.”\r\nIf this param is present then this button will be hidden."
+        schema:
+          type: boolean
+      requestBody:
+        description: Data to execute transfer.
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/InitializeTransfersForLinkRequest'
+            example:
+              toAddresses:
+              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                symbol: ETH
+                address: '0x00000000000000000000000'
+              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                symbol: USDC
+                address: '0x00000000000000000000000'
+              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                symbol: MATIC
+                address: '0x00000000000000000000000'
+              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                symbol: USDC
+                address: '0x00000000000000000000000'
+              clientFee: 0
+              isCustomClientFeeProvided: false
+              isInclusiveFeeEnabled: false
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/InitializeTransfersForLinkRequest'
+            example:
+              toAddresses:
+              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                symbol: ETH
+                address: '0x00000000000000000000000'
+              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                symbol: USDC
+                address: '0x00000000000000000000000'
+              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                symbol: MATIC
+                address: '0x00000000000000000000000'
+              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                symbol: USDC
+                address: '0x00000000000000000000000'
+              clientFee: 0
+              isCustomClientFeeProvided: false
+              isInclusiveFeeEnabled: false
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/InitializeTransfersForLinkRequest'
+            example:
+              toAddresses:
+              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                symbol: ETH
+                address: '0x00000000000000000000000'
+              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                symbol: USDC
+                address: '0x00000000000000000000000'
+              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                symbol: MATIC
+                address: '0x00000000000000000000000'
+              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                symbol: USDC
+                address: '0x00000000000000000000000'
+              clientFee: 0
+              isCustomClientFeeProvided: false
+              isInclusiveFeeEnabled: false
+      responses:
+        '200':
+          description: Catalog link created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogLinkApiResult'
+              example:
+                content:
+                  url: https://web.meshconnect.com/broker-connect?auth_code={authCode}
+                  iFrameUrl: https://web.meshconnect.com/b2b-iframe/{clientId}/broker-connect?auth_code={authCode}
+                status: ok
+                message: ''
+                errorType: ''
+        '404':
+          description: API Client not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: notFound
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '400':
+          description: "BadRequest can happen in following cases:\r\n<list type=\"number\"><item><description>userId parameter not specified</description></item><item><description>Callback url parameter is invalid</description></item><item><description>Client does not have callback url specified</description></item></list>"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+      deprecated: true
+  /api/v1/linktoken:
+    post:
+      tags:
+      - Managed Account Authentication
+      summary: Get Link token with parameters
+      description: Get a short lived, one-time use token for initializing a Link session using the client-side SDKs
+      requestBody:
+        description: Create Link token request.
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/GetLinkTokenRequest'
+            example:
+              userId: UserId
+              configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
+              restrictMultipleAccounts: true
+              transferOptions:
+                toAddresses:
+                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                  symbol: ETH
+                  address: '0x00000000000000000000000'
+                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                  symbol: USDC
+                  address: '0x00000000000000000000000'
+                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                  symbol: MATIC
+                  address: '0x00000000000000000000000'
+                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                  symbol: USDC
+                  address: '0x00000000000000000000000'
+                amountInFiat: 10
+                isInclusiveFeeEnabled: false
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/GetLinkTokenRequest'
+            example:
+              userId: UserId
+              configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
+              restrictMultipleAccounts: true
+              transferOptions:
+                toAddresses:
+                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                  symbol: ETH
+                  address: '0x00000000000000000000000'
+                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                  symbol: USDC
+                  address: '0x00000000000000000000000'
+                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                  symbol: MATIC
+                  address: '0x00000000000000000000000'
+                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                  symbol: USDC
+                  address: '0x00000000000000000000000'
+                amountInFiat: 10
+                isInclusiveFeeEnabled: false
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/GetLinkTokenRequest'
+            example:
+              userId: UserId
+              configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
+              restrictMultipleAccounts: true
+              transferOptions:
+                toAddresses:
+                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                  symbol: ETH
+                  address: '0x00000000000000000000000'
+                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                  symbol: USDC
+                  address: '0x00000000000000000000000'
+                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                  symbol: MATIC
+                  address: '0x00000000000000000000000'
+                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                  symbol: USDC
+                  address: '0x00000000000000000000000'
+                amountInFiat: 10
+                isInclusiveFeeEnabled: false
+      responses:
+        '200':
+          description: Link token created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkTokenModelApiResult'
+              example:
+                content:
+                  linkToken: aHR0cHM6Ly93ZWIuZ2V0ZnJvbnQuY29tL2IyYi1pZnJhbWUve2NsaWVudElkfS9icm9rZXItY29ubmVjdD9hdXRoX2NvZGU9e2F1dGhDb2RlfQ==
+                status: ok
+                message: ''
+                errorType: ''
+        '404':
+          description: API Client not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: notFound
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '400':
+          description: "BadRequest can happen in following cases:\r\n<list type=\"number\"><item><description>userId parameter not specified</description></item></list>"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+  /api/v1/token/refresh:
+    post:
+      tags:
+      - Managed Account Authentication
+      summary: Refresh auth token
+      description: "Refresh auth token of the connected institution.\r\nSome institutions do not require tokens to be refreshed.\r\n            \r\nThe following institutions require custom flows:\r\n            \r\nWeBull: AuthToken should be provided along with the RefreshToken\r\n            \r\nVanguard: security settings may activate MFA, requiring user action.\r\nIf MFA is triggered, a second refresh request should be sent.\r\nSecond request should contain MFA code and access token obtained from initial response.\r\n            \r\nBitfinex Direct: Expired Access Token is used as Refresh token. Use this endpoint to\r\ntrade it for a new one"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BrokerRefreshTokenRequest'
+            example:
+              refreshToken: Secret refresh token
+              type: coinbase
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerRefreshTokenResponseApiResult'
+              example:
+                content:
+                  status: succeeded
+                  expiresInSeconds: 86400
+                  brokerAccountTokens:
+                  - accessToken: New secret token
+                    refreshToken: New secret refresh token
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Unauthorized token
+                displayMessage: Could not refresh the authentication token. The provided data is not correct
+                errorType: badRequest
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+  /api/v1/account:
+    delete:
+      tags:
+      - Managed Account Authentication
+      summary: Remove connection
+      description: Remove connection to the financial institution and erase all related data completely.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BrokerBaseRequest'
+            example:
+              authToken: Secret authentication token
+              type: robinhood
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BrokerBaseRequest'
+            example:
+              authToken: Secret authentication token
+              type: robinhood
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BrokerBaseRequest'
+            example:
+              authToken: Secret authentication token
+              type: robinhood
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+  /api/v1/status:
+    get:
+      tags:
+      - Managed Account Authentication
+      summary: Get health status
+      description: Get the list of supported institutions and their health statuses.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokersHealthStatusListApiResult'
+              example:
+                content:
+                - type: robinhood
+                  name: Robinhood
+                  isUp: true
+                  supportedProducts:
+                  - balance
+                  - holdings
+                  - identity
+                  - orders
+                  - transfers
+                - type: celsius
+                  name: Celsius
+                  isUp: false
+                  description: Temporarily disabled
+                  downTimeStart: 1655891444
+                  supportedProducts:
+                  - balance
+                  - orders
+                  - transfers
+                  - holdings
+                - type: deFiWallet
+                  name: MetaMask
+                  isUp: false
+                  supportedProducts:
+                  - transfers
+                  - holdings
+                  deFiWalletData:
+                    id: 00000000-0000-0000-0000-000000000000
+                    name: MetaMask
+                status: ok
+                message: ''
+                errorType: ''
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+  /api/v1/integrations:
+    get:
+      tags:
+      - Managed Account Authentication
+      summary: Retrieve the list of all available integrations.
+      description: "Returns a list of integrations with details including the integration ID, name, type,\r\nDeFi wallet provider ID, and categories."
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationsResponseApiResult'
+              example:
+                content:
+                  items:
+                  - id: b7efa542-0b16-4a2a-8f89-00143298e615
+                    name: CoinbasePro
+                    type: coinbasePro
+                    logo:
+                      logoWhiteUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_White.svg
+                      logoBlackUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_Black.svg
+                      logoColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_Color.svg
+                      iconWhiteUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_White.svg
+                      iconBlackUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_Black.svg
+                      iconColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_Color.svg
+                    cryptoTransfersSupported: true
+                  - id: 3d8f5c31-9fc0-4b61-bdfb-00fb18cbb9ad
+                    name: CoinCircle
+                    type: deFiWallet
+                    deFiWalletProviderId: 36d8d9c0c7fe2957149ce8e878f3a01...
+                    categories:
+                    - deFiWallet
+                    logo:
+                      logoColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/CoinCircle_Logo_Color.svg
+                      iconColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/CoinCircle_Icon_Color.svg
+                    cryptoTransfersSupported: true
+                status: ok
+                message: ''
+                errorType: ''
+components:
+  schemas:
+    BrokerFiatBalance:
+      type: object
+      properties:
+        symbol:
+          type: string
+          description: Account balance currency
+          nullable: true
+        buyingPower:
+          type: number
+          description: "BuyingPower indicates total amount of money the user can spend for buying stock. Always includes cash and\r\ncan also include margin"
+          format: double
+          nullable: true
+        cryptoBuyingPower:
+          type: number
+          description: BuyingPower indicates total amount of money the user can spend for buying crypto.
+          format: double
+          nullable: true
+        cash:
+          type: number
+          description: Account cash indicates total amount of money
+          format: double
+          nullable: true
+      additionalProperties: false
+    IntegrationLogo:
+      type: object
+      properties:
+        logoWhiteUrl:
+          type: string
+          description: White logo url.
+          nullable: true
+        logoBlackUrl:
+          type: string
+          description: Black logo url.
+          nullable: true
+        logoColorUrl:
+          type: string
+          description: Colored logo url.
+          nullable: true
+        iconWhiteUrl:
+          type: string
+          description: White icon url.
+          nullable: true
+        iconBlackUrl:
+          type: string
+          description: Balck icon url.
+          nullable: true
+        iconColorUrl:
+          type: string
+          description: Colored logo url.
+          nullable: true
+      additionalProperties: false
+      description: Integreation logos.
+    IntegrationsResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/IntegrationsResponse'
+          description: Integration response.
+          nullable: true
+      additionalProperties: false
+    GetLinkTokenRequest:
+      required:
+      - userId
+      type: object
+      properties:
+        userId:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: "A unique Id representing the end user. Typically this will be a user Id from the\r\nclient application. Personally identifiable information, such as an email address or phone number,\r\nshould not be used. 50 characters length maximum."
+        brokerType:
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: "Type of integration to redirect to. Will redirect to catalog if not provided.\r\nNot supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet."
+          nullable: true
+          deprecated: true
+        restrictMultipleAccounts:
+          type: boolean
+          description: "The final screen of Link allows users to “continue” back to your app or “Link another account.”\r\nIf this param is present then this button will be hidden."
+        transferOptions:
+          allOf:
+          - $ref: '#/components/schemas/LinkTokenTransferOptions'
+          description: Encapsulates transaction-related parameters, including destination addresses and the amount to transfer in fiat currency.
+          nullable: true
+        integrationId:
+          type: string
+          description: A unique identifier representing a specific integration obtained from the list of available integrations.
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    B2BBrokersHealthStatus:
+      type: object
+      properties:
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: Type of the integration
+        name:
+          type: string
+          description: Name of the integration
+          nullable: true
+        isUp:
+          type: boolean
+          description: Is the communication with the integration up
+        description:
+          type: string
+          description: Description of the outage
+          nullable: true
+        downTimeStart:
+          type: integer
+          description: Unix timestamp in seconds indicating when the outage occurred
+          format: int64
+          nullable: true
+        downTimeEnd:
+          type: integer
+          description: Unix timestamp in seconds indicating expected end of the outage
+          format: int64
+          nullable: true
+        supportedProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerFeature'
+          description: Get products supported by the financial institution
+          nullable: true
+        deFiWalletData:
+          allOf:
+          - $ref: '#/components/schemas/DeFiWalletHealthStatusInfo'
+          description: Short information about DeFiWallet
+          nullable: true
+      additionalProperties: false
+    B2BBrokersHealthStatusListApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/B2BBrokersHealthStatus'
+          nullable: true
+      additionalProperties: false
+    IntegrationModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Integration unique identifier.
+          format: uuid
+        name:
+          type: string
+          description: Integration name.
+          nullable: true
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: Integration type.
+        deFiWalletProviderId:
+          type: string
+          description: DeFi wallet provider identifier.
+          nullable: true
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialInstitutionIntegrationType'
+          description: Integration categories.
+          nullable: true
+        logo:
+          allOf:
+          - $ref: '#/components/schemas/IntegrationLogo'
+          description: Logo object.
+          nullable: true
+        cryptoTransfersSupported:
+          type: boolean
+          description: Indicates if crypto transfers supported by integration.
+      additionalProperties: false
+      description: Integration model.
+    LinkTokenTransferOptions:
+      type: object
+      properties:
+        toAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransferToAddressWithAmount'
+          description: "The list of destination addresses with corresponding networks are asset symbols that\r\ncan be used to initiate incoming transfers. If this parameter is present, the Link\r\nsession will continue to transfer flow after connecting the origin account."
+          nullable: true
+        amountInFiat:
+          type: number
+          description: Amount in USD to transfer. If not provided users can specify amount by themselves.
+          format: double
+          nullable: true
+        transactionId:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: Transaction ID Provided by client to track transaction in future calls
+          nullable: true
+        clientFee:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: "A percentage fee (input as a ratio, eg. 0.02500 = 2.500%) added onto your users' gross payments to your company.\r\nThis will override any default fee entered in your Mesh dashboard for an individual transaction.\r\nPlease note: this fee should only be used for Payments (when the transfer destination is an address owned by your company),\r\nand not for Deposits (when the transfer destination is an address owned by the end user).\r\nIf used for Deposits, it will increase the size of the user's Deposit by the fee amount,\r\nbut will incorrectly show to the user as a fee."
+          format: double
+          nullable: true
+        transferType:
+          allOf:
+          - $ref: '#/components/schemas/TransferTypeEnum'
+          description: "Deposit: The user is transferring crypto to a wallet they own on your platform.\r\nPayment: The user is transferring crypto to a wallet your company owns in exchange for receiving a good or service.\r\nOnramp: The user is using balances and linked payment methods in an exchange account to fund the purchase of crypto in their wallet on your platform."
+          nullable: true
+        fundingOptions:
+          allOf:
+          - $ref: '#/components/schemas/TransferCryptocurrencyFundingOptions'
+          description: "Specifies the permitted options to use the end user's available buying power\r\nand/or payment methods to supplement the cryptocurrency balance if it is insufficient\r\nfor the transfer."
+          nullable: true
+        isInclusiveFeeEnabled:
+          type: boolean
+          description: Specifies if all the fees are included in the amount to transfer.
+      additionalProperties: false
+    B2BBrokerRefreshTokenResponse:
+      type: object
+      properties:
+        status:
+          enum:
+          - failed
+          - succeeded
+          - mfaRequired
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAuthStatus'
+        errorMessage:
+          type: string
+          nullable: true
+        displayMessage:
+          type: string
+          nullable: true
+        account:
+          allOf:
+          - $ref: '#/components/schemas/BrokerAccount'
+          nullable: true
+          deprecated: true
+        accessToken:
+          type: string
+          nullable: true
+          deprecated: true
+        refreshToken:
+          type: string
+          nullable: true
+          deprecated: true
+        expiresInSeconds:
+          type: integer
+          format: int32
+          nullable: true
+        refreshTokenExpiresInSeconds:
+          type: integer
+          format: int32
+          nullable: true
+        brokerAccountTokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerAccountTokens'
+          nullable: true
+      additionalProperties: false
+    InitializeTransfersForLinkRequest:
+      type: object
+      properties:
+        toAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransferToAddressWithAmount'
+          description: "The list of destination addresses with corresponding networks are asset symbols that\r\ncan be used to initiate incoming transfers."
+          nullable: true
+        amountInFiat:
+          type: number
+          description: Amount in USD to transfer. If not provided users can specify amount by themselves.
+          format: double
+          nullable: true
+        transactionId:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: Transaction ID Provided by client to track transaction in future calls
+          nullable: true
+        clientFee:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: "A percentage fee (input as a ratio, eg. 0.02500 = 2.500%) added onto your users' gross payments to your company.\r\nThis will override any default fee entered in your Mesh dashboard for an individual transaction.\r\nPlease note: this fee should only be used for Payments (when the transfer destination is an address owned by your company),\r\nand not for Deposits (when the transfer destination is an address owned by the end user).\r\nIf used for Deposits, it will increase the size of the user's Deposit by the fee amount,\r\nbut will incorrectly show to the user as a fee."
+          format: double
+        transferType:
+          allOf:
+          - $ref: '#/components/schemas/TransferTypeEnum'
+          description: "Deposit: The user is transferring crypto to a wallet they own on your platform.\r\nPayment: The user is transferring crypto to a wallet your company owns in exchange for receiving a good or service.\r\nOnramp: The user is using balances and linked payment methods in an exchange account to fund the purchase of crypto in their wallet on your platform."
+          nullable: true
+      additionalProperties: false
+    BrokerAccount:
+      type: object
+      properties:
+        meshAccountId:
+          type: string
+          format: uuid
+        frontAccountId:
+          type: string
+          format: uuid
+          readOnly: true
+          deprecated: true
+        accountId:
+          type: string
+          nullable: true
+        accountName:
+          type: string
+          nullable: true
+        fund:
+          type: number
+          description: "Buying power of the account. Typically consists of cash plus available margin.\r\nFor non-margin accounts fund contains cash only"
+          format: double
+          nullable: true
+        cash:
+          type: number
+          description: Cash balance in USD
+          format: double
+          nullable: true
+        isReconnected:
+          type: boolean
+          description: "Indicates if this account was already connected by the current user and device.\r\nCan be null."
+          nullable: true
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerFiatBalance'
+          description: The list of all asset balances of account
+          nullable: true
+      additionalProperties: false
+    TransferCryptocurrencyFundingOptions:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: "Indicates whether the Link is permitted to use the end user's available buying power\r\nand/or payment methods to supplement the cryptocurrency balance if it is insufficient\r\nfor the transfer."
+      additionalProperties: false
+    CatalogLink:
+      type: object
+      properties:
+        url:
+          type: string
+          description: Url to open Front catalog that should be presented to the end user.
+          format: uri
+          nullable: true
+        iFrameUrl:
+          type: string
+          description: Url to open Front catalog in iFrame that should be presented to the end user.
+          format: uri
+          nullable: true
+      additionalProperties: false
+    TransferToAddressWithAmount:
+      type: object
+      properties:
+        networkId:
+          type: string
+          description: "The Id of the network in Front system. The list of all available networks can be obtained by\r\nusing `GET /transfers/managed/networks` endpoint."
+          format: uuid
+        symbol:
+          type: string
+          description: The symbol of the digital asset.
+          nullable: true
+        address:
+          type: string
+          description: The address to send the asset to.
+          nullable: true
+        addressTag:
+          type: string
+          description: Secondary address identifier for coins like XRP,XMR etc.
+          nullable: true
+        amount:
+          type: number
+          description: Amount of tokens to transfer by specified network.
+          format: double
+          nullable: true
+      additionalProperties: false
+    IntegrationsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationModel'
+          description: Integrations list.
+          nullable: true
+      additionalProperties: false
+      description: Integration response.
+    TransferTypeEnum:
+      enum:
+      - deposit
+      - payment
+      - onramp
+      type: string
+    LinkTokenModelApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/LinkTokenModel'
+          nullable: true
+      additionalProperties: false
+    BrokerAccountTokens:
+      type: object
+      properties:
+        account:
+          allOf:
+          - $ref: '#/components/schemas/BrokerAccount'
+          nullable: true
+        accessToken:
+          type: string
+          nullable: true
+        refreshToken:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrokerFeature:
+      enum:
+      - holdings
+      - balance
+      - orders
+      - transfers
+      - identity
+      - cryptocurrencyDepositAddresses
+      - accountNumber
+      - paymentMethods
+      - conversions
+      type: string
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      type: string
+    CatalogLinkApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/CatalogLink'
+          nullable: true
+      additionalProperties: false
+    BrokerBaseRequest:
+      required:
+      - authToken
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: Type of the institution to connect
+      additionalProperties: false
+    BrokerRefreshTokenRequest:
+      required:
+      - refreshToken
+      - type
+      type: object
+      properties:
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+        refreshToken:
+          minLength: 1
+          type: string
+        createNewRefreshToken:
+          type: boolean
+          description: "Optional, used when we the refresh token should be refreshed.\r\nCurrently this flow is supported by TD Ameritrade"
+          nullable: true
+        accessToken:
+          type: string
+          description: "Some institutions may require accessToken to be provided as well.\r\nIt's currently required by WeBull and Vanguard"
+          nullable: true
+        tradeToken:
+          type: string
+          description: Currently used to update WeBull trade token.
+          nullable: true
+        mfaCode:
+          type: string
+          description: Optional, currently used by Vanguard if account has enforced MFA enabled.
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          description: Additional metadata
+          nullable: true
+      additionalProperties: false
+    LinkTokenModel:
+      type: object
+      properties:
+        linkToken:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeFiWalletHealthStatusInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    FinancialInstitutionIntegrationType:
+      enum:
+      - brokerage
+      - bank
+      - exchange
+      - wallet
+      - address
+      - nftMarketplace
+      - deFiWallet
+      type: string
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
+    B2BBrokerAuthStatus:
+      enum:
+      - failed
+      - succeeded
+      - mfaRequired
+      type: string
+    B2BBrokerRefreshTokenResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerRefreshTokenResponse'
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

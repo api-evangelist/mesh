@@ -1,0 +1,570 @@
+openapi: 3.0.1
+info:
+  title: Mesh Connect Integration Assets Balance API
+  description: '
+
+    Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: Balance
+  description: '
+
+
+    ### Supported integrations:
+
+    ```Robinhood```
+
+    ```ETrade```
+
+    ```Alpaca```
+
+    ```WeBull```
+
+    ```Stash```
+
+    ```InteractiveBrokers```
+
+    ```Public```
+
+    ```Coinbase```
+
+    ```Kraken```
+
+    ```CoinbasePro```
+
+    ```CryptoCom```
+
+    ```Binance```
+
+    ```Gemini```
+
+    ```OkCoin```
+
+    ```KuCoin```
+
+    ```Etoro```
+
+    ```CexIo```
+
+    ```BinanceInternational```
+
+    ```Bitstamp```
+
+    ```GateIo```
+
+    ```Acorns```
+
+    ```Okx```
+
+    ```BitFlyer```
+
+    ```Coinlist```
+
+    ```Huobi```
+
+    ```Bitfinex```
+
+    ```KrakenDirect```
+
+    ```Vanguard```
+
+    ```BinanceInternationalDirect```
+
+    ```BitfinexDirect```
+
+    ```Bybit```
+
+    ```Paxos```
+
+    ```CoinbasePrime```
+
+    '
+paths:
+  /api/v1/balance/get:
+    post:
+      tags:
+      - Balance
+      summary: Get account balance
+      description: Get real-time account fiat balances.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BalanceBrokerBaseRequest'
+            example:
+              authToken: Secret authentication token
+              type: binanceInternationalDirect
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerAccountBalanceModelApiResult'
+              example:
+                content:
+                  balances:
+                  - cash: 158.5
+                    buyingPower: 258.5
+                    currencyCode: USD
+                  - cash: 10
+                    buyingPower: 10
+                    currencyCode: EUR
+                  totalCashUsdValue: 10
+                  totalBuyingPowerUsdValue: 10
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have read permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+  /api/v1/balance/portfolio:
+    get:
+      tags:
+      - Balance
+      summary: Get aggregated portfolio fiat balances
+      description: Get cached aggregated fiat balances from all connected integrations.
+      parameters:
+      - name: UserId
+        in: query
+        description: End user ID to get the aggregated portfolio for.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BFiatPortfolioModelApiResult'
+              example:
+                content:
+                  fiatBalances:
+                  - symbol: USD
+                    cash: 3.099
+                    buyingPower: 3.099
+                  - symbol: EUR
+                    cash: -102.88
+                    buyingPower: 1293.596
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have read permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    B2BFiatPortfolioModel:
+      type: object
+      properties:
+        fiatBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioFiatBalance'
+          description: List of aggregated fiat balances
+          nullable: true
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      type: string
+    BalanceBrokerBaseRequest:
+      required:
+      - authToken
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```ETrade```
+
+            ```Alpaca```
+
+            ```WeBull```
+
+            ```Stash```
+
+            ```InteractiveBrokers```
+
+            ```Public```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```Etoro```
+
+            ```CexIo```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Acorns```
+
+            ```Okx```
+
+            ```BitFlyer```
+
+            ```Coinlist```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```Vanguard```
+
+            ```BinanceInternationalDirect```
+
+            ```BitfinexDirect```
+
+            ```Bybit```
+
+            ```Paxos```
+
+            ```CoinbasePrime```
+
+            '
+      additionalProperties: false
+    B2BFiatPortfolioModelApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BFiatPortfolioModel'
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAccountBalanceModelApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAccountBalanceModel'
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAccountBalance:
+      type: object
+      properties:
+        cash:
+          type: number
+          description: Withdrawable cash amount on the account.
+          format: double
+          nullable: true
+        buyingPower:
+          type: number
+          description: Buying power indicating the maximum amount the user can spend to buy assets. E.g. available margin.
+          format: double
+          nullable: true
+        cryptocurrencyBuyingPower:
+          type: number
+          description: Buying power available for placing cryptocurrency orders.
+          format: double
+          nullable: true
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code.
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAccountBalanceModel:
+      type: object
+      properties:
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/B2BBrokerAccountBalance'
+          nullable: true
+        totalCashUsdValue:
+          type: number
+          description: Total USD value of all currencies
+          format: double
+          nullable: true
+        totalBuyingPowerUsdValue:
+          type: number
+          description: Total USD value of all Buying Power
+          format: double
+          nullable: true
+      additionalProperties: false
+    PortfolioFiatBalance:
+      type: object
+      properties:
+        symbol:
+          type: string
+          description: Balance currency
+          nullable: true
+        cash:
+          type: number
+          description: Amount of money in a specific currency from all brokers
+          format: double
+          nullable: true
+        buyingPower:
+          type: number
+          description: "BuyingPower from all brokers, it indicates total amount of money the user can spend on buying stock.\r\nAlways includes cash and can also include margin"
+          format: double
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

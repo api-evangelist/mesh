@@ -1,0 +1,2805 @@
+openapi: 3.0.1
+info:
+  title: Mesh Connect Integration Assets Transactions API
+  description: '
+
+    Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: Transactions
+  description: '
+
+
+    ### Supported integrations:
+
+    ```Robinhood```
+
+    ```ETrade```
+
+    ```Alpaca```
+
+    ```WeBull```
+
+    ```Stash```
+
+    ```InteractiveBrokers```
+
+    ```Public```
+
+    ```Coinbase```
+
+    ```Kraken```
+
+    ```CoinbasePro```
+
+    ```CryptoCom```
+
+    ```Binance```
+
+    ```Gemini```
+
+    ```OkCoin```
+
+    ```KuCoin```
+
+    ```Etoro```
+
+    ```CexIo```
+
+    ```BinanceInternational```
+
+    ```Bitstamp```
+
+    ```GateIo```
+
+    ```Okx```
+
+    ```BitFlyer```
+
+    ```Coinlist```
+
+    ```Huobi```
+
+    ```Bitfinex```
+
+    ```KrakenDirect```
+
+    ```Vanguard```
+
+    ```BinanceInternationalDirect```
+
+    ```Bybit```
+
+    ```CoinbasePrime```
+
+
+
+    ### Integration-specific notes:
+
+
+
+    #### Binance:
+
+
+
+    Because of limitations of Binance API, initial loading of transaction history in Binance can take long time
+
+
+    depending on the size of the portfolio.
+
+
+
+    #### OkCoin:
+
+
+
+    Getting transactions history from OkCoin is not currently supported.
+
+    '
+paths:
+  /api/v1/transactions/list:
+    post:
+      tags:
+      - Transactions
+      summary: Get transactions
+      description: Get transactions on the account - the paginated history of the executed orders along with the pending orders.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransactionsB2BBrokerOrderListRequest'
+            example:
+              count: 20
+              statuses:
+              - success
+              authToken: Secret authentication token
+              type: robinhood
+      responses:
+        '200':
+          description: Transactions obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerOrderListResponseApiResult'
+              example:
+                content:
+                  transactions:
+                  - id: 17EC1243-D91A-48B6-B0CE-ECFDB134F8A0
+                    side: buy
+                    symbol: AAPL
+                    name: APPLE INC
+                    assetType: option
+                    paymentSymbol: USD
+                    paymentType: fiat
+                    amount: 1
+                    price: 120
+                    value: 120
+                    createdTimestamp: 1653215676
+                    updatedTimestamp: 1653215697
+                    status: success
+                    orderType: market
+                    timeInForce: goodForDay
+                    brokerType: robinhood
+                    transactionType: order
+                    optionDetails:
+                      optionType: call
+                      direction: buyToOpen
+                      strikePrice: 200
+                      expirationTimestamp: 1673215697
+                      numberOfSharesInContract: 100
+                      complexOrderStrategyType: NONE
+                  - id: F9E932AE-A780-42F3-B887-82D888D594E5
+                    side: sell
+                    symbol: AAPL
+                    name: APPLE INC
+                    assetType: equity
+                    paymentSymbol: USD
+                    paymentType: fiat
+                    amount: 2
+                    price: 130
+                    value: 260
+                    createdTimestamp: 1651739676
+                    updatedTimestamp: 1651739781
+                    status: success
+                    orderType: market
+                    timeInForce: goodTillCanceled
+                    brokerType: robinhood
+                    transactionType: order
+                  - id: 9B5827E4-7D08-4A71-B4C0-B1B4E5562592
+                    side: buy
+                    symbol: BTC
+                    name: Bitcoin
+                    assetType: cryptocurrency
+                    paymentSymbol: ETH
+                    paymentType: cryptocurrency
+                    amount: 0.3
+                    price: 18604.8197
+                    value: 5581.44591
+                    createdTimestamp: 1651739676
+                    updatedTimestamp: 1651739781
+                    status: success
+                    orderType: limit
+                    timeInForce: goodTillCanceled
+                    brokerType: robinhood
+                    transactionType: order
+                  cursor: N2VkZDI0MDMtNmRhYy01NThhLTk5NDUDYzI12M3GQ3ZmQ2
+                  total: 3
+                  earliestTimestamp: 1651739676
+                status: ok
+                message: ''
+                errorType: ''
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or provided integration token is not correct.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have read permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+  /api/v1/transactions/details:
+    post:
+      tags:
+      - Transactions
+      summary: Get transaction details
+      description: Get details of an executed order. Typically used to poll the status of the previously executed order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransactionsB2BBrokerOrderRequest'
+            example:
+              id: 17EC1243-D91A-48B6-B0CE-ECFDB134F8A0
+              isCryptocurrency: true
+              authToken: Secret authentication token
+              type: robinhood
+      responses:
+        '200':
+          description: Transactions obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerOrderApiResult'
+              example:
+                id: 17EC1243-D91A-48B6-B0CE-ECFDB134F8A0
+                side: buy
+                symbol: AAPL
+                assetType: equity
+                paymentType: fiat
+                amount: 1
+                price: 120
+                value: 120
+                createdTimestamp: 1653215676
+                updatedTimestamp: 1653215697
+                status: success
+                statusDetails: ''
+                brokerType: robinhood
+                transactionType: order
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or provided integration token is not correct.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have read permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Transaction is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/transactions/featureList:
+    post:
+      tags:
+      - Transactions
+      summary: Get supported order features for institution
+      description: "Get supported features for trading for a particular financial institution. Different institutions support different\r\nfeatures (e.g. different `OrderType` or different sets of `TimeInForce` values), so this endpoint is used to\r\ndescribe such features for provided financial institution."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransactionsBrokerBaseRequest'
+            example:
+              authToken: Secret authentication token
+              type: binanceInternationalDirect
+      responses:
+        '200':
+          description: Feature list obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerTradingFeatureInfoApiResult'
+              example:
+                content:
+                  brokerType: robinhood
+                  accountId: 5K9N3VO1
+                  cryptocurrencyOrders:
+                    supported: true
+                    supportsFiatCurrencyPayment: true
+                    supportsCryptocurrencyPayment: false
+                    supportsMarginOrders: true
+                    supportedCryptocurrencySymbols:
+                    - BTC
+                    - ETH
+                    - SOL
+                    - DOGE
+                    supportedFiatCurrencies:
+                    - USD
+                    marketType:
+                      supported: true
+                      supportsFractionalShares: true
+                      supportsExtendedMarketHours: true
+                      supportsPlacingBuyOrdersInFiatAmount: false
+                      supportsPlacingSellOrdersInFiatAmount: false
+                      supportedTimeInForceList:
+                      - fillOrKill
+                      - goodForDay
+                      - goodTillCanceled
+                      - immediateOrCancel
+                      supportsPlacingBuyOrdersInPaymentSymbolAmount: false
+                      supportsPlacingSellOrdersInPaymentSymbolAmount: false
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: true
+                      supportsPlacingSellOrdersInBaseSymbolAmount: true
+                    limitType:
+                      supported: true
+                      supportsFractionalShares: true
+                      supportsExtendedMarketHours: true
+                      supportsPlacingBuyOrdersInFiatAmount: false
+                      supportsPlacingSellOrdersInFiatAmount: false
+                      supportedTimeInForceList:
+                      - goodForDay
+                      - goodTillCanceled
+                      - immediateOrCancel
+                      supportsPlacingBuyOrdersInPaymentSymbolAmount: false
+                      supportsPlacingSellOrdersInPaymentSymbolAmount: false
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: true
+                      supportsPlacingSellOrdersInBaseSymbolAmount: true
+                    stopLossType:
+                      supported: true
+                      supportsFractionalShares: true
+                      supportsExtendedMarketHours: true
+                      supportsPlacingBuyOrdersInFiatAmount: false
+                      supportsPlacingSellOrdersInFiatAmount: false
+                      supportedTimeInForceList:
+                      - fillOrKill
+                      - goodForDay
+                      - goodTillCanceled
+                      - immediateOrCancel
+                      supportsPlacingBuyOrdersInPaymentSymbolAmount: false
+                      supportsPlacingSellOrdersInPaymentSymbolAmount: false
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: true
+                      supportsPlacingSellOrdersInBaseSymbolAmount: true
+                  stockOrders:
+                    supported: true
+                    supportsFiatCurrencyPayment: true
+                    supportsCryptocurrencyPayment: false
+                    supportsMarginOrders: true
+                    supportedFiatCurrencies:
+                    - USD
+                    marketType:
+                      supported: true
+                      supportsFractionalShares: true
+                      supportsExtendedMarketHours: true
+                      supportsPlacingBuyOrdersInFiatAmount: false
+                      supportsPlacingSellOrdersInFiatAmount: false
+                      supportedTimeInForceList:
+                      - fillOrKill
+                      - goodForDay
+                      - goodTillCanceled
+                      - immediateOrCancel
+                      supportsPlacingBuyOrdersInPaymentSymbolAmount: false
+                      supportsPlacingSellOrdersInPaymentSymbolAmount: false
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: false
+                      supportsPlacingSellOrdersInBaseSymbolAmount: false
+                    limitType:
+                      supported: true
+                      supportsFractionalShares: true
+                      supportsExtendedMarketHours: true
+                      supportsPlacingBuyOrdersInFiatAmount: false
+                      supportsPlacingSellOrdersInFiatAmount: false
+                      supportedTimeInForceList:
+                      - goodForDay
+                      - goodTillCanceled
+                      - immediateOrCancel
+                      supportsPlacingBuyOrdersInPaymentSymbolAmount: false
+                      supportsPlacingSellOrdersInPaymentSymbolAmount: false
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: false
+                      supportsPlacingSellOrdersInBaseSymbolAmount: false
+                    stopLossType:
+                      supported: true
+                      supportsFractionalShares: true
+                      supportsExtendedMarketHours: true
+                      supportsPlacingBuyOrdersInFiatAmount: false
+                      supportsPlacingSellOrdersInFiatAmount: false
+                      supportedTimeInForceList:
+                      - fillOrKill
+                      - goodForDay
+                      - goodTillCanceled
+                      - immediateOrCancel
+                      supportsPlacingBuyOrdersInPaymentSymbolAmount: false
+                      supportsPlacingSellOrdersInPaymentSymbolAmount: false
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: false
+                      supportsPlacingSellOrdersInBaseSymbolAmount: false
+                  cryptocurrencyAssetPairTrading:
+                    supported: true
+                    supportedCryptocurrencySymbols:
+                    - BTC
+                    - ETH
+                    - SOL
+                    - DOGE
+                    supportedFiatCurrencies:
+                    - USD
+                    supportedTradingPairs:
+                    - BTC-ETH
+                    - BTC-USD
+                    - ETH-SOL
+                    - ETH-USD
+                    - SOL-USD
+                    - DOGE-USD
+                    marketType:
+                      supported: true
+                      supportedTimeInForceList:
+                      - immediateOrCancel
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: false
+                      supportsPlacingSellOrdersInBaseSymbolAmount: true
+                      supportsPlacingBuyOrdersInQuoteSymbolAmount: true
+                      supportsPlacingSellOrdersInQuoteSymbolAmount: false
+                    limitType:
+                      supported: true
+                      supportedTimeInForceList:
+                      - goodTillCanceled
+                      - goodTillDate
+                      supportsPlacingBuyOrdersInBaseSymbolAmount: true
+                      supportsPlacingSellOrdersInBaseSymbolAmount: true
+                      supportsPlacingBuyOrdersInQuoteSymbolAmount: true
+                      supportsPlacingSellOrdersInQuoteSymbolAmount: true
+                  cryptocurrencyConversion:
+                    supported: true
+                    supportsPreview: true
+                    supportedCryptocurrencySymbols:
+                    - BTC
+                    - ETH
+                    - SOL
+                    - DOGE
+                    supportedFiatCurrencies:
+                    - USD
+                  status: succeeded
+                  supportsOrderPreview: true
+                  supportsPriceQuotes: false
+                  supportsOrderCancellation: true
+                  isIntegrationUp: true
+                  isTradingSupported: true
+                  fiatBalances:
+                  - cash: 1355
+                    buyingPower: 1355
+                    cryptocurrencyBuyingPower: 1355
+                    currencyCode: USD
+                  usesSpreads: false
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or provided integration token is not correct.'
+          content:
+            application/json:
+              schema: {}
+  /api/v1/transactions/preview/{side}:
+    post:
+      tags:
+      - Transactions
+      summary: Preview order execution
+      description: "Validates the order information (such as necessary balance availability), and returns additional information,\r\nsuch as expected order fee.\r\nDoes not execute the order."
+      parameters:
+      - name: side
+        in: path
+        required: true
+        schema:
+          enum:
+          - unknown
+          - buy
+          - sell
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransactionsB2BBrokerCreateOrderRequest'
+            examples:
+              Cryptocurrency Limit example:
+                value:
+                  symbol: ETH
+                  paymentSymbol: USD
+                  amount: 1
+                  price: 1200
+                  isCryptocurrency: true
+                  paymentIsCryptocurrency: false
+                  amountIsFiat: false
+                  amountIsInPaymentSymbol: false
+                  extendedHours: false
+                  orderType: limit
+                  timeInForce: goodForDay
+                  authToken: Secret authentication token
+                  type: robinhood
+              Stock Market example:
+                value:
+                  symbol: AAPL
+                  paymentSymbol: USD
+                  amount: 1
+                  price: 0
+                  isCryptocurrency: false
+                  paymentIsCryptocurrency: false
+                  amountIsFiat: false
+                  amountIsInPaymentSymbol: false
+                  extendedHours: false
+                  orderType: market
+                  timeInForce: goodTillCanceled
+                  authToken: Secret authentication token
+                  type: robinhood
+              Stock Payment/Quote amount example ('buy TSLA for $10'):
+                value:
+                  symbol: TSLA
+                  paymentSymbol: USD
+                  amount: 0
+                  price: 0
+                  isCryptocurrency: false
+                  paymentIsCryptocurrency: false
+                  amountIsFiat: true
+                  amountInFiat: 10
+                  amountIsInPaymentSymbol: true
+                  amountInPaymentSymbol: 10
+                  extendedHours: false
+                  orderType: market
+                  timeInForce: goodTillCanceled
+                  authToken: Secret authentication token
+                  type: robinhood
+      responses:
+        '200':
+          description: Order preview obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerPreviewOrderResultApiResult'
+              example:
+                content:
+                  brokerType: robinhood
+                  fee: 1.99
+                  feeText: ''
+                  amount: 1
+                  side: buy
+                  status: success
+                  paymentSymbol: USD
+                  paymentIsCryptocurrency: false
+                  estimatedUnitPrice: 1200
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Request details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or provided integration token is not correct.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have write permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+  /api/v1/transactions/{side}:
+    post:
+      tags:
+      - Transactions
+      summary: Execute order
+      description: "Validates the order information and then calls institution's API to execute an order.\r\nIt's recommended to call this endpoint after calling the `preview` endpoint to make sure that the\r\norder execution request is correct."
+      parameters:
+      - name: side
+        in: path
+        required: true
+        schema:
+          enum:
+          - unknown
+          - buy
+          - sell
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransactionsB2BBrokerCreateOrderRequest'
+            examples:
+              Cryptocurrency Limit example:
+                value:
+                  symbol: ETH
+                  paymentSymbol: USD
+                  amount: 1
+                  price: 1200
+                  isCryptocurrency: true
+                  paymentIsCryptocurrency: false
+                  amountIsFiat: false
+                  amountIsInPaymentSymbol: false
+                  extendedHours: false
+                  orderType: limit
+                  timeInForce: goodForDay
+                  authToken: Secret authentication token
+                  type: robinhood
+              Stock Market example:
+                value:
+                  symbol: AAPL
+                  paymentSymbol: USD
+                  amount: 1
+                  price: 0
+                  isCryptocurrency: false
+                  paymentIsCryptocurrency: false
+                  amountIsFiat: false
+                  amountIsInPaymentSymbol: false
+                  extendedHours: false
+                  orderType: market
+                  timeInForce: goodTillCanceled
+                  authToken: Secret authentication token
+                  type: robinhood
+              Stock Payment/Quote amount example ('buy TSLA for $10'):
+                value:
+                  symbol: TSLA
+                  paymentSymbol: USD
+                  amount: 0
+                  price: 0
+                  isCryptocurrency: false
+                  paymentIsCryptocurrency: false
+                  amountIsFiat: true
+                  amountInFiat: 10
+                  amountIsInPaymentSymbol: true
+                  amountInPaymentSymbol: 10
+                  extendedHours: false
+                  orderType: market
+                  timeInForce: goodTillCanceled
+                  authToken: Secret authentication token
+                  type: robinhood
+      responses:
+        '200':
+          description: Order executed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerCreateOrderResultApiResult'
+              example:
+                content:
+                  orderId: 6713DCDC-3D2E-46BC-ACB6-CF5FDE431CE2
+                  brokerType: robinhood
+                  side: buy
+                  amount: 1
+                  price: 1200
+                  value: 1200
+                  fee: 1.99
+                  timestamp: 1661904014
+                  status: success
+                  statusDetails: Executed successfully
+                  timeInForce: goodTillCanceled
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Request details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or provided integration token is not correct.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have write permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+  /api/v1/transactions/cancel:
+    post:
+      tags:
+      - Transactions
+      summary: Cancel order execution
+      description: "Cancels a pending order (an order with `InProgress` status).\r\n`SymbolPair` is required to be provided for `Binance`, `BinanceInternational`, `Okx` and `BitFlyer` institutions.\r\nThis value"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransactionsB2BBrokerOrderRequest'
+            example:
+              id: 17EC1243-D91A-48B6-B0CE-ECFDB134F8A0
+              isCryptocurrency: true
+              authToken: Secret authentication token
+              type: robinhood
+      responses:
+        '200':
+          description: Order canceled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+        '400':
+          description: Request details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or provided integration token is not correct.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have write permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/transactions/symbolinfo:
+    post:
+      tags:
+      - Transactions
+      summary: Get symbol information
+      description: "Returns information on trading allowance for a provided symbol.\r\nFor example - some institutions allow fractional trading for some symbols, but do not allow it\r\nfor others. So before placing an order the API client can check if the required symbol can be traded fractionally\r\nwith the provided institution."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransactionsB2BBrokerSymbolInfoForOrderRequest'
+            example:
+              side: buy
+              symbol: BTC
+              amount: 0
+              price: 0
+              isCryptocurrency: false
+              paymentIsCryptocurrency: false
+              amountIsFiat: false
+              amountIsInPaymentSymbol: false
+              extendedHours: false
+              orderType: market
+              timeInForce: goodTillCanceled
+              type: robinhood
+      responses:
+        '200':
+          description: Information for symbol obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerOrderSymbolInfoApiResult'
+              example:
+                content:
+                  fractionalTradingAllowance: fractionalTradingAllowed
+                  minimumOrderValue: 0.001
+                  precisionScale: 6
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Request details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct.'
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    B2BBrokerOrderSymbolInfoApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerOrderSymbolInfo'
+          nullable: true
+      additionalProperties: false
+    B2BBrokerTradingFeatureInfo:
+      type: object
+      properties:
+        brokerType:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: Type of the integration.
+        accountId:
+          type: string
+          description: Account Id of the integration.
+          nullable: true
+        cryptocurrencyOrders:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerTradingFeature'
+          description: Model, describing the ability to place cryptocurrency orders.
+          nullable: true
+        stockOrders:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerTradingFeature'
+          description: Model, describing the ability to place equity orders.
+          nullable: true
+        cryptocurrencyAssetPairTrading:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptocurrencyPairTradeFeature'
+          description: Model, describing the asset pair trading ability
+          nullable: true
+        cryptocurrencyConversion:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerConversionFeature'
+          description: Model, describing the conversion ability
+          nullable: true
+        status:
+          enum:
+          - succeeded
+          - failed
+          - notAuthorized
+          allOf:
+          - $ref: '#/components/schemas/BrokerRequestStatus'
+          description: Status of the request.
+        supportsOrderPreview:
+          type: boolean
+          description: "Indicates if the preview of orders (`preview order execution` endpoint) is provided by the institution.\r\nThis allows to validate the order using the API of the institution. If the order preview is not supported,\r\nFront API validates the order without calling the institution's API."
+        supportsPriceQuotes:
+          type: boolean
+          description: Supports getting price information directly from the institution.
+        supportsOrderCancellation:
+          type: boolean
+          description: Indicates if it is possible to cancel the placed order, while it's in the `InProgress` status.
+        isIntegrationUp:
+          type: boolean
+          description: Indicates if the integration is available.
+        isTradingSupported:
+          type: boolean
+          description: Indicates if trading is generally supported at this time.
+        fiatBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/B2BBrokerAccountBalance'
+          description: List of fiat balances of the account.
+          nullable: true
+        historyRecordLimit:
+          type: integer
+          description: Limit for history records
+          format: int32
+          nullable: true
+        usesSpreads:
+          type: boolean
+          description: Indicates whether the current exchange uses spreads as costs for trading
+      additionalProperties: false
+    BrokerPairTradeTimeInForceType:
+      enum:
+      - immediateOrCancel
+      - goodTillCanceled
+      - goodTillDate
+      type: string
+    TransactionsB2BBrokerOrderRequest:
+      required:
+      - authToken
+      - id
+      - isCryptocurrency
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```ETrade```
+
+            ```Alpaca```
+
+            ```WeBull```
+
+            ```Stash```
+
+            ```InteractiveBrokers```
+
+            ```Public```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```Etoro```
+
+            ```CexIo```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```BitFlyer```
+
+            ```Coinlist```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```Vanguard```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```CoinbasePrime```
+
+            '
+        id:
+          minLength: 1
+          type: string
+        side:
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderType'
+          description: Should be provided for Coinbase.
+          nullable: true
+        isCryptocurrency:
+          type: boolean
+          description: Some Stock and Crypto symbols can intersect, so we need to explicitly specify what type of asset is requested to be bought.
+        symbolPair:
+          type: string
+          description: Symbol pair of the order (requested by some brokers).
+          nullable: true
+        mfaCode:
+          type: string
+          description: MFA Code to cancel an order (requested by Kraken if MFA is enabled in user settings)
+          nullable: true
+      additionalProperties: false
+    B2BBrokerOrderListResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/B2BBrokerOrder'
+          description: List of obtained transactions.
+          nullable: true
+        cursor:
+          type: string
+          description: The cursor to retrieve the next page of transactions.
+          nullable: true
+        total:
+          type: integer
+          description: Total amount of records.
+          format: int64
+        earliestTimestamp:
+          type: integer
+          description: Earliest transaction timestamp.
+          format: int64
+      additionalProperties: false
+    B2BBrokerCryptocurrencyPairTradeFeature:
+      type: object
+      properties:
+        supported:
+          type: boolean
+        supportedCryptocurrencySymbols:
+          type: array
+          items:
+            type: string
+          nullable: true
+        supportedFiatCurrencies:
+          type: array
+          items:
+            type: string
+          nullable: true
+        supportedTradingPairs:
+          type: array
+          items:
+            type: string
+          nullable: true
+        marketType:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptoPairTradeFeatureOrderType'
+          nullable: true
+        limitType:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptoPairTradeFeatureOrderType'
+          nullable: true
+      additionalProperties: false
+    BrokerOrderStatus:
+      enum:
+      - unknown
+      - inProgress
+      - cancelled
+      - rejected
+      - failed
+      - success
+      - partiallyFilled
+      - expired
+      type: string
+    B2BBrokerCreateOrderResult:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Id of the order, as returned from the financial institution. Can be used to get the status of the order.
+          nullable: true
+        brokerType:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: Type of the institution.
+        side:
+          enum:
+          - unknown
+          - buy
+          - sell
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderType'
+          description: Side of the order.
+        amount:
+          type: number
+          description: Amount of the order.
+          format: double
+        price:
+          type: number
+          description: Unit price of the asset.
+          format: double
+          nullable: true
+        value:
+          type: number
+          description: Total value of the order.
+          format: double
+          nullable: true
+        fee:
+          type: number
+          description: Optional Fee taken by the financial institution.
+          format: double
+          nullable: true
+        timestamp:
+          type: integer
+          description: Timestamp of the order.
+          format: int64
+        status:
+          enum:
+          - unknown
+          - inProgress
+          - cancelled
+          - rejected
+          - failed
+          - success
+          - partiallyFilled
+          - expired
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderStatus'
+          description: Status of the order.
+        statusDetails:
+          type: string
+          description: Text details of the order, if additionally returned from the financial institution.
+          nullable: true
+        timeInForce:
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderTimeInForceType'
+          description: Value that indicates how long the order will remain active before it is executed or expires.
+          nullable: true
+        symbolPair:
+          type: string
+          description: Optional pair of symbols, as returned from the financial institution. Can be required to obtain the status of the order by some institutions.
+          nullable: true
+        parentOrderId:
+          type: string
+          description: Id of the parent order, applicable to some institutions if the order was executed in several trades.
+          nullable: true
+        trades:
+          type: array
+          items:
+            $ref: '#/components/schemas/B2BBrokerOrderTrade'
+          description: List of trades, provided only if the order was executed in several trades.
+          nullable: true
+        errorMessage:
+          type: string
+          description: A message describing the error if the order wasn't placed.
+          nullable: true
+        displayMessage:
+          type: string
+          description: A user-friendly display message that can be presented to the end user.
+          nullable: true
+      additionalProperties: false
+    BrokerOrderCategory:
+      enum:
+      - order
+      - trade
+      - ledger
+      - historyAction
+      type: string
+    B2BBrokerOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Transaction id, as provided by the institution
+          nullable: true
+        side:
+          enum:
+          - unknown
+          - buy
+          - sell
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderType'
+          description: Side of the transaction
+        symbol:
+          type: string
+          description: Traded symbol
+          nullable: true
+        name:
+          type: string
+          description: Name of the traded asset
+          nullable: true
+        assetType:
+          enum:
+          - equity
+          - cryptocurrency
+          - option
+          - nft
+          allOf:
+          - $ref: '#/components/schemas/B2BAssetType'
+          description: Type of the traded asset
+        paymentSymbol:
+          type: string
+          description: "Fiat or cryptocurrency symbol used for payment. For transactions with types `ConversionFrom` or `ConversionTo`\r\nthis field specifies the target symbol. For example, for `ETH` to `BTC` conversion, the transaction type is `ConversionTo`, the `Symbol` field is `ETH` and the `PaymentSymbol` is `BTC`"
+          nullable: true
+        paymentType:
+          enum:
+          - fiat
+          - cryptocurrency
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerOrderPaymentSymbolType'
+          description: Indicates if the payment was performed with fiat or crypto currency
+        amount:
+          type: number
+          description: Executed amount
+          format: double
+          nullable: true
+        price:
+          type: number
+          description: Price of the unit
+          format: double
+          nullable: true
+        fee:
+          type: number
+          description: Order Fee, taken by the financial institution
+          format: double
+          nullable: true
+        value:
+          type: number
+          description: Total value
+          format: double
+          nullable: true
+        createdTimestamp:
+          type: integer
+          description: Unix timestamp in seconds indicating when the order was placed or the transaction was created
+          format: int64
+        updatedTimestamp:
+          type: integer
+          description: Unix timestamp in seconds indicating when the transaction was last updated (e.g. executed)
+          format: int64
+        status:
+          enum:
+          - unknown
+          - inProgress
+          - cancelled
+          - rejected
+          - failed
+          - success
+          - partiallyFilled
+          - expired
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderStatus'
+          description: Status of the transaction
+        statusDetails:
+          type: string
+          description: Status text, as provided by the institution
+          nullable: true
+        orderType:
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderPlaceType'
+          description: Type of the placed order
+          nullable: true
+        timeInForce:
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderTimeInForceType'
+          description: 'Time in force of the order: a value indicating how long the order remains active before it is executed or expires'
+          nullable: true
+        brokerType:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: Type of the integration
+        transactionType:
+          enum:
+          - order
+          - conversionTo
+          - conversionFrom
+          - ownAccountDeposit
+          - ownAccountWithdraw
+          - stake
+          - dividendReinvestment
+          - interest
+          - reward
+          - unknown
+          - conversionToFiat
+          - conversionFromFiat
+          allOf:
+          - $ref: '#/components/schemas/B2BTransactionType'
+          description: Type of the transaction
+        parentOrderId:
+          type: string
+          description: Id of the parent order, applicable to some institutions
+          nullable: true
+        optionDetails:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerOptionData'
+          description: Additional details for options
+          nullable: true
+      additionalProperties: false
+    BrokerOrderPlaceType:
+      enum:
+      - unknown
+      - market
+      - limit
+      - stopLoss
+      - stopLimit
+      - takeProfit
+      - netDebit
+      - netCredit
+      - exercise
+      type: string
+    TransactionsB2BBrokerOrderListRequest:
+      required:
+      - authToken
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```ETrade```
+
+            ```Alpaca```
+
+            ```WeBull```
+
+            ```Stash```
+
+            ```InteractiveBrokers```
+
+            ```Public```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```Etoro```
+
+            ```CexIo```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```BitFlyer```
+
+            ```Coinlist```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```Vanguard```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```CoinbasePrime```
+
+            '
+        cursor:
+          type: string
+          description: "The cursor to retrieve the next page of transactions.\r\nProviding it will cause the response to only return changes after this update.\r\nIf this field is not provided, the history of transactions will be returned starting with the first-added transaction."
+          nullable: true
+        count:
+          type: integer
+          description: "Number of records to include in the response. <br />\r\nDefault: `100` <br />\r\nMaximum: `250`"
+          format: int32
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerOrderStatus'
+          description: Return orders of this statuses only. If this field is not provided, orders with all available statuses will be returned.
+          nullable: true
+        from:
+          type: integer
+          description: "Return orders created after this timestamp.\r\nIf this field is not provided, orders will be returned according to the default of the institution."
+          format: int64
+          nullable: true
+      additionalProperties: false
+    BrokerOrderTimeInForceType:
+      enum:
+      - goodTillCanceled
+      - immediateOrCancel
+      - fillOrKill
+      - goodForDay
+      - postOnly
+      - unknown
+      type: string
+    B2BAssetType:
+      enum:
+      - equity
+      - cryptocurrency
+      - option
+      - nft
+      type: string
+    BrokerOptionType:
+      enum:
+      - unknown
+      - call
+      - put
+      type: string
+    TransactionsB2BBrokerCreateOrderRequest:
+      required:
+      - amount
+      - amountIsInPaymentSymbol
+      - authToken
+      - isCryptocurrency
+      - orderType
+      - paymentIsCryptocurrency
+      - paymentSymbol
+      - symbol
+      - timeInForce
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```ETrade```
+
+            ```Alpaca```
+
+            ```WeBull```
+
+            ```Stash```
+
+            ```InteractiveBrokers```
+
+            ```Public```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```Etoro```
+
+            ```CexIo```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```BitFlyer```
+
+            ```Coinlist```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```Vanguard```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```CoinbasePrime```
+
+            '
+        symbol:
+          minLength: 1
+          type: string
+          description: Symbol to trade. For example, `AAPL` or `ETH`
+        paymentSymbol:
+          minLength: 1
+          type: string
+          description: Symbol to use for payment, defaults to `USD`.
+        amount:
+          type: number
+          description: Amount of purchase.
+          format: double
+        price:
+          type: number
+          description: Price of the unit, used for `Limit` and `StopLoss` orders.
+          format: double
+        isCryptocurrency:
+          type: boolean
+          description: Some Stock and Crypto symbols can intersect, so the type of the asset needs to be specified explicitly.
+        paymentIsCryptocurrency:
+          type: boolean
+          description: Indicates whether the `PaymentSymbol` is fiat or cryptocurrency
+        amountIsFiat:
+          type: boolean
+          nullable: true
+          deprecated: true
+        amountInFiat:
+          type: number
+          format: double
+          nullable: true
+          deprecated: true
+        amountIsInPaymentSymbol:
+          type: boolean
+          description: "This value indicates if the order should be executed in payment/quote currency amount (e.g. purchase ETH for $10). This can be\r\nperformed only if the current institution supports such orders (`SupportsPlacingSellOrdersInPaymentSymbolAmount` and\r\n`SupportsPlacingBuyOrdersInPaymentSymbolAmount` fields in `get supported order features for institution`) and `AmountInPaymentSymbol`\r\nvalue is passed."
+        amountInPaymentSymbol:
+          type: number
+          description: "Specifies the target amount in the payment/quote currency. For example, setting this to `10` when the `AmountInPaymentSymbol` = `true`\r\nand `PaymentSymbol` = `USD` will instruct the API to place an order to buy/sell the asset worth $10."
+          format: double
+          nullable: true
+        extendedHours:
+          type: boolean
+          description: Specifies if the extended trading hours should be used.
+        orderType:
+          enum:
+          - market
+          - limit
+          - stopLoss
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderPlaceTypeTrade'
+        timeInForce:
+          enum:
+          - goodTillCanceled
+          - immediateOrCancel
+          - fillOrKill
+          - goodForDay
+          - postOnly
+          - unknown
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderTimeInForceType'
+        mfaCode:
+          type: string
+          description: MFA Code to create an order (requested by Kraken if MFA is enabled in user settings)
+          nullable: true
+      additionalProperties: false
+    BrokerOptionDirection:
+      enum:
+      - unknown
+      - buyToOpen
+      - buyToClose
+      - sellToOpen
+      - sellToClose
+      - buyToCover
+      - sellShort
+      type: string
+    B2BTransactionType:
+      enum:
+      - order
+      - conversionTo
+      - conversionFrom
+      - ownAccountDeposit
+      - ownAccountWithdraw
+      - stake
+      - dividendReinvestment
+      - interest
+      - reward
+      - unknown
+      - conversionToFiat
+      - conversionFromFiat
+      type: string
+    B2BBrokerPreviewOrderResult:
+      type: object
+      properties:
+        brokerType:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+        fee:
+          type: number
+          format: double
+          nullable: true
+        feeText:
+          type: string
+          nullable: true
+        amount:
+          type: number
+          format: double
+        side:
+          enum:
+          - unknown
+          - buy
+          - sell
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderType'
+        status:
+          enum:
+          - success
+          - failed
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderValidationStatus'
+        errorMessage:
+          type: string
+          nullable: true
+        paymentSymbol:
+          type: string
+          nullable: true
+        paymentIsCryptocurrency:
+          type: boolean
+        estimatedUnitPrice:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    SymbolTradingAllowance:
+      enum:
+      - fractionalTradingAllowed
+      - fractionalTradingNotAllowed
+      - tradingNotAllowed
+      - fractionalTradingPossiblyAllowed
+      type: string
+    B2BBrokerCreateOrderResultApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCreateOrderResult'
+          nullable: true
+      additionalProperties: false
+    TransactionsB2BBrokerSymbolInfoForOrderRequest:
+      required:
+      - amount
+      - amountIsInPaymentSymbol
+      - authToken
+      - isCryptocurrency
+      - orderType
+      - paymentIsCryptocurrency
+      - paymentSymbol
+      - symbol
+      - timeInForce
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```ETrade```
+
+            ```Alpaca```
+
+            ```WeBull```
+
+            ```Stash```
+
+            ```InteractiveBrokers```
+
+            ```Public```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```Etoro```
+
+            ```CexIo```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```BitFlyer```
+
+            ```Coinlist```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```Vanguard```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```CoinbasePrime```
+
+            '
+        symbol:
+          minLength: 1
+          type: string
+          description: Symbol to trade. For example, `AAPL` or `ETH`
+        paymentSymbol:
+          minLength: 1
+          type: string
+          description: Symbol to use for payment, defaults to `USD`.
+        amount:
+          type: number
+          description: Amount of purchase.
+          format: double
+        price:
+          type: number
+          description: Price of the unit, used for `Limit` and `StopLoss` orders.
+          format: double
+        isCryptocurrency:
+          type: boolean
+          description: Some Stock and Crypto symbols can intersect, so the type of the asset needs to be specified explicitly.
+        paymentIsCryptocurrency:
+          type: boolean
+          description: Indicates whether the `PaymentSymbol` is fiat or cryptocurrency
+        amountIsFiat:
+          type: boolean
+          nullable: true
+          deprecated: true
+        amountInFiat:
+          type: number
+          format: double
+          nullable: true
+          deprecated: true
+        amountIsInPaymentSymbol:
+          type: boolean
+          description: "This value indicates if the order should be executed in payment/quote currency amount (e.g. purchase ETH for $10). This can be\r\nperformed only if the current institution supports such orders (`SupportsPlacingSellOrdersInPaymentSymbolAmount` and\r\n`SupportsPlacingBuyOrdersInPaymentSymbolAmount` fields in `get supported order features for institution`) and `AmountInPaymentSymbol`\r\nvalue is passed."
+        amountInPaymentSymbol:
+          type: number
+          description: "Specifies the target amount in the payment/quote currency. For example, setting this to `10` when the `AmountInPaymentSymbol` = `true`\r\nand `PaymentSymbol` = `USD` will instruct the API to place an order to buy/sell the asset worth $10."
+          format: double
+          nullable: true
+        extendedHours:
+          type: boolean
+          description: Specifies if the extended trading hours should be used.
+        orderType:
+          enum:
+          - market
+          - limit
+          - stopLoss
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderPlaceTypeTrade'
+        timeInForce:
+          enum:
+          - goodTillCanceled
+          - immediateOrCancel
+          - fillOrKill
+          - goodForDay
+          - postOnly
+          - unknown
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderTimeInForceType'
+        mfaCode:
+          type: string
+          description: MFA Code to create an order (requested by Kraken if MFA is enabled in user settings)
+          nullable: true
+        side:
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderType'
+          nullable: true
+      additionalProperties: false
+    BrokerOrderPlaceTypeTrade:
+      enum:
+      - market
+      - limit
+      - stopLoss
+      type: string
+    B2BBrokerCryptoPairTradeFeatureOrderType:
+      type: object
+      properties:
+        supported:
+          type: boolean
+          description: Specifies if this order type is supported for this integration.
+        supportedTimeInForceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerPairTradeTimeInForceType'
+          description: The list of supported Time-in-force instructions for this order type.
+          nullable: true
+        supportsPlacingBuyOrdersInBaseSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing buy orders in base symbol amounts. For example,\r\nif payment/quote symbol is USD, base symbol is ETH, and this capability is supported, then the API can be instructed to buy 1 or other amount of ETH."
+        supportsPlacingSellOrdersInBaseSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing sell orders in base symbol amounts. For example,\r\nif payment/quote symbol is USD, base symbol is ETH, and this capability is supported, then the API can be instructed to sell 1 or other amount of ETH."
+        supportsPlacingBuyOrdersInQuoteSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing buy orders in quote symbol amounts. For example,\r\nif payment/quote symbol is USDC, and this capability is supported, then the API can be instructed to buy asset for 10 USDC or other amount."
+        supportsPlacingSellOrdersInQuoteSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing sell orders in quote symbol amounts. For example,\r\nif payment/quote symbol is USDC, and this capability is supported, then the API can be instructed to sell asset for 10 USDC or other amount."
+      additionalProperties: false
+    BrokerRequestStatus:
+      enum:
+      - succeeded
+      - failed
+      - notAuthorized
+      type: string
+    B2BBrokerTradingFeatureOrderType:
+      type: object
+      properties:
+        supported:
+          type: boolean
+          description: Specifies if this order type is supported for this integration.
+        supportsFractionalShares:
+          type: boolean
+          description: Specifies if this order type supports buying or selling in fractional amounts. If this value is `false`, then only whole shares can be traded.
+        supportsExtendedMarketHours:
+          type: boolean
+          description: Indicates if pre-market trading or after-hours trading is supported.
+        supportsPlacingBuyOrdersInFiatAmount:
+          type: boolean
+          readOnly: true
+          deprecated: true
+        supportsPlacingSellOrdersInFiatAmount:
+          type: boolean
+          readOnly: true
+          deprecated: true
+        supportedTimeInForceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerOrderTimeInForceType'
+          description: The list of supported Time-in-force instructions for this order type.
+          nullable: true
+        supportsPlacingBuyOrdersInPaymentSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing buy orders in payment/quote symbol amounts. For example,\r\nif payment/quote symbol is USD, and this capability is supported, then the API can be instructed to buy asset for $10 or other dollar amount."
+        supportsPlacingSellOrdersInPaymentSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing sell orders in payment/quote symbol amounts. For example,\r\nif payment/quote symbol is USD, and this capability is supported, then the API can be instructed to sell asset for $10 or other dollar amount."
+        supportsPlacingBuyOrdersInBaseSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing buy orders in base symbol amounts. For example,\r\nif payment/quote symbol is USD, base symbol is AAPL, and this capability is supported, then the API can be instructed to buy 1 or other amount of AAPL."
+        supportsPlacingSellOrdersInBaseSymbolAmount:
+          type: boolean
+          description: "Specifies if this order type supports placing sell orders in base symbol amounts. For example,\r\nif payment/quote symbol is USD, base symbol is AAPL, and this capability is supported, then the API can be instructed to sell 1 or other amount of AAPL."
+      additionalProperties: false
+    B2BBrokerOrderPaymentSymbolType:
+      enum:
+      - fiat
+      - cryptocurrency
+      type: string
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      type: string
+    B2BBrokerOrderApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerOrder'
+          nullable: true
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    B2BBrokerOrderTrade:
+      type: object
+      properties:
+        tradeId:
+          type: string
+          nullable: true
+        amount:
+          type: number
+          format: double
+          nullable: true
+        value:
+          type: number
+          format: double
+          nullable: true
+        price:
+          type: number
+          format: double
+          nullable: true
+        fee:
+          type: number
+          format: double
+          nullable: true
+        orderCategory:
+          enum:
+          - order
+          - trade
+          - ledger
+          - historyAction
+          allOf:
+          - $ref: '#/components/schemas/BrokerOrderCategory'
+      additionalProperties: false
+    BrokerOrderValidationStatus:
+      enum:
+      - success
+      - failed
+      type: string
+    B2BBrokerOrderListResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerOrderListResponse'
+          nullable: true
+      additionalProperties: false
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
+    B2BBrokerOptionData:
+      type: object
+      properties:
+        optionType:
+          enum:
+          - unknown
+          - call
+          - put
+          allOf:
+          - $ref: '#/components/schemas/BrokerOptionType'
+          description: Type of option
+        direction:
+          enum:
+          - unknown
+          - buyToOpen
+          - buyToClose
+          - sellToOpen
+          - sellToClose
+          - buyToCover
+          - sellShort
+          allOf:
+          - $ref: '#/components/schemas/BrokerOptionDirection'
+          description: Direction of option
+        strikePrice:
+          type: number
+          description: Option strike price
+          format: double
+        expirationTimestamp:
+          type: integer
+          description: Option expiration timestamp
+          format: int64
+        numberOfSharesInContract:
+          type: number
+          description: Number of shares covered by option
+          format: double
+        complexOrderStrategyType:
+          type: string
+          description: Option complex order strategy type
+          nullable: true
+      additionalProperties: false
+    B2BBrokerPreviewOrderResultApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerPreviewOrderResult'
+          nullable: true
+      additionalProperties: false
+    B2BBrokerOrderSymbolInfo:
+      type: object
+      properties:
+        fractionalTradingAllowance:
+          enum:
+          - fractionalTradingAllowed
+          - fractionalTradingNotAllowed
+          - tradingNotAllowed
+          - fractionalTradingPossiblyAllowed
+          allOf:
+          - $ref: '#/components/schemas/SymbolTradingAllowance'
+          description: Specifies if the fractional trading is allowed for the provided symbol
+        minimumOrderValue:
+          type: number
+          description: Minimum allowed order value
+          format: double
+        precisionScale:
+          type: integer
+          description: Maximum number of decimal digits accepted by the symbol
+          format: int32
+          nullable: true
+      additionalProperties: false
+    B2BBrokerConversionFeature:
+      type: object
+      properties:
+        supported:
+          type: boolean
+        supportsPreview:
+          type: boolean
+        supportedCryptocurrencySymbols:
+          type: array
+          items:
+            type: string
+          nullable: true
+        supportedFiatCurrencies:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    B2BBrokerAccountBalance:
+      type: object
+      properties:
+        cash:
+          type: number
+          description: Withdrawable cash amount on the account.
+          format: double
+          nullable: true
+        buyingPower:
+          type: number
+          description: Buying power indicating the maximum amount the user can spend to buy assets. E.g. available margin.
+          format: double
+          nullable: true
+        cryptocurrencyBuyingPower:
+          type: number
+          description: Buying power available for placing cryptocurrency orders.
+          format: double
+          nullable: true
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code.
+          nullable: true
+      additionalProperties: false
+    TransactionsBrokerBaseRequest:
+      required:
+      - authToken
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```ETrade```
+
+            ```Alpaca```
+
+            ```WeBull```
+
+            ```Stash```
+
+            ```InteractiveBrokers```
+
+            ```Public```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```Etoro```
+
+            ```CexIo```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```BitFlyer```
+
+            ```Coinlist```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```Vanguard```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```CoinbasePrime```
+
+            '
+      additionalProperties: false
+    B2BBrokerTradingFeature:
+      type: object
+      properties:
+        supported:
+          type: boolean
+        supportsFiatCurrencyPayment:
+          type: boolean
+        supportsCryptocurrencyPayment:
+          type: boolean
+        supportsMarginOrders:
+          type: boolean
+        supportedCryptocurrencySymbols:
+          type: array
+          items:
+            type: string
+          nullable: true
+        supportedCryptocurrencySymbolsForPayment:
+          type: array
+          items:
+            type: string
+          nullable: true
+        supportedFiatCurrencies:
+          type: array
+          items:
+            type: string
+          nullable: true
+        marketType:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerTradingFeatureOrderType'
+          nullable: true
+        limitType:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerTradingFeatureOrderType'
+          nullable: true
+        stopLossType:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerTradingFeatureOrderType'
+          nullable: true
+      additionalProperties: false
+    B2BBrokerTradingFeatureInfoApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type: string
+          description: A message generated by the API
+          nullable: true
+        displayMessage:
+          type: string
+          description: User-friendly display message that can be presented to the end user
+          nullable: true
+        errorType:
+          type: string
+          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
+          nullable: true
+        errorData:
+          nullable: true
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerTradingFeatureInfo'
+          nullable: true
+      additionalProperties: false
+    BrokerOrderType:
+      enum:
+      - unknown
+      - buy
+      - sell
+      type: string
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header
