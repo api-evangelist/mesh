@@ -1,0 +1,42 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.meshconnect.com/resources/sdk-release-notes
+scheme: semver
+canonical_source: "GitHub releases per SDK repo under github.com/FrontFin (docs page mirrors them)"
+current_versions:
+  web: "@meshconnect/web-link-sdk 3.10.5"
+  react_native: "@meshconnect/react-native-link-sdk 2.4.4"
+  flutter: "mesh_sdk_flutter 1.1.8"
+  android: "com.meshconnect:link 3.4.4"
+  ios: "mesh-ios-sdk 3.3.2"
+entries:
+- version: Web SDK 3.10.5
+  date: '2026-07-20'
+  breaking: false
+  highlights:
+  - "Restricts the Comlink wallet bridge to the Mesh iframe (origin allowlist + event.source guard), closing a cross-window message-validation issue; bumps @meshconnect/uwc-bridge-parent to 1.4.2."
+  url: https://github.com/FrontFin/mesh-web-sdk/releases/tag/3.10.5
+- version: React Native SDK 2.4.4
+  date: '2026-07-16'
+  breaking: false
+  highlights:
+  - "OAuth and onramp handoffs (e.g. Coinbase deposit) now open reliably in the external browser on iOS instead of stalling on the loading screen."
+  url: https://github.com/FrontFin/mesh-react-native-sdk/releases/tag/2.4.4
+- version: Flutter SDK 1.1.8
+  date: '2026-07-10'
+  breaking: false
+  highlights:
+  - "SDK events include additional optional fields from the Link event contract; sends platform=flutter to the Link UI; sparse-payload events now delivered reliably."
+  url: https://github.com/FrontFin/mesh-flutter-sdk/releases/tag/v1.1.8
+- version: Android SDK 3.4.4
+  date: '2026-07-06'
+  breaking: false
+  highlights:
+  - "Removed hardcoded third-party origins from the WebView domain whitelist."
+  url: https://github.com/FrontFin/mesh-android-sdk/releases/tag/3.4.4
+- version: iOS SDK 3.3.2
+  date: '2026-07-06'
+  breaking: false
+  highlights:
+  - "Maintenance and stability; removed hardcoded connection origins."
+  url: https://github.com/FrontFin/mesh-ios-sdk/releases/tag/3.3.2

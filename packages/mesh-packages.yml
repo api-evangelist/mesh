@@ -1,0 +1,60 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.meshconnect.com/resources/sdk-release-notes
+notes: >-
+  Mesh publishes six official first-party libraries: a server-side Node API client,
+  and five client-side "Link" SDKs (web, iOS, Android, React Native, Flutter) that
+  render Mesh's hosted connection UX. GitHub org is FrontFin (Mesh was formerly
+  Front Finance).
+packages:
+- language: javascript
+  registry: npm
+  name: "@meshconnect/web-link-sdk"
+  url: https://www.npmjs.com/package/@meshconnect/web-link-sdk
+  install: npm install @meshconnect/web-link-sdk
+  version: 3.10.5
+  repo: https://github.com/FrontFin/mesh-web-sdk
+  role: client-link-sdk
+  official: true
+- language: javascript
+  registry: npm
+  name: "@meshconnect/node-api"
+  url: https://www.npmjs.com/package/@meshconnect/node-api
+  install: npm install @meshconnect/node-api
+  version: 2.0.28
+  repo: https://github.com/FrontFin/mesh-web-sdk
+  role: server-api-client
+  official: true
+- language: javascript
+  registry: npm
+  name: "@meshconnect/react-native-link-sdk"
+  url: https://www.npmjs.com/package/@meshconnect/react-native-link-sdk
+  install: npm install @meshconnect/react-native-link-sdk
+  version: 2.4.4
+  repo: https://github.com/FrontFin/mesh-react-native-sdk
+  role: client-link-sdk
+  official: true
+- language: kotlin
+  registry: maven-central
+  name: "com.meshconnect:link"
+  url: https://central.sonatype.com/artifact/com.meshconnect/link
+  version: 3.4.4
+  repo: https://github.com/FrontFin/mesh-android-sdk
+  role: client-link-sdk
+  official: true
+- language: swift
+  registry: swift-package-manager
+  name: "FrontFin/mesh-ios-sdk"
+  url: https://github.com/FrontFin/mesh-ios-sdk
+  version: 3.3.2
+  repo: https://github.com/FrontFin/mesh-ios-sdk
+  role: client-link-sdk
+  official: true
+- language: dart
+  registry: pub.dev
+  name: "mesh_sdk_flutter"
+  url: https://pub.dev/packages/mesh_sdk_flutter
+  version: 1.1.8
+  repo: https://github.com/FrontFin/mesh-flutter-sdk
+  role: client-link-sdk
+  official: true

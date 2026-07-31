@@ -1,0 +1,22 @@
+generated: '2026-07-20'
+method: searched
+source: >-
+  https://docs.meshconnect.com/resources/sdk-release-notes,
+  https://status.meshconnect.com/, openapi/mesh-integration-api-openapi.json
+api_versioning:
+  scheme: uri-path
+  current: v1
+  evidence: "All Integration API paths are prefixed /api/v1/"
+sdk_versioning:
+  scheme: semver
+  policy_url: https://docs.meshconnect.com/resources/sdk-release-notes
+  rule: "MAJOR = breaking (review migration notes), MINOR = new non-breaking feature, PATCH = fix"
+  canonical_source: "GitHub releases per SDK repo under github.com/FrontFin"
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: "No formal API deprecation policy or RFC 8594 Sunset/Deprecation header support is published for the Integration API. SDK breaking changes are gated behind a major-version bump with migration notes."
+status_page: https://status.meshconnect.com/
+sla:
+  url: null
+deprecated_operations: []

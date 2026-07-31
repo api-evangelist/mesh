@@ -1,0 +1,47 @@
+generated: '2026-07-20'
+method: searched
+source: >-
+  https://docs.meshconnect.com/resources/concepts,
+  https://docs.meshconnect.com/resources/webhooks,
+  https://docs.meshconnect.com/resources/common-errors,
+  openapi/mesh-integration-api-openapi.json
+authentication:
+  style: api-key-headers
+  headers: [X-Client-Id, X-Client-Secret]
+  session_token: "Link Token — short-lived (10 min), single-use, minted server-side via POST /api/v1/linktoken and handed to the client SDK"
+  registered_client_token: "Short-lived auth token via POST /api/v1/auth-token for sub-client / registered-client calls"
+  cross_ref: authentication/mesh-authentication.yml
+request_style:
+  transport: REST/JSON over HTTPS
+  base_path: /api/v1
+  reads_via_post: "Several read endpoints (balance/get, holdings/get, transactions/list, transfers/list) accept POST bodies rather than query params"
+idempotency:
+  request_level: false
+  notes: >-
+    Mesh does not document a request-level Idempotency-Key header for API writes. Link
+    Tokens are single-use. Idempotency IS documented for webhook consumption: dedupe on
+    the stable EventId (the Id field changes per delivery attempt).
+pagination:
+  documented: false
+  notes: "No cursor/offset pagination convention is documented; list endpoints filter by connected-account/type parameters."
+webhooks:
+  surface: Transfer status webhooks
+  signature_header: X-Mesh-Signature-256
+  signature_algorithm: HMAC-SHA256 (base64) over the raw request body bytes
+  source_ip: "20.22.113.37 (static)"
+  delivery: at-least-once
+  dedupe_key: EventId
+  response_requirement: "Return 200 in < 200ms, then process asynchronously"
+  cross_ref: asyncapi/mesh-transfers-webhooks.yml
+error_envelope:
+  format: plain-json
+  problem_json: false
+  cross_ref: errors/mesh-problem-types.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  cross_ref: lifecycle/mesh-lifecycle.yml
+environments:
+  production: https://integration-api.meshconnect.com
+  sandbox: https://sandbox-integration-api.meshconnect.com
+  cross_ref: sandbox/mesh-sandbox.yml

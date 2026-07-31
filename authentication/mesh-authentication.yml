@@ -1,0 +1,33 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/mesh-integration-api-openapi.json
+docs: https://docs.meshconnect.com/build/prepare-to-build
+notes: >-
+  Server-to-server calls to the Mesh Connect Integration API authenticate with two
+  API-key headers issued in the Mesh dashboard (Account > API keys): X-Client-Id and
+  X-Client-Secret. Sandbox and production keys are separate. Registered-client (sub-client)
+  calls additionally use a short-lived auth token obtained via POST
+  /api/v1/auth-token (see api-reference/auth-token/generate-auth-token). Link Tokens
+  (POST /api/v1/linktoken) are short-lived (10 min) single-use tokens minted server-side
+  and handed to the client SDK to launch Link. No OAuth2 is exposed on Mesh's own API
+  (OAuth is used internally by Mesh when connecting end users to underlying integrations).
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: Client-Secret
+  type: apiKey
+  in: header
+  parameter: X-Client-Secret
+  description: Contact Mesh to get client Secret
+  sources:
+  - openapi/mesh-integration-api-openapi.json
+- name: Client-Id
+  type: apiKey
+  in: header
+  parameter: X-Client-Id
+  description: Contact Mesh to get client Id
+  sources:
+  - openapi/mesh-integration-api-openapi.json

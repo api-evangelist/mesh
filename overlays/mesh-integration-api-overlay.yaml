@@ -1,0 +1,31 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Mesh Connect Integration API
+  version: 1.0.0
+extends: openapi/mesh-integration-api-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: mesh
+    x-apievangelist-company: Mesh
+    x-apievangelist-category:
+    - Crypto
+    - Payments
+    - Digital Assets
+    - Transfers
+    x-apievangelist-sandbox-baseURL: https://sandbox-integration-api.meshconnect.com
+    x-apievangelist-status-page: https://status.meshconnect.com/
+    x-apievangelist-compliance:
+    - SOC 2 Type II
+    x-apievangelist-webhooks: asyncapi/mesh-transfers-webhooks.yml
+    x-apievangelist-notes: >-
+      Auth is via X-Client-Id + X-Client-Secret API-key headers. Error bodies are plain
+      JSON (a ProblemDetails schema exists but responses are served as application/json,
+      not application/problem+json). Operations lack operationIds in the published spec —
+      a gap surfaced for a follow-up with Mesh.
+- target: $.servers
+  update:
+  - url: https://integration-api.meshconnect.com
+    description: Production
+  - url: https://sandbox-integration-api.meshconnect.com
+    description: Sandbox

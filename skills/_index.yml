@@ -1,0 +1,30 @@
+generated: '2026-07-20'
+method: generated
+source: >-
+  openapi/mesh-integration-api-openapi.json, conventions/mesh-conventions.yml,
+  errors/mesh-problem-types.yml, asyncapi/mesh-transfers-webhooks.yml
+note: >-
+  The published OpenAPI has no operationIds, so each skill step is grounded in the
+  verified METHOD + path (all confirmed present in the spec) rather than an operationId.
+skills:
+- file: mesh-connect-and-deposit.md
+  name: Connect an account and take a crypto deposit
+  api: openapi/mesh-integration-api-openapi.json
+  operations:
+  - "GET /api/v1/integrations"
+  - "POST /api/v1/linktoken"
+- file: mesh-read-holdings-and-balances.md
+  name: Read a connected account's holdings and balances
+  api: openapi/mesh-integration-api-openapi.json
+  operations:
+  - "POST /api/v1/holdings/get"
+  - "POST /api/v1/balance/get"
+  - "GET /api/v1/holdings/portfolio"
+- file: mesh-managed-transfer.md
+  name: Quote, preview, and execute a managed transfer
+  api: openapi/mesh-integration-api-openapi.json
+  operations:
+  - "GET /api/v1/transfers/managed/tokens"
+  - "POST /api/v1/transfers/managed/quote"
+  - "POST /api/v1/transfers/managed/preview"
+  - "POST /api/v1/transfers/managed/execute"

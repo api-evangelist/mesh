@@ -1,0 +1,54 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.meshconnect.com/resources/webhooks
+spec_type: Webhooks
+notes: >-
+  Mesh publishes a webhook surface (transfer-status events) but no AsyncAPI document.
+  Captured here as a webhook catalog. Events are server-to-server POSTs from a static
+  Mesh IP, signed HMAC-SHA256 over the raw body in the X-Mesh-Signature-256 header,
+  delivered at-least-once (dedupe on EventId).
+delivery:
+  method: http-post
+  content_type: application/json
+  source_ip: "20.22.113.37"
+  signature_header: X-Mesh-Signature-256
+  signature_algorithm: "HMAC-SHA256 over raw request body bytes, base64-encoded"
+  guarantee: at-least-once
+  dedupe_key: EventId
+  response_requirement: "Return 200 in < 200ms; process asynchronously"
+  registration: "Dashboard > Account > API keys > Webhooks (one production + one sandbox callback URI)"
+channels:
+- name: transfer-status
+  description: "Updates to the status of a Mesh-initiated transfer."
+  message: TransferStatusEvent
+  statuses:
+  - Pending
+  - Succeeded
+  - Failed
+  - RefundPending
+  - RefundSucceeded
+messages:
+- name: TransferStatusEvent
+  fields:
+    event:
+    - EventId (Guid, stable idempotency key)
+    - Id (Guid, per-delivery-attempt id)
+    - SentTimestamp (unix seconds)
+    transfer:
+    - TransferId (Guid)
+    - Timestamp (unix seconds)
+    - TransferStatus (string)
+    - TransactionId (client-provided)
+    - TxHash (string, present once on-chain)
+    - UserId (client-provided)
+    - Token (destination symbol)
+    - Chain (destination network)
+    - SourceAmount (decimal)
+    - SourceAccountProvider (string)
+    - DestinationAmount (decimal)
+    - DestinationAddress (string)
+    - SourceAddress (string)
+    - RefundAddress (string)
+    - RefundType (string, e.g. OffChainConvert)
+    - TransferSteps (array; per-hop legs for bridging/swaps)
+poll_alternative: "GET /api/v1/transfers/managed/mesh (polling is discouraged in favor of webhooks)"

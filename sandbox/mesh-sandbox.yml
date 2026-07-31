@@ -1,0 +1,75 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.meshconnect.com/resources/sandbox-testnets
+overview: >-
+  The Mesh sandbox is a full replica of production — same API, same flows, same SDK —
+  using simulated exchange accounts and real blockchain testnets so integrations can be
+  built and tested without touching real funds. Sandbox API keys are separate from
+  production keys and managed in the same dashboard section.
+environments:
+  production:
+    base_url: https://integration-api.meshconnect.com
+  sandbox:
+    base_url: https://sandbox-integration-api.meshconnect.com
+cex_test_accounts:
+  shared_password: "Pass123"
+  shared_mfa_otp: "123456"
+  accounts:
+  - username: Mesh
+    portfolio: "Full (BTC, ETH, BNB, USDC, USDT, SOL, XRP, and more)"
+    usd_balance: "$10M"
+    best_for: General testing
+  - username: Mesh2
+    portfolio: Empty
+    usd_balance: "$0"
+    best_for: Empty state / zero-balance flows
+  - username: Mesh3
+    portfolio: "No crypto, cash only"
+    usd_balance: "$10M"
+    best_for: Buy / onramp flows
+  - username: Mesh4
+    portfolio: Full
+    usd_balance: "$100M"
+    best_for: Large transaction testing
+  - username: MeshBTC
+    portfolio: BTC only
+    usd_balance: "$0"
+  - username: MeshUSDC
+    portfolio: USDC only
+    usd_balance: "$0"
+  - username: MeshUSDT
+    portfolio: USDT only
+    usd_balance: "$0"
+  - username: MeshETH
+    portfolio: ETH only
+    usd_balance: "$0"
+  - username: MeshSOL
+    portfolio: SOL only
+    usd_balance: "$0"
+wallet_testnets:
+- wallet: MetaMask
+  testnet: Sepolia
+  native_token: SEPOLIAETH
+  stablecoins: [PYUSD, USDG]
+  faucet: https://sepoliafaucet.com
+- wallet: MetaMask
+  testnet: Base Sepolia
+  native_token: SEPOLIAETH
+  stablecoins: [USDC, EURC]
+  faucet: https://sepoliafaucet.com
+- wallet: Rainbow
+  testnet: Sepolia
+  native_token: SEPOLIAETH
+  stablecoins: [PYUSD, USDG]
+  faucet: https://sepolia-faucet.pk910.de
+- wallet: Phantom
+  testnet: Solana Devnet
+  native_token: DEVNETSOL
+  stablecoins: [PYUSD, USDG]
+  faucet: https://faucet.solana.com
+  note: "Enable Settings > Developer Settings > Testnet mode"
+limitations:
+- "Only Coinbase and a legacy Binance integration are available in sandbox; other production exchanges are not replicated."
+- "Mesh Managed Tokens (MMT) are not supported in sandbox."
+- "Only MetaMask (Sepolia, Base Sepolia), Rainbow (Sepolia), and Phantom (Solana Devnet) are supported for testnet wallet flows."
+- "The Pending webhook event is not guaranteed in sandbox — transfers may go directly to Succeeded or Failed."

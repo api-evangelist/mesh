@@ -1,0 +1,31 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.meshconnect.com/resources/concepts
+notes: >-
+  Mesh's client-side surface is "Link" — a hosted, embeddable UX (iframe on web, native
+  view on mobile) that facilitates connecting accounts, initiating transfers, and
+  verifying wallets. It is launched with a server-minted Link Token and driven via
+  callback functions. Distinct from the server-side Node API client in packages/.
+families:
+- name: Mesh Link
+  kind: hosted-embeddable-ux
+  description: "Hosted connection/transfer/verify flow. Handles OAuth flows, wallet connections, transfer previews, compliance steps, and success/error states. Loaded from *.meshconnect.com (web iframe hosted at web.meshconnect.com)."
+  platforms:
+  - platform: web
+    loader: "@meshconnect/web-link-sdk (createLink / openLink)"
+    package: https://www.npmjs.com/package/@meshconnect/web-link-sdk
+  - platform: ios
+    loader: FrontFin/mesh-ios-sdk (Swift Package Manager)
+    package: https://github.com/FrontFin/mesh-ios-sdk
+  - platform: android
+    loader: "com.meshconnect:link (Maven Central)"
+    package: https://central.sonatype.com/artifact/com.meshconnect/link
+  - platform: react-native
+    loader: "@meshconnect/react-native-link-sdk"
+    package: https://www.npmjs.com/package/@meshconnect/react-native-link-sdk
+  - platform: flutter
+    loader: mesh_sdk_flutter (pub.dev)
+    package: https://pub.dev/packages/mesh_sdk_flutter
+  integration_notes:
+  - "Add *.meshconnect.com to the host app CSP frame-src directive to allow the iframe."
+  - "Approved domains (incl. localhost) must be added under Dashboard > Account > API keys > Access."

@@ -1,0 +1,19 @@
+generated: '2026-07-20'
+method: searched
+probe: true
+url: https://www.meshpay.com/security
+certifications:
+- SOC 2 Type II
+program:
+- Zero trust, least-privilege access
+- Encryption at rest and in transit
+- Security-by-design principles
+- Regular third-party penetration testing and audits
+evidence:
+- source: https://www.meshpay.com/security
+  keywords: [soc 2 type ii, penetration testing, encryption, zero trust, security & trust]
+notes: >-
+  Mesh publishes a "Security & Trust" page stating it is SOC 2 Type II certified and
+  undergoes regular audits and penetration testing with third-party security firms.
+  No standalone trust-portal subdomain (trust.meshpay.com) or downloadable report
+  index was found; certifications are asserted on the marketing security page.

@@ -1,0 +1,44 @@
+generated: '2026-07-20'
+method: searched
+source: live probes of /.well-known/* on Mesh hosts
+notes: >-
+  No /.well-known discovery documents are published on any Mesh host (API, docs, or
+  marketing). No security.txt (RFC 9116), OpenID/OAuth discovery, api-catalog, or
+  ai-plugin.json present. All probes returned 404. Recorded as a valid negative result.
+hosts:
+- host: https://integration-api.meshconnect.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://docs.meshconnect.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://www.meshpay.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404

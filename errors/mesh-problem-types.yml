@@ -1,0 +1,67 @@
+generated: '2026-07-20'
+method: searched
+source: >-
+  Derived from openapi/mesh-integration-api-openapi.json 4xx/5xx responses; enriched
+  from https://docs.meshconnect.com/resources/common-errors
+format: plain-json
+notes: >-
+  The Mesh Connect Integration API returns plain JSON error bodies (not RFC 9457
+  application/problem+json). Standard HTTP status codes are used across the 40
+  operations. The integration-specific errors below are the most common issues
+  developers hit, drawn from Mesh's published Common Errors reference.
+http_status:
+- status: 400
+  title: Bad Request
+  count_operations: 33
+  remediation: "Validate request body / parameters; use token ticker (e.g. USDC), not an ERC-20 contract address, for symbol fields."
+- status: 401
+  title: Unauthorized
+  count_operations: 36
+  remediation: "Provide valid X-Client-Id and X-Client-Secret headers; check sandbox vs production keys and that the SDK domain is on the dashboard allowlist."
+- status: 403
+  title: Forbidden
+  count_operations: 17
+  remediation: "Your API key lacks access to the requested resource/environment, or the SDK domain is not authorized."
+- status: 404
+  title: Not Found
+  count_operations: 9
+  remediation: "Resource (integration, transfer, client) not found; verify identifiers."
+- status: 500
+  title: Internal Server Error
+  count_operations: 1
+- status: 503
+  title: Service Unavailable
+  count_operations: 1
+integration_problems:
+- id: sdk-domain-not-authorized
+  symptom: "SDK loads then shows an authorization error, or CORS error in console"
+  cause: "Domain (including localhost) not on the dashboard allowlist"
+  action: "Dashboard > Account > API keys > Access — add every domain (localhost:PORT, staging, production)"
+- id: sdk-iframe-blocked-by-csp
+  symptom: "Link modal renders as a blank grey box; CSP frame-src error"
+  cause: "App CSP does not permit Mesh's hosted iframe"
+  action: "Add *.meshconnect.com to the CSP frame-src directive"
+- id: link-token-expired-or-used
+  symptom: "openLink() throws / immediate error screen"
+  cause: "Link Tokens are short-lived (10 min) and single-use"
+  action: "Fetch a fresh Link Token on the connect-button click, never on page load; never cache or reuse"
+- id: symbol-not-supported-empty-catalog
+  symptom: "Empty integration catalog or error on toAddresses"
+  cause: "ERC-20 contract address passed as symbol instead of the ticker, or an invalid networkId/symbol pair"
+  action: "Use the ticker symbol (e.g. USDC); include multiple networkId/symbol pairs to widen coverage"
+- id: no-eligible-assets
+  symptom: "'No eligible assets' screen; transferNoEligibleAssets event fires"
+  cause: "Connected account holds no asset matching the networkId/symbol pairs in toAddresses"
+  action: "Broaden toAddresses; handle transferNoEligibleAssets using its arrayOfTokensHeld payload"
+- id: webhook-signature-mismatch
+  symptom: "Every inbound webhook rejected as invalid signature"
+  cause: "HMAC computed over re-serialized JSON instead of the raw request body bytes"
+  action: "Compute HMAC-SHA256 over the raw body (express.raw(), not express.json()); parse JSON only after verification"
+- id: duplicate-webhook-deliveries
+  symptom: "Same webhook event processed more than once"
+  cause: "At-least-once delivery; Mesh retries on non-2xx or slow responses"
+  action: "Deduplicate on EventId (stable across retries; Id changes per attempt); return 200 quickly, process async"
+- id: transfer-stuck-pending-or-failed
+  symptom: "Succeeded webhook never arrives, or arrives as Failed"
+  cause: "Exchange-side delay (CEX can take up to 24h), amount below exchange minimum, bad destination address format, or user 2FA timeout"
+  action: "Wait for Succeeded before crediting; surface minAmount/minAmountInFiat; validate destination address; contact Mesh with the TransferId if stuck in production"

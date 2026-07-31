@@ -1,0 +1,87 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/mesh-integration-api-openapi.json (212 component schemas)
+enriched_from: https://docs.meshconnect.com/resources/concepts
+notes: >-
+  Entity graph derived from the Mesh Connect Integration API OpenAPI schemas and the
+  published Concepts glossary. Mesh's model centers on a LinkToken that launches Link,
+  which authenticates the end user with an Integration (exchange or wallet); connected
+  accounts expose Holdings/Portfolio and Transactions, and Transfers move assets across
+  Networks/Tokens.
+entities:
+- name: LinkToken
+  schema: LinkTokenModel
+  description: "Short-lived (10 min), single-use token that configures and launches a Link session. Minted server-side via POST /api/v1/linktoken."
+  key_fields: [transferOptions, transferType, userId, transactionId]
+- name: Integration
+  schema: IntegrationModel
+  description: "A supported exchange (Coinbase, Binance) or wallet (MetaMask, Phantom) Mesh connects to. Retrieved via GET /api/v1/integrations."
+  key_fields: [id, name, type, categories]
+- name: BrokerAccount
+  schema: BrokerAccount
+  description: "An end-user account connected through an Integration; holds auth tokens and exposes balances/holdings."
+- name: Network
+  schema: NetworkResponse
+  description: "A blockchain network (Ethereum, Solana, Base) assets can move over. Retrieved via GET /api/v1/transfers/managed/networks."
+  key_fields: [id, name]
+- name: Token
+  schema: TokenNetworksModel
+  description: "A supported asset/ticker (USDC, ETH) and the networks it is available on. Retrieved via GET /api/v1/transfers/managed/tokens."
+- name: Asset
+  schema: Asset
+  description: "A tradable/holdable asset entry. Retrieved via GET /api/v1/assets/{assetType}."
+- name: Holding
+  schema: HoldingsModel
+  description: "Positions held in a connected account. Retrieved via POST /api/v1/holdings/get and /value."
+- name: Portfolio
+  schema: B2BPortfolioModel
+  description: "Aggregated value view across a connected account's holdings. GET /api/v1/holdings/portfolio."
+- name: Transfer
+  schema: TransferModel
+  description: "A crypto movement (deposit/payment/onramp/withdrawal) initiated via Mesh. Configured, previewed, and executed through /api/v1/transfers/managed/*; status delivered by webhook."
+  key_fields: [transferId, status, sourceAmount, destinationAmount, destinationAddress]
+- name: Transaction
+  schema: B2BBrokerOrder
+  description: "A buy/sell/trade order executed on a connected brokerage/exchange account via /api/v1/transactions/*."
+- name: DepositAddress
+  schema: B2BBrokerCryptocurrencyDepositAddressResponse
+  description: "A generated crypto deposit address for a connected account/network."
+- name: RegisteredClient
+  description: "A sub-client (child account) under a main Mesh client, with its own credentials, branding, and compliance settings."
+relationships:
+- from: LinkToken
+  to: Integration
+  type: references
+  via: transferOptions/integrationId
+- from: BrokerAccount
+  to: Integration
+  type: belongs_to
+  via: integrationId
+- from: Transfer
+  to: Network
+  type: has_one
+  via: networkId
+- from: Transfer
+  to: Token
+  type: has_one
+  via: symbol
+- from: Transfer
+  to: DepositAddress
+  type: has_one
+  via: destinationAddress
+- from: Holding
+  to: BrokerAccount
+  type: belongs_to
+  via: account
+- from: Portfolio
+  to: Holding
+  type: has_many
+  via: positions
+- from: Transaction
+  to: BrokerAccount
+  type: belongs_to
+  via: account
+- from: RegisteredClient
+  to: RegisteredClient
+  type: belongs_to
+  via: mainClientId
