@@ -1,0 +1,240 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets Managed Transfers API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Managed Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get networks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/networks"
+          },
+          "docs": "**Get supported networks list.**\r\n<br />\r\n---\r\nGet the list of all networks supported by Mesh to perform transfers, including which tokens and integrations are supported."
+        },
+        {
+          "info": {
+            "name": "Get integrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/integrations"
+          },
+          "docs": "**Get supported integrations list.**\r\n<br />\r\n---\r\nGet the list of all integrations supported by Mesh to perform transfers, including which tokens and networks are supported."
+        },
+        {
+          "info": {
+            "name": "Get supported tokens list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/tokens"
+          },
+          "docs": "Get the list of all tokens supported by Mesh to perform transfers, including which networks and integrations are supported."
+        },
+        {
+          "info": {
+            "name": "Verify the transfer request without authenticating the integration accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/verify",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Checks if the combination of integration ID, network ID, token is correct for transfer.\r\nChecks if the target address is in the correct format."
+        },
+        {
+          "info": {
+            "name": "Configure transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/configure",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Get the list of networks and tokens eligible for a transfer, based on the provided request data.**\r\n<br />\r\n---\r\nTransfers can be configured either from one connected account to another connected account, or\r\nfrom a connected account to any arbitrary address or addresses.\r\n<br />\r\n* **From one connected account to another connected account:**\r\n<br />\r\nThe API client provides `FromAuthToken` that is representing the source account and `ToAuthToken` that is representing the target account. Front"
+        },
+        {
+          "info": {
+            "name": "Preview transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Validate and preview the transfer.**\r\n<br />\r\n---\r\nValidates the transfer, calculates the relevant amount in crypto if requested amount was in fiat and updates\r\nthe current network fee values.\r\n<br />\r\nThis endpoint uses the `NetworkId` field to specify which network will be used to perform the transfer. The target `NetworkId`\r\nshould be selected after configuring the transfer using `/configure` endpoint.\r\n<br /><br />\r\nReturns the `PreviewId` value that can be used to commit the transfer."
+        },
+        {
+          "info": {
+            "name": "Execute transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/execute",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Commit the previously previewed transfer.**\r\n<br />\r\n---\r\nPreviews the transfer, using the `PreviewId` value.\r\n<br />\r\nHandles multi-factor authentication codes if the account is configured to use them for additional security.\r\n<br /><br />\r\nReturns the status of the transfer and the details of the transfer if it was initiated successfully."
+        },
+        {
+          "info": {
+            "name": "Get deposit address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/address/get",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get or generate a cryptocurrency deposit address that can be used to transfer assets to the financial institution"
+        },
+        {
+          "info": {
+            "name": "Quote transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/quote",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a quote for transferring a fiat amount from a brokerage account in a given cryptocurrency over a specified network.\r\nReturns min and max fees and amounts to account for different funding sources (existing crypto balance, cash balance or\r\nACH/debit deposit). Currently only supported for Coinbase."
+        },
+        {
+          "info": {
+            "name": "Get transfers initiated by Mesh",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/managed/mesh",
+            "params": [
+              {
+                "name": "Count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to return. Default 10, maximum - 100."
+              },
+              {
+                "name": "Offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to skip."
+              },
+              {
+                "name": "Id",
+                "value": "",
+                "type": "query",
+                "description": "Mesh transfer identifier."
+              },
+              {
+                "name": "ClientTransactionId",
+                "value": "",
+                "type": "query",
+                "description": "Client transaction identifier."
+              },
+              {
+                "name": "UserId",
+                "value": "",
+                "type": "query",
+                "description": "Client's user identifier."
+              },
+              {
+                "name": "IntegrationIds",
+                "value": "",
+                "type": "query",
+                "description": "Transfered integration."
+              },
+              {
+                "name": "Statuses",
+                "value": "",
+                "type": "query",
+                "description": "Transfer statuses."
+              },
+              {
+                "name": "FromTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Transfer created minimum timestamp."
+              },
+              {
+                "name": "ToTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Transfer created maximum timestamp."
+              },
+              {
+                "name": "MinAmountInFiat",
+                "value": "",
+                "type": "query",
+                "description": "Minimum amount in fiat."
+              },
+              {
+                "name": "MaxAmountInFiat",
+                "value": "",
+                "type": "query",
+                "description": "Maximum amount in fiat."
+              },
+              {
+                "name": "OrderBy",
+                "value": "",
+                "type": "query",
+                "description": "Order by column."
+              },
+              {
+                "name": "DescendingOrder",
+                "value": "",
+                "type": "query",
+                "description": "Value indicating if ordering is descending."
+              }
+            ]
+          },
+          "docs": "Get cryptocurrency transfers initiated by Mesh on exchanges or self-custody wallets."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

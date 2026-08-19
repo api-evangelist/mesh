@@ -1,0 +1,145 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets Transactions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transactions/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get transactions on the account - the paginated history of the executed orders along with the pending orders."
+        },
+        {
+          "info": {
+            "name": "Get transaction details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transactions/details",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get details of an executed order. Typically used to poll the status of the previously executed order."
+        },
+        {
+          "info": {
+            "name": "Get supported order features for institution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transactions/featureList",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get supported features for trading for a particular financial institution. Different institutions support different\r\nfeatures (e.g. different `OrderType` or different sets of `TimeInForce` values), so this endpoint is used to\r\ndescribe such features for provided financial institution."
+        },
+        {
+          "info": {
+            "name": "Preview order execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transactions/preview/:side",
+            "params": [
+              {
+                "name": "side",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates the order information (such as necessary balance availability), and returns additional information,\r\nsuch as expected order fee.\r\nDoes not execute the order."
+        },
+        {
+          "info": {
+            "name": "Execute order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transactions/:side",
+            "params": [
+              {
+                "name": "side",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates the order information and then calls institution's API to execute an order.\r\nIt's recommended to call this endpoint after calling the `preview` endpoint to make sure that the\r\norder execution request is correct."
+        },
+        {
+          "info": {
+            "name": "Cancel order execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transactions/cancel",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancels a pending order (an order with `InProgress` status).\r\n`SymbolPair` is required to be provided for `Binance`, `BinanceInternational`, `Okx` and `BitFlyer` institutions.\r\nThis value"
+        },
+        {
+          "info": {
+            "name": "Get symbol information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transactions/symbolinfo",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns information on trading allowance for a provided symbol.\r\nFor example - some institutions allow fractional trading for some symbols, but do not allow it\r\nfor others. So before placing an order the API client can check if the required symbol can be traded fractionally\r\nwith the provided institution."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

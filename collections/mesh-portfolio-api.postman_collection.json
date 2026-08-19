@@ -1,0 +1,854 @@
+{
+  "item": [
+    {
+      "id": "b6aadbcc-7434-4957-b673-dea1bac84708",
+      "name": "Portfolio",
+      "description": {
+        "content": "\n\n### Supported integrations:\n```Robinhood```\n```ETrade```\n```Alpaca```\n```WeBull```\n```Stash```\n```InteractiveBrokers```\n```Public```\n```Coinbase```\n```Kraken```\n```CoinbasePro```\n```CryptoCom```\n```OpenSea```\n```Binance```\n```Gemini```\n```OkCoin```\n```KuCoin```\n```Etoro```\n```CexIo```\n```BinanceInternational```\n```Bitstamp```\n```GateIo```\n```Acorns```\n```Okx```\n```BitFlyer```\n```Coinlist```\n```Huobi```\n```Bitfinex```\n```KrakenDirect```\n```Vanguard```\n```BinanceInternationalDirect```\n```BitfinexDirect```\n```Bybit```\n```Paxos```\n```CoinbasePrime```\n```DeFiWallet```\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "edc0b8d8-580d-4cdd-8300-67c2385a8e13",
+          "name": "Get holdings.",
+          "request": {
+            "name": "Get holdings.",
+            "description": {
+              "content": "Obtain assets from the connected investment account. Performs realtime API call to the underlying integration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "holdings",
+                "get"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\",\n  \"includeMarketValue\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0c4cca7c-950d-42c8-9f1d-2d390ef436a8",
+              "name": "Holdings obtained",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "get"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\",\n  \"includeMarketValue\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": {\n    \"equityPositions\": [\n      {\n        \"symbol\": \"AAPL\",\n        \"amount\": 3,\n        \"costBasis\": 109\n      },\n      {\n        \"symbol\": \"F\",\n        \"amount\": 27,\n        \"costBasis\": 7.05791\n      }\n    ],\n    \"cryptocurrencyPositions\": [\n      {\n        \"marketValue\": 75.15,\n        \"lastPrice\": 0.05,\n        \"symbol\": \"DOGE\",\n        \"amount\": 1503,\n        \"costBasis\": 0.033\n      },\n      {\n        \"symbol\": \"BTC\",\n        \"amount\": 3.0001672,\n        \"costBasis\": 18000\n      }\n    ],\n    \"status\": \"succeeded\",\n    \"notSupportedEquityPositions\": [\n      {\n        \"symbol\": \"CUSIP38259P508\",\n        \"amount\": 1\n      }\n    ],\n    \"notSupportedCryptocurrencyPositions\": [],\n    \"nftPositions\": [],\n    \"optionPositions\": [],\n    \"type\": \"robinhood\",\n    \"accountId\": \"5FUVPB0\",\n    \"institutionName\": \"Robinhood\",\n    \"accountName\": \"Margin account\"\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc27536b-ab8f-42ef-a311-c2be851957d6",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "get"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\",\n  \"includeMarketValue\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04950565-c847-4dcc-a881-9e3aebd16815",
+              "name": "Unauthorized: Client Id or Client Secret are not correct or missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "get"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\",\n  \"includeMarketValue\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8bfd5954-956f-4cae-8610-72f9362836d1",
+              "name": "The API key used does not have read permission to call this Mesh endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "get"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\",\n  \"includeMarketValue\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "db95eaf5-bc3a-40eb-aede-8a2a67e07044",
+          "name": "Get holdings values.",
+          "request": {
+            "name": "Get holdings values.",
+            "description": {
+              "content": "Obtain assets from the connected investment account and return total value and performance.\r\nPerforms realtime API call to the underlying integration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "holdings",
+                "value"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1a01da84-aeb4-4f3e-b56e-beae327d89bc",
+              "name": "Market values of assets",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "value"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": {\n    \"totalValue\": 186.03,\n    \"totalPerformance\": 6.23,\n    \"equitiesValue\": 100.12,\n    \"equitiesPerformance\": 5.3457,\n    \"cryptocurrenciesValue\": 50.37,\n    \"cryptocurrenciesPerformance\": 7.23,\n    \"nftsValue\": 15.34,\n    \"fiatValue\": 20.2\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73e44384-0f88-430b-966e-e6b916224145",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "value"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d3ac430-7f06-4823-a56d-775586340c14",
+              "name": "Unauthorized: Client Id or Client Secret are not correct or missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "value"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bdf6226f-7b14-4490-b48e-3400311aa62b",
+              "name": "The API key used does not have read permission to call this Mesh endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "value"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7c65509-37e0-4758-a097-465948c74c0c",
+          "name": "Get aggregated portfolio",
+          "request": {
+            "name": "Get aggregated portfolio",
+            "description": {
+              "content": "Get the aggregated portfolio of the user containing market values.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "holdings",
+                "portfolio"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "UserId",
+                  "value": "<string>",
+                  "description": "(Required) End user ID to get the aggregated portfolio for."
+                },
+                {
+                  "disabled": false,
+                  "key": "TimezoneOffset",
+                  "value": "<long>",
+                  "description": "Offset in second, used to calculate daily return for cryptocurrencies."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "64f2e5c8-d59a-422c-9004-368613cc04f6",
+              "name": "Portfolio obtained",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "portfolio"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "UserId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "TimezoneOffset",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": {\n    \"portfolioCostBasis\": 1793.71,\n    \"actualPortfolioPerformance\": 6.9,\n    \"equitiesValue\": 1918.03,\n    \"cryptocurrenciesValue\": 1164.44,\n    \"nftsValue\": 0,\n    \"equityPositions\": [\n      {\n        \"portfolioPercentage\": 0.44,\n        \"totalReturn\": -1.3,\n        \"returnPercentage\": -8.67,\n        \"companyName\": \"Tesla\",\n        \"totalDailyReturn\": 0.45,\n        \"dailyReturnPercentage\": 3.45,\n        \"marketValue\": 13.69,\n        \"lastPrice\": 214.44,\n        \"symbol\": \"TSLA\",\n        \"amount\": 0.063,\n        \"costBasis\": 234.8\n      },\n      {\n        \"portfolioPercentage\": 38.98,\n        \"totalReturn\": 144.97,\n        \"returnPercentage\": 13.71,\n        \"companyName\": \"Apple\",\n        \"totalDailyReturn\": 31.65,\n        \"dailyReturnPercentage\": 2.7,\n        \"marketValue\": 1201.67,\n        \"lastPrice\": 147.27,\n        \"symbol\": \"AAPL\",\n        \"amount\": 8.15,\n        \"costBasis\": 129.5\n      }\n    ],\n    \"cryptocurrencyPositions\": [\n      {\n        \"portfolioPercentage\": 11.4018,\n        \"totalReturn\": -592.6533,\n        \"returnPercentage\": -62.7737,\n        \"companyName\": \"Ethereum\",\n        \"totalDailyReturn\": -3.6081,\n        \"dailyReturnPercentage\": -1.0162,\n        \"marketValue\": 351.457,\n        \"lastPrice\": 1350.07,\n        \"symbol\": \"ETH\",\n        \"amount\": 0.260325,\n        \"costBasis\": 3626.66\n      },\n      {\n        \"portfolioPercentage\": 7.8,\n        \"totalReturn\": -85.45,\n        \"returnPercentage\": -26.2,\n        \"companyName\": \"Dogecoin\",\n        \"totalDailyReturn\": -2.45,\n        \"dailyReturnPercentage\": -1.0103,\n        \"marketValue\": 240.5754,\n        \"lastPrice\": 0.05977,\n        \"symbol\": \"DOGE\",\n        \"amount\": 4025.02,\n        \"costBasis\": 0.081\n      }\n    ],\n    \"nftPositions\": []\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "578bb4f8-0785-40ba-969c-3e384495a99f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "portfolio"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "UserId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "TimezoneOffset",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e3dfebc-998a-49a9-8cee-012a26974db0",
+              "name": "Unauthorized: Client Id or Client Secret are not correct or missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "portfolio"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "UserId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "TimezoneOffset",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9dbd838-b703-4a1f-9def-36b58800e309",
+              "name": "The API key used does not have read permission to call this Mesh endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "holdings",
+                    "portfolio"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "UserId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "TimezoneOffset",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Secret",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://integration-api.meshconnect.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Secret"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ede1e2ec-5662-4049-9a0a-c89f2bb1ccf6",
+    "name": "Mesh Connect Integration Assets Portfolio API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\nMesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets Portfolio API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Portfolio",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get holdings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/holdings/get",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Obtain assets from the connected investment account. Performs realtime API call to the underlying integration."
+        },
+        {
+          "info": {
+            "name": "Get holdings values.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/holdings/value",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Obtain assets from the connected investment account and return total value and performance.\r\nPerforms realtime API call to the underlying integration."
+        },
+        {
+          "info": {
+            "name": "Get aggregated portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/holdings/portfolio",
+            "params": [
+              {
+                "name": "UserId",
+                "value": "",
+                "type": "query",
+                "description": "End user ID to get the aggregated portfolio for."
+              },
+              {
+                "name": "TimezoneOffset",
+                "value": "",
+                "type": "query",
+                "description": "Offset in second, used to calculate daily return for cryptocurrencies."
+              }
+            ]
+          },
+          "docs": "Get the aggregated portfolio of the user containing market values."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

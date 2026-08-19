@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets Managed Account Authentication API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Managed Account Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get catalog link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/cataloglink",
+            "params": [
+              {
+                "name": "UserId",
+                "value": "",
+                "type": "query",
+                "description": "A unique Id representing the end user. Typically this will be a user Id from the\r\nclient application. Personally identifiable information, such as an email address or phone number,\r\nshould not be used. 50 characters length maximum."
+              },
+              {
+                "name": "BrokerType",
+                "value": "",
+                "type": "query",
+                "description": "Type of integration to redirect to. Will redirect to catalog if not provided.\r\nNot supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet."
+              },
+              {
+                "name": "EnableTransfers",
+                "value": "",
+                "type": "query",
+                "description": "Link Configuration identifier - an optional paramater for used configuration.\r\nIf not provided default configuration with all avaialbe integrations will be used."
+              },
+              {
+                "name": "RestrictMultipleAccounts",
+                "value": "",
+                "type": "query",
+                "description": "The final screen of Link allows users to “continue” back to your app or “Link another account.”\r\nIf this param is present then this button will be hidden."
+              }
+            ]
+          },
+          "docs": "Get personalized catalog link for client"
+        },
+        {
+          "info": {
+            "name": "Get catalog link with parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/cataloglink",
+            "params": [
+              {
+                "name": "UserId",
+                "value": "",
+                "type": "query",
+                "description": "A unique Id representing the end user. Typically this will be a user Id from the\r\nclient application. Personally identifiable information, such as an email address or phone number,\r\nshould not be used. 50 characters length maximum."
+              },
+              {
+                "name": "BrokerType",
+                "value": "",
+                "type": "query",
+                "description": "Type of integration to redirect to. Will redirect to catalog if not provided.\r\nNot supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet."
+              },
+              {
+                "name": "EnableTransfers",
+                "value": "",
+                "type": "query",
+                "description": "Link Configuration identifier - an optional paramater for used configuration.\r\nIf not provided default configuration with all avaialbe integrations will be used."
+              },
+              {
+                "name": "RestrictMultipleAccounts",
+                "value": "",
+                "type": "query",
+                "description": "The final screen of Link allows users to “continue” back to your app or “Link another account.”\r\nIf this param is present then this button will be hidden."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get personalized catalog link for client supplying parameters for Link actions, such as transfers"
+        },
+        {
+          "info": {
+            "name": "Get Link token with parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/linktoken",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a short lived, one-time use token for initializing a Link session using the client-side SDKs"
+        },
+        {
+          "info": {
+            "name": "Refresh auth token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/token/refresh",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Refresh auth token of the connected institution.\r\nSome institutions do not require tokens to be refreshed.\r\n            \r\nThe following institutions require custom flows:\r\n            \r\nWeBull: AuthToken should be provided along with the RefreshToken\r\n            \r\nVanguard: security settings may activate MFA, requiring user action.\r\nIf MFA is triggered, a second refresh request should be sent.\r\nSecond request should contain MFA code and access token obtained from initial response.\r\n            "
+        },
+        {
+          "info": {
+            "name": "Remove connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://integration-api.meshconnect.com/api/v1/account",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Remove connection to the financial institution and erase all related data completely."
+        },
+        {
+          "info": {
+            "name": "Get health status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/status"
+          },
+          "docs": "Get the list of supported institutions and their health statuses."
+        },
+        {
+          "info": {
+            "name": "Retrieve the list of all available integrations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/integrations"
+          },
+          "docs": "Returns a list of integrations with details including the integration ID, name, type,\r\nDeFi wallet provider ID, and categories."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

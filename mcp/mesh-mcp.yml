@@ -2,57 +2,61 @@ generated: '2026-07-20'
 method: derived
 status: candidate
 source: openapi/mesh-integration-api-openapi.json
-notes: >-
-  No official hosted/remote Mesh MCP server was found (no mcp.meshconnect.com, no
-  @meshconnect MCP package in the npm/MCP registries as of this pass). Below is a
-  candidate tool surface derived from the Integration API's read-oriented operations —
-  a starting point for an MCP server, not a published Mesh product. Write/transfer
-  operations are intentionally omitted from the candidate set because they move funds
-  and require human-in-the-loop approval via Link.
+notes: No official hosted/remote Mesh MCP server was found (no mcp.meshconnect.com, no @meshconnect MCP
+  package in the npm/MCP registries as of this pass). Below is a candidate tool surface derived from the
+  Integration API's read-oriented operations — a starting point for an MCP server, not a published Mesh
+  product. Write/transfer operations are intentionally omitted from the candidate set because they move
+  funds and require human-in-the-loop approval via Link.
 server:
   name: mesh
   transport: http
   url: null
 tools:
 - name: list_integrations
-  description: "List available exchange/wallet integrations and their categories."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/integrations"
+  description: List available exchange/wallet integrations and their categories.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/integrations
 - name: get_integrations_health
-  description: "Get health status of supported institutions."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/status"
+  description: Get health status of supported institutions.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/status
 - name: list_networks
-  description: "List supported blockchain networks for managed transfers."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/transfers/managed/networks"
+  description: List supported blockchain networks for managed transfers.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/transfers/managed/networks
 - name: list_supported_tokens
-  description: "List tokens supported for transfers with their networks and integrations."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/transfers/managed/tokens"
+  description: List tokens supported for transfers with their networks and integrations.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/transfers/managed/tokens
 - name: get_assets
-  description: "Get available assets of a given asset type."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/assets/{assetType}"
+  description: Get available assets of a given asset type.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/assets/{assetType}
 - name: get_symbol_price
-  description: "Get the current price for an equity symbol."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/assets/equity/{symbol}/price"
+  description: Get the current price for an equity symbol.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/assets/equity/{symbol}/price
 - name: get_account_balance
-  description: "Get real-time fiat balances for a connected account."
-  source_operation: "openapi/mesh-integration-api-openapi.json#POST /api/v1/balance/get"
+  description: Get real-time fiat balances for a connected account.
+  source_operation: openapi/mesh-integration-api-openapi.json#POST /api/v1/balance/get
 - name: get_portfolio_balances
-  description: "Get aggregated portfolio fiat balances across connected integrations."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/balance/portfolio"
+  description: Get aggregated portfolio fiat balances across connected integrations.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/balance/portfolio
 - name: get_holdings
-  description: "Get crypto holdings for a connected account."
-  source_operation: "openapi/mesh-integration-api-openapi.json#POST /api/v1/holdings/get"
+  description: Get crypto holdings for a connected account.
+  source_operation: openapi/mesh-integration-api-openapi.json#POST /api/v1/holdings/get
 - name: get_aggregated_portfolio
-  description: "Get the aggregated portfolio with market values."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/holdings/portfolio"
+  description: Get the aggregated portfolio with market values.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/holdings/portfolio
 - name: list_transactions
-  description: "List transactions for a connected account."
-  source_operation: "openapi/mesh-integration-api-openapi.json#POST /api/v1/transactions/list"
+  description: List transactions for a connected account.
+  source_operation: openapi/mesh-integration-api-openapi.json#POST /api/v1/transactions/list
 - name: quote_transfer
-  description: "Get a quote (fees, min/max) for a managed transfer."
-  source_operation: "openapi/mesh-integration-api-openapi.json#POST /api/v1/transfers/managed/quote"
+  description: Get a quote (fees, min/max) for a managed transfer.
+  source_operation: openapi/mesh-integration-api-openapi.json#POST /api/v1/transfers/managed/quote
 - name: preview_transfer
-  description: "Preview a managed transfer before execution."
-  source_operation: "openapi/mesh-integration-api-openapi.json#POST /api/v1/transfers/managed/preview"
+  description: Preview a managed transfer before execution.
+  source_operation: openapi/mesh-integration-api-openapi.json#POST /api/v1/transfers/managed/preview
 - name: list_mesh_transfers
-  description: "List transfers initiated by Mesh on exchanges or wallets."
-  source_operation: "openapi/mesh-integration-api-openapi.json#GET /api/v1/transfers/managed/mesh"
+  description: List transfers initiated by Mesh on exchanges or wallets.
+  source_operation: openapi/mesh-integration-api-openapi.json#GET /api/v1/transfers/managed/mesh
+deployment:
+  mode: none
+  verified: derived
+  tools: 14
+  checked: '2026-08-12'
+  source: catalog MCP census

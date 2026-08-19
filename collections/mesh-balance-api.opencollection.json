@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets Balance API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Balance",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get account balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/balance/get",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get real-time account fiat balances."
+        },
+        {
+          "info": {
+            "name": "Get aggregated portfolio fiat balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/balance/portfolio",
+            "params": [
+              {
+                "name": "UserId",
+                "value": "",
+                "type": "query",
+                "description": "End user ID to get the aggregated portfolio for."
+              }
+            ]
+          },
+          "docs": "Get cached aggregated fiat balances from all connected integrations."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

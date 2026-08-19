@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets Self Managed Account Authentication API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Self Managed Account Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get authentication schemes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/authenticationSchemes"
+          },
+          "docs": "Get authentication schemes of available integrations to perform authentication programmatically (not using\r\nthe Web Catalog UI)."
+        },
+        {
+          "info": {
+            "name": "Authenticate user's account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/authenticate",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the end-user"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Authenticate user's brokerage/exchange account programmatically (not using the Web Catalog UI)"
+        },
+        {
+          "info": {
+            "name": "Get OAuth authentication link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/authenticate/:brokerType",
+            "params": [
+              {
+                "name": "brokerType",
+                "value": "",
+                "type": "path",
+                "description": "Type of the integration to connect"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the end-user"
+              }
+            ]
+          },
+          "docs": "Get OAuth link for the integrations with `OAuth` AuthenticationSchemeType"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

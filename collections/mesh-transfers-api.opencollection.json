@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets Transfers API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get transfer history",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get entire history of cryptocurrency transfers (withdrawals or deposits) executed from an exchange.\r\nOnly supports Exchange integrations."
+        },
+        {
+          "info": {
+            "name": "Get transfer details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/details",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get details of a specific transfer (withdrawals or deposits) executed from an exchange.\r\nOnly supports Exchange integrations."
+        },
+        {
+          "info": {
+            "name": "Initiate a transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate a new cryptocurrency transfer on a blockchain, cryptocurrency broker or cryptocurrency exchange.\r\nObsolete endpoint, please use POST /transfers/managed/execute endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Get deposit address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/address/get",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get or generate a cryptocurrency deposit address that can be used to transfer assets to the financial institution"
+        },
+        {
+          "info": {
+            "name": "Get details of asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integration-api.meshconnect.com/api/v1/transfers/symbol/details",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get details of the asset for deposit or withdrawal. For example, several exchanges support same tokens over multiple\r\nblockchains, and thus require the name of chain to be supplied for transfers. This endpoint allows getting such details."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

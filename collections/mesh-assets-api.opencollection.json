@@ -1,0 +1,77 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Mesh Connect Integration Assets API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Secret",
+      "value": "{{X-Client-Secret}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Assets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get available assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/assets/:assetType",
+            "params": [
+              {
+                "name": "assetType",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "Search",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "Count",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "Offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get available assets"
+        },
+        {
+          "info": {
+            "name": "Get symbol price",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integration-api.meshconnect.com/api/v1/assets/equity/:symbol/price",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get symbol price"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
