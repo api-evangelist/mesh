@@ -42,6 +42,21 @@ tags:
 - Cryptocurrency
 - Payments
 - Digital Assets
+- Financial-Services
+- Wallets
+- Exchanges
+- Transfers
+- Stablecoins
+- Embedded Finance
+- Fintech
+- On-Ramp
+- Blockchain
+tags_raw:
+- Company
+- Crypto
+- Cryptocurrency
+- Payments
+- Digital Assets
 - Financial Services
 - Wallets
 - Exchanges
@@ -137,6 +152,8 @@ apis:
   humanURL: https://docs.meshconnect.com/overview
   baseURL: https://integration-api.meshconnect.com
   tags:
+  - Balances
+  tags_raw:
   - Balance
   properties:
   - type: OpenAPI
@@ -369,6 +386,8 @@ apis:
   humanURL: https://docs.meshconnect.com/overview
   baseURL: https://integration-api.meshconnect.com
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
