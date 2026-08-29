@@ -1,0 +1,52 @@
+slug: mesh
+provider: Mesh
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Transactions
+  spec_file: mesh-transactions-api-openapi.yml
+  capability_id: BC-1370.30
+  capability_id_l1: BC-1370
+  capability_name: Trading Order Management
+  confidence: 0.75
+  evidence: POST /api/v1/transactions/preview/{side} 'Preview order execution'; POST /api/v1/transactions/{side}
+    'Execute order'; POST /api/v1/transactions/cancel 'Cancel order execution'; schemas BrokerOrderStatus,
+    B2BBrokerCreateOrderResult
+  reason: Despite the generic 'Transactions' tag, the operations place, preview, execute and cancel buy/sell
+    orders at connected brokers and expose order status and symbol/order-type features — order capture
+    and execution. Mapped to trading order management; 0.75 as it is executed via third-party brokers
+    rather than an in-house OMS.
+- tag: Managed Transfers
+  spec_file: mesh-managed-transfers-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /api/v1/transfers/managed/configure 'Configure transfer'; POST /api/v1/transfers/managed/preview
+    'Preview transfer'; POST /api/v1/transfers/managed/execute 'Execute transfer'; POST /api/v1/transfers/managed/quote
+    'Quote transfer'
+  reason: Configure, verify, quote, preview and execute value transfers between connected accounts/wallets,
+    including deposit-address resolution and network selection — instruction capture, validation and authorisation
+    of a payment. Mapped to payment initiation; 0.7 because the crypto-rail routing aspect also touches
+    payment processing sub-capabilities.
+- tag: Transfers
+  spec_file: mesh-transfers-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /api/v1/transfers 'Initiate a transfer'; POST /api/v1/transfers/address/get 'Get deposit
+    address'; schemas TransfersBrokerCreateCryptocurrencyTransactionRequest, BrokerCryptocurrencyTransactionStatus
+  reason: Initiates crypto value transfers, resolves deposit addresses and retrieves transfer history/details
+    with network fees and status — capture, validation and authorisation of payment instructions. 0.7
+    given overlap with payment processing/settlement sub-capabilities on the crypto rails.

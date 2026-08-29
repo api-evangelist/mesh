@@ -613,6 +613,9 @@ apis:
   - type: x-sandbox-baseURL
     url: https://sandbox-integration-api.meshconnect.com
 common:
+- type: CapabilityMap
+  url: capabilities/mesh-capability-edges.yml
+  name: Mesh Business Capability Map
 - type: Overlay
   url: overlays/mesh-integration-api-overlay.yaml
 - type: DeveloperPortal
