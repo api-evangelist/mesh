@@ -1,15 +1,7 @@
 {
   "provider": "mesh",
   "sources": [
-    "mesh-assets-api-openapi.yml",
-    "mesh-balance-api-openapi.yml",
-    "mesh-brokeraccountdetail-api-openapi.yml",
-    "mesh-managed-account-authentication-api-openapi.yml",
-    "mesh-managed-transfers-api-openapi.yml",
-    "mesh-portfolio-api-openapi.yml",
-    "mesh-self-managed-account-authentication-api-openapi.yml",
-    "mesh-transactions-api-openapi.yml",
-    "mesh-transfers-api-openapi.yml"
+    "_original/mesh-integration-api-openapi.json"
   ],
   "outputs": [
     "mesh-assets-api-openapi.yml",
@@ -25,6 +17,20 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "mesh-integration-api-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "mesh-assets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-balance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-brokeraccountdetail-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-managed-account-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-managed-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-portfolio-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-self-managed-account-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "mesh-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

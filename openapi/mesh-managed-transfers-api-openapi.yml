@@ -1,9 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Mesh Connect Integration Assets Managed Transfers API
-  description: '
-
-    Mesh allows users to connect accounts of financial institutions,
+  title: Mesh Connect Integration Managed Transfers API
+  description: 'Mesh allows users to connect accounts of financial institutions,
 
     crypto exchanges, and self-custody wallets. Mesh handles credential
 
@@ -26,7 +24,12 @@ paths:
       tags:
       - Managed Transfers
       summary: Get networks
-      description: "**Get supported networks list.**\r\n<br />\r\n---\r\nGet the list of all networks supported by Mesh to perform transfers, including which tokens and integrations are supported."
+      description: '**Get supported networks list.**
+
+
+        ---
+
+        Get the list of all networks supported by Mesh to perform transfers, including which tokens and integrations are supported.'
       responses:
         '200':
           description: Success
@@ -68,12 +71,19 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: getApiV1TransfersManagedNetworks
+      x-operation-id-source: derived
   /api/v1/transfers/managed/integrations:
     get:
       tags:
       - Managed Transfers
       summary: Get integrations
-      description: "**Get supported integrations list.**\r\n<br />\r\n---\r\nGet the list of all integrations supported by Mesh to perform transfers, including which tokens and networks are supported."
+      description: '**Get supported integrations list.**
+
+
+        ---
+
+        Get the list of all integrations supported by Mesh to perform transfers, including which tokens and networks are supported.'
       responses:
         '200':
           description: Success
@@ -112,6 +122,8 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: getApiV1TransfersManagedIntegrations
+      x-operation-id-source: derived
   /api/v1/transfers/managed/tokens:
     get:
       tags:
@@ -139,12 +151,16 @@ paths:
                 status: ok
                 message: ''
                 errorType: ''
+      operationId: getApiV1TransfersManagedTokens
+      x-operation-id-source: derived
   /api/v1/transfers/managed/verify:
     get:
       tags:
       - Managed Transfers
       summary: Verify the transfer request without authenticating the integration accounts
-      description: "Checks if the combination of integration ID, network ID, token is correct for transfer.\r\nChecks if the target address is in the correct format."
+      description: 'Checks if the combination of integration ID, network ID, token is correct for transfer.
+
+        Checks if the target address is in the correct format.'
       requestBody:
         content:
           application/json:
@@ -181,12 +197,40 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: getApiV1TransfersManagedVerify
+      x-operation-id-source: derived
   /api/v1/transfers/managed/configure:
     post:
       tags:
       - Managed Transfers
       summary: Configure transfer
-      description: "**Get the list of networks and tokens eligible for a transfer, based on the provided request data.**\r\n<br />\r\n---\r\nTransfers can be configured either from one connected account to another connected account, or\r\nfrom a connected account to any arbitrary address or addresses.\r\n<br />\r\n* **From one connected account to another connected account:**\r\n<br />\r\nThe API client provides `FromAuthToken` that is representing the source account and `ToAuthToken` that is representing the target account. Front API maps networks and tokens supported by both accounts and returns all tokens and networks eligible for a transfer as the result.\r\n<br />\r\n* **From a connected account to any arbitrary address:**\r\n<br />\r\nThe API client provides `FromAuthToken` that is representing the source account and the list of target addresses using the `ToAddresses` field. Front API verifies the addresses and returns the list of tokens, eligible to be transferred as the result of the operation.\r\n<br /><br />\r\nReturns the list of holdings on the account that can be used to perform the transfer. Each holdings item\r\ncontains the list of supported networks that can be used to transfer the corresponding asset.\r\nEach network contains details such as gas fees and the amount eligible to be transferred."
+      description: '**Get the list of networks and tokens eligible for a transfer, based on the provided request data.**
+
+
+        ---
+
+        Transfers can be configured either from one connected account to another connected account, or
+
+        from a connected account to any arbitrary address or addresses.
+
+
+        * **From one connected account to another connected account:**
+
+
+        The API client provides `FromAuthToken` that is representing the source account and `ToAuthToken` that is representing the target account. Front API maps networks and tokens supported by both accounts and returns all tokens and networks eligible for a transfer as the result.
+
+
+        * **From a connected account to any arbitrary address:**
+
+
+        The API client provides `FromAuthToken` that is representing the source account and the list of target addresses using the `ToAddresses` field. Front API verifies the addresses and returns the list of tokens, eligible to be transferred as the result of the operation.
+
+
+        Returns the list of holdings on the account that can be used to perform the transfer. Each holdings item
+
+        contains the list of supported networks that can be used to transfer the corresponding asset.
+
+        Each network contains details such as gas fees and the amount eligible to be transferred.'
       requestBody:
         content:
           application/json:
@@ -439,12 +483,29 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: postApiV1TransfersManagedConfigure
+      x-operation-id-source: derived
   /api/v1/transfers/managed/preview:
     post:
       tags:
       - Managed Transfers
       summary: Preview transfer
-      description: "**Validate and preview the transfer.**\r\n<br />\r\n---\r\nValidates the transfer, calculates the relevant amount in crypto if requested amount was in fiat and updates\r\nthe current network fee values.\r\n<br />\r\nThis endpoint uses the `NetworkId` field to specify which network will be used to perform the transfer. The target `NetworkId`\r\nshould be selected after configuring the transfer using `/configure` endpoint.\r\n<br /><br />\r\nReturns the `PreviewId` value that can be used to commit the transfer."
+      description: '**Validate and preview the transfer.**
+
+
+        ---
+
+        Validates the transfer, calculates the relevant amount in crypto if requested amount was in fiat and updates
+
+        the current network fee values.
+
+
+        This endpoint uses the `NetworkId` field to specify which network will be used to perform the transfer. The target `NetworkId`
+
+        should be selected after configuring the transfer using `/configure` endpoint.
+
+
+        Returns the `PreviewId` value that can be used to commit the transfer.'
       requestBody:
         content:
           application/json:
@@ -616,12 +677,25 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: postApiV1TransfersManagedPreview
+      x-operation-id-source: derived
   /api/v1/transfers/managed/execute:
     post:
       tags:
       - Managed Transfers
       summary: Execute transfer
-      description: "**Commit the previously previewed transfer.**\r\n<br />\r\n---\r\nPreviews the transfer, using the `PreviewId` value.\r\n<br />\r\nHandles multi-factor authentication codes if the account is configured to use them for additional security.\r\n<br /><br />\r\nReturns the status of the transfer and the details of the transfer if it was initiated successfully."
+      description: '**Commit the previously previewed transfer.**
+
+
+        ---
+
+        Previews the transfer, using the `PreviewId` value.
+
+
+        Handles multi-factor authentication codes if the account is configured to use them for additional security.
+
+
+        Returns the status of the transfer and the details of the transfer if it was initiated successfully.'
       requestBody:
         content:
           application/json:
@@ -737,6 +811,8 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: postApiV1TransfersManagedExecute
+      x-operation-id-source: derived
   /api/v1/transfers/managed/address/get:
     post:
       tags:
@@ -796,12 +872,18 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: postApiV1TransfersManagedAddressGet
+      x-operation-id-source: derived
   /api/v1/transfers/managed/quote:
     post:
       tags:
       - Managed Transfers
       summary: Quote transfer
-      description: "Get a quote for transferring a fiat amount from a brokerage account in a given cryptocurrency over a specified network.\r\nReturns min and max fees and amounts to account for different funding sources (existing crypto balance, cash balance or\r\nACH/debit deposit). Currently only supported for Coinbase."
+      description: 'Get a quote for transferring a fiat amount from a brokerage account in a given cryptocurrency over a specified network.
+
+        Returns min and max fees and amounts to account for different funding sources (existing crypto balance, cash balance or
+
+        ACH/debit deposit). Currently only supported for Coinbase.'
       requestBody:
         content:
           application/json:
@@ -908,6 +990,8 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: postApiV1TransfersManagedQuote
+      x-operation-id-source: derived
   /api/v1/transfers/managed/mesh:
     get:
       tags:
@@ -1068,35 +1152,62 @@ paths:
           content:
             application/json:
               schema: {}
+      operationId: getApiV1TransfersManagedMesh
+      x-operation-id-source: derived
 components:
   schemas:
-    BrokerPaymentMethodType:
+    QuoteFees:
+      type: object
+      properties:
+        inFiat:
+          allOf:
+          - $ref: '#/components/schemas/QuoteFeesInFiat'
+          description: Summary of all possible transfer fees in fiat
+        inCrypto:
+          allOf:
+          - $ref: '#/components/schemas/QuoteFeesInCrypto'
+          description: Summary of all possible transfer fees in crypto
+      additionalProperties: false
+    TransferOrderByFields:
       enum:
-      - card
-      - bankAccount
-      - digitalWallet
-      - unknown
+      - id
+      - clientTransferId
+      - userId
+      - fromType
+      - amountInFiat
+      - status
+      - createdTimestamp
       type: string
-    ExecuteTransferMfaType:
-      enum:
-      - unspecified
-      - phone
-      - email
-      - totp
-      - face
-      type: string
-    ExecuteTransferStatus:
-      enum:
-      - succeeded
-      - failed
-      - mfaRequired
-      - emailConfirmationRequired
-      - deviceConfirmationRequired
-      - mfaFailed
-      - addressWhitelistRequired
-      - secondMfaRequired
-      - deFiWalletConfirmationRequired
-      type: string
+    TokenNetworksModel:
+      type: object
+      properties:
+        token:
+          type:
+          - string
+          - 'null'
+        networks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NetworkResponseBase'
+        supportedIntegrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerType'
+        integrationNetworks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/IntegrationNetwork'
+        tokenLogoUrl:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     IntegrationNetworkResponseApiResult:
       type: object
       properties:
@@ -1114,124 +1225,169 @@ components:
           - $ref: '#/components/schemas/ApiResultStatus'
           readOnly: true
         message:
-          type: string
+          type:
+          - string
+          - 'null'
           description: A message generated by the API
-          nullable: true
         displayMessage:
-          type: string
+          type:
+          - string
+          - 'null'
           description: User-friendly display message that can be presented to the end user
-          nullable: true
         errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
         errorData:
-          nullable: true
           readOnly: true
         content:
           allOf:
           - $ref: '#/components/schemas/IntegrationNetworkResponse'
-          nullable: true
       additionalProperties: false
-    TransferVerificationResponseApiResult:
+    ConfigureTransferResponse:
       type: object
       properties:
         status:
           enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
+          - succeeded
+          - failed
+          - validationFailed
+          - notAuthorizedTo
+          - notAuthorizedFrom
+          - kycRequired
+          - fromIntegrationNotSupported
+          - toIntegrationNotSupported
           allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type: string
-          description: A message generated by the API
-          nullable: true
-        displayMessage:
-          type: string
-          description: User-friendly display message that can be presented to the end user
-          nullable: true
-        errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
-        errorData:
-          nullable: true
-          readOnly: true
-        content:
+          - $ref: '#/components/schemas/ConfigureTransferStatus'
+          description: Status of the operation.
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Error message, if the operation did not complete successfully.
+        holdings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ConfigureTransferResultHolding'
+          description: List of holdings on the source account.
+        amountInFiat:
+          type:
+          - number
+          - 'null'
+          description: Amount in USD to transfer. If not provided users can specify amount by themselves.
+          format: double
+        minimumTransferAmountInFiat:
+          type:
+          - number
+          - 'null'
+          description: Minimum transfer amount in fiat
+          format: double
+        maximumTransferAmountInFiat:
+          type:
+          - number
+          - 'null'
+          description: Maximum transfer amount in fiat
+          format: double
+        transferBalanceFundingAvailability:
           allOf:
-          - $ref: '#/components/schemas/TransferVerificationResponse'
-          nullable: true
+          - $ref: '#/components/schemas/TransferBalanceFundingAvailabilityBase'
       additionalProperties: false
-    HoldingTransferIneligibilityReason:
-      enum:
-      - noEligibleNetworks
-      - symbolDoesNotMatch
-      - notSupportedForTransferByTarget
-      - notSupportedForTransferBySource
-      - eligibleWithFunding
-      - amountNotSufficient
-      type: string
-    TransferIntegrationModel:
+    TransferBalanceFundingAvailability:
       type: object
       properties:
-        id:
+        status:
+          enum:
+          - disabled
+          - available
+          - requiresAmountLowering
+          - notApplicable
+          - unavailable
+          allOf:
+          - $ref: '#/components/schemas/TransferBalanceFundingAvailabilityStatus'
+        transferTotalAmount:
+          type: number
+          description: The total transfer amount in crypto after all fees are applied
+          format: double
+        unitPrice:
+          type: number
+          description: The price of the cryptocurrency asset in the fiat currency.
+          format: double
+        gasFeeBuffer:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: Represents the safety margin amount to cover gas fee volatility.
+        symbol:
+          type:
+          - string
+          - 'null'
+        transferTotalAmountInFiat:
+          type: number
+          description: The total transfer amount in fiat after all fees are applied.
+          format: double
+      additionalProperties: false
+    QuoteFeesInFiat:
+      type: object
+      properties:
+        paymentMethodFeeMaxFiat:
+          type: number
+          description: Max fee charged if funded by payment method
+          format: double
+        tradingFeeMaxFiat:
+          type: number
+          description: Max fee charged to buy crypto
+          format: double
+        withdrawalFeeFiat:
+          type: number
+          description: Fee charged to withdraw crypto
+          format: double
+        partnerFeeFiat:
+          type: number
+          description: Fee charged by partner
+          format: double
+        networkFeeFiat:
+          type: number
+          description: Fee charged for network transaction
+          format: double
+        minFeesFiat:
+          type: number
+          description: Min of total fees charged in fiat
+          format: double
+        maxFeesFiat:
+          type: number
+          description: Max of total fees charged in fiat
+          format: double
+      additionalProperties: false
+    TransferToAddress:
+      type: object
+      properties:
+        networkId:
           type: string
+          description: 'The Id of the network in Front system. The list of all available networks can be obtained by
+
+            using `GET /transfers/managed/networks` endpoint.'
           format: uuid
-        type:
-          enum:
-          - robinhood
-          - eTrade
-          - alpaca
-          - tdAmeritrade
-          - weBull
-          - stash
-          - interactiveBrokers
-          - public
-          - coinbase
-          - kraken
-          - coinbasePro
-          - cryptoCom
-          - openSea
-          - binanceUs
-          - gemini
-          - cryptocurrencyAddress
-          - cryptocurrencyWallet
-          - okCoin
-          - bittrex
-          - kuCoin
-          - etoro
-          - cexIo
-          - binanceInternational
-          - bitstamp
-          - gateIo
-          - acorns
-          - okx
-          - bitFlyer
-          - coinlist
-          - huobi
-          - bitfinex
-          - deFiWallet
-          - krakenDirect
-          - vanguard
-          - binanceInternationalDirect
-          - bitfinexDirect
-          - bybit
-          - paxos
-          - coinbasePrime
-          allOf:
-          - $ref: '#/components/schemas/BrokerType'
-        name:
-          type: string
-          nullable: true
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of the digital asset.
+        address:
+          type:
+          - string
+          - 'null'
+          description: The address to send the asset to.
+        addressTag:
+          type:
+          - string
+          - 'null'
+          description: Secondary address identifier for coins like XRP,XMR etc.
       additionalProperties: false
-    QuoteTransferResponseApiResult:
+    ApiResult:
       type: object
       properties:
         status:
@@ -1248,24 +1404,24 @@ components:
           - $ref: '#/components/schemas/ApiResultStatus'
           readOnly: true
         message:
-          type: string
+          type:
+          - string
+          - 'null'
           description: A message generated by the API
-          nullable: true
         displayMessage:
-          type: string
+          type:
+          - string
+          - 'null'
           description: User-friendly display message that can be presented to the end user
-          nullable: true
         errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
         errorData:
-          nullable: true
           readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/QuoteTransferResponse'
-          nullable: true
       additionalProperties: false
     ManagedBrokerCryptocurrencyDepositAddressRequest:
       required:
@@ -1322,24 +1478,29 @@ components:
           - $ref: '#/components/schemas/BrokerType'
           description: Type of the institution to connect
         symbol:
-          type: string
-          description: "Symbol of the required cryptocurrency, e.g. ETH or BTC.\r\nCan be used instead of the `AddressType` field."
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: 'Symbol of the required cryptocurrency, e.g. ETH or BTC.
+
+            Can be used instead of the `AddressType` field.'
         addressType:
           allOf:
           - $ref: '#/components/schemas/CryptocurrencyAddressType'
-          description: "Type of the address of symbol to be transferred. Providing `EthAddress` will assume a transfer of ETH over Ethereum blockchain.\r\nCan be used instead of `Symbol` field."
-          nullable: true
+          description: 'Type of the address of symbol to be transferred. Providing `EthAddress` will assume a transfer of ETH over Ethereum blockchain.
+
+            Can be used instead of `Symbol` field.'
         networkId:
           type: string
           description: Specifies which the network to use to obtain the deposit address of the `Symbol` asset.
           format: uuid
         mfaCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Some of integrations require MFA code to create a deposit address, e.g. KrakenDirect
-          nullable: true
       additionalProperties: false
-    TokenNetworksResponseApiResult:
+    TransferVerificationResponseApiResult:
       type: object
       properties:
         status:
@@ -1356,50 +1517,58 @@ components:
           - $ref: '#/components/schemas/ApiResultStatus'
           readOnly: true
         message:
-          type: string
+          type:
+          - string
+          - 'null'
           description: A message generated by the API
-          nullable: true
         displayMessage:
-          type: string
+          type:
+          - string
+          - 'null'
           description: User-friendly display message that can be presented to the end user
-          nullable: true
         errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
         errorData:
-          nullable: true
           readOnly: true
         content:
           allOf:
-          - $ref: '#/components/schemas/TokenNetworksResponse'
-          nullable: true
+          - $ref: '#/components/schemas/TransferVerificationResponse'
       additionalProperties: false
-    TokenNetworksModel:
+    HoldingTransferIneligibilityReason:
+      enum:
+      - noEligibleNetworks
+      - symbolDoesNotMatch
+      - notSupportedForTransferByTarget
+      - notSupportedForTransferBySource
+      - eligibleWithFunding
+      - amountNotSufficient
+      type: string
+    NetworkModelResponse:
       type: object
       properties:
-        token:
-          type: string
-          nullable: true
         networks:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
-            $ref: '#/components/schemas/NetworkResponseBase'
-          nullable: true
-        supportedIntegrations:
-          type: array
-          items:
-            $ref: '#/components/schemas/BrokerType'
-          nullable: true
-        integrationNetworks:
-          type: array
-          items:
-            $ref: '#/components/schemas/IntegrationNetwork'
-          nullable: true
-        tokenLogoUrl:
-          type: string
-          nullable: true
+            $ref: '#/components/schemas/NetworkResponseWithIntegrations'
       additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
     PreviewTransferResponse:
       type: object
       properties:
@@ -1412,20 +1581,19 @@ components:
           - $ref: '#/components/schemas/PreviewTransferStatus'
           description: The status of the operation.
         errorMessage:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Error message, if the operation did not complete successfully.
-          nullable: true
         previewResult:
           allOf:
           - $ref: '#/components/schemas/PreviewTransferResult'
           description: Result of the preview.
-          nullable: true
         transferBalanceFundingAvailability:
           allOf:
           - $ref: '#/components/schemas/TransferBalanceFundingAvailability'
-          nullable: true
       additionalProperties: false
-    ConfigureTransferResponseApiResult:
+    ExecuteTransferResponseApiResult:
       type: object
       properties:
         status:
@@ -1442,24 +1610,586 @@ components:
           - $ref: '#/components/schemas/ApiResultStatus'
           readOnly: true
         message:
-          type: string
+          type:
+          - string
+          - 'null'
           description: A message generated by the API
-          nullable: true
         displayMessage:
-          type: string
+          type:
+          - string
+          - 'null'
           description: User-friendly display message that can be presented to the end user
-          nullable: true
         errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
         errorData:
-          nullable: true
           readOnly: true
         content:
           allOf:
-          - $ref: '#/components/schemas/ConfigureTransferResponse'
-          nullable: true
+          - $ref: '#/components/schemas/ExecuteTransferResponse'
+      additionalProperties: false
+    TransferBalanceFundingAvailabilityBase:
+      type: object
+      properties:
+        status:
+          enum:
+          - disabled
+          - available
+          - requiresAmountLowering
+          - notApplicable
+          - unavailable
+          allOf:
+          - $ref: '#/components/schemas/TransferBalanceFundingAvailabilityStatus'
+      additionalProperties: false
+    TransferVerificationRequest:
+      type: object
+      properties:
+        integrationId:
+          type:
+          - string
+          - 'null'
+        token:
+          type:
+          - string
+          - 'null'
+        networkId:
+          type:
+          - string
+          - 'null'
+        targetAddress:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    NetworkResponseWithIntegrations:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The Id of the network in Mesh system. Should be used to initiate transfers.
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name if the network.
+        chainId:
+          type:
+          - string
+          - 'null'
+          description: The Inner id of the chain, used for reference. For example, Polygon's (MATIC) chain Id is 137.
+        logoUrl:
+          type:
+          - string
+          - 'null'
+          description: Network logo URL.
+        supportedTokens:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of tokens that are currently supported to be transferred using the network.
+        nativeSymbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of the network's native cryptocurrency.
+        tokens:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NetworkResponseToken'
+          description: The list of tokens that are currently supported to be transferred using the network.
+        supportedBrokerTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerType'
+          description: The list of types of integrations that are currently supported to perform transfers over the network.
+      additionalProperties: false
+      description: Crypto network.
+    TransferIntegrationModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+        name:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    NetworkResponseToken:
+      type: object
+      properties:
+        symbol:
+          type:
+          - string
+          - 'null'
+        logoUrl:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    TokenNetworksResponse:
+      type: object
+      properties:
+        tokens:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TokenNetworksModel'
+      additionalProperties: false
+    CryptocurrencyFundingOptionType:
+      enum:
+      - existingCryptocurrencyBalance
+      - buyingPowerPurchase
+      - paymentMethodDepositUsage
+      - cryptocurrencyConversion
+      - stableCoinNoFeeConversion
+      - cryptocurrencyBuyingPowerConversion
+      type: string
+    BrokerPaymentMethodType:
+      enum:
+      - card
+      - bankAccount
+      - digitalWallet
+      - unknown
+      type: string
+    NetworkResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The Id of the network in Mesh system. Should be used to initiate transfers.
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name if the network.
+        chainId:
+          type:
+          - string
+          - 'null'
+          description: The Inner id of the chain, used for reference. For example, Polygon's (MATIC) chain Id is 137.
+        logoUrl:
+          type:
+          - string
+          - 'null'
+          description: Network logo URL.
+        supportedTokens:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of tokens that are currently supported to be transferred using the network.
+        nativeSymbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of the network's native cryptocurrency.
+      additionalProperties: false
+      description: Crypto network.
+    ProcessingFeeRetainType:
+      enum:
+      - default
+      - smartDeposit
+      type: string
+    QuoteFundingOption:
+      type: object
+      properties:
+        fundingOption:
+          enum:
+          - existingCryptocurrencyBalance
+          - buyingPowerPurchase
+          - paymentMethodDepositUsage
+          - cryptocurrencyConversion
+          - stableCoinNoFeeConversion
+          - cryptocurrencyBuyingPowerConversion
+          allOf:
+          - $ref: '#/components/schemas/CryptocurrencyFundingOptionType'
+          description: Funding option being quoted
+        paymentMethodType:
+          allOf:
+          - $ref: '#/components/schemas/BrokerPaymentMethodType'
+          description: Payment method being quoted for PaymentMethodDepositUsage funding option
+        paymentMethodFeeFiat:
+          type: number
+          description: Fee charged for this payment method
+          format: double
+        tradingFeeFiat:
+          type: number
+          description: Fee charged to buy crypto if necessary for this funding option
+          format: double
+      additionalProperties: false
+    NetworkResponseBase:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The Id of the network in Mesh system. Should be used to initiate transfers.
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name if the network.
+        chainId:
+          type:
+          - string
+          - 'null'
+          description: The Inner id of the chain, used for reference. For example, Polygon's (MATIC) chain Id is 137.
+        logoUrl:
+          type:
+          - string
+          - 'null'
+          description: Network logo URL.
+      additionalProperties: false
+      description: Crypto network.
+    BrokerResponseStatus:
+      enum:
+      - unknown
+      - mfaRequired
+      - kycRequired
+      type: string
+    BrokerCryptocurrencyTransactionStatus:
+      enum:
+      - unknown
+      - failed
+      - frozen
+      - succeeded
+      - mfaRequired
+      - pending
+      - expired
+      - canceled
+      - waitingForSignature
+      - waitingForClearing
+      - awaitingApproval
+      - awaitingConfirmation
+      - awaitingVerification
+      - rejected
+      - pendingCancel
+      - emailVerification
+      - deviceConfirmationRequired
+      - mfaFailed
+      - addressWhitelistRequired
+      - secondMfaRequired
+      type: string
+    PreviewTransferResult:
+      type: object
+      properties:
+        previewId:
+          type: string
+          description: The Id of the preview of the transfer. Should be used to commit the transfer using `Execute` endpoint.
+          format: uuid
+        previewExpiresIn:
+          type: integer
+          description: The period of time in seconds during which the transfer can be committed.
+          format: int32
+        fromAddress:
+          type:
+          - string
+          - 'null'
+          description: Obtained address that will be used to send the transfer. Not guaranteed to be returned by some of integrations.
+        toAddress:
+          type:
+          - string
+          - 'null'
+          description: The target address to send the asset to.
+        addressTag:
+          type:
+          - string
+          - 'null'
+          description: Secondary address identifier for coins like XRP, XMR etc.
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Symbol of the asset to be sent.
+        amount:
+          type: number
+          description: 'Amount in symbol. If the transfer was requested using `AmounInFiat` field, this field represents the exact amount
+
+            of the asset that will be transferred.'
+          format: double
+        amountInFiat:
+          type: number
+          description: 'Transfer amount in fiat. If the transfer was requested in crypto amount using the `Amount` field,
+
+            this field contains the corresponding converted to fiat value.'
+          format: double
+        totalEstimatedAmountInFiat:
+          type: number
+          description: Total estimated amount of the transfer including all fees, converted to fiat.
+          format: double
+        networkId:
+          type: string
+          description: Id of the network in Front system.
+          format: uuid
+        networkName:
+          type:
+          - string
+          - 'null'
+          description: Name of the network in Front system.
+        contractAddress:
+          type:
+          - string
+          - 'null'
+          description: Blockchain address of the transferred token's contract
+        institutionTransferFee:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: 'The fee that is taken by the institution. Depending on the institution, can cover the gas fee. Some institutions do not
+
+            take the transfer fee and only network fee is used for the transfer.'
+        estimatedNetworkGasFee:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: 'The gas fee that is estimated to be taken by the network. Depending on the integration, the network gas fee might be
+
+            covered by the `InstitutionTransferFee`.'
+        decimalPlaces:
+          type:
+          - integer
+          - 'null'
+          description: Number of decimal places used to represent the token's smallest unit
+          format: int32
+        unitPrice:
+          type: number
+          description: The price of the cryptocurrency asset in the fiat currency.
+          format: double
+        clientTransactionId:
+          maxLength: 128
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Transaction id provided by the client
+        clientFee:
+          maximum: 1
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 'A percentage fee (input as a ratio, eg. 0.02500 = 2.500%) added onto your users'' gross payments.
+
+            This will override any default fee entered in your Mesh dashboard for an individual transaction.
+
+            Please note: this fee should only be used for Payments (when the transfer destination is an address owned by your company),
+
+            and not for Deposits (when the transfer destination is an address owned by the end user).
+
+            If used for Deposits, it will increase the size of the user''s Deposit by the fee amount,
+
+            but will incorrectly show to the user as a fee.'
+          format: double
+        customClientFee:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: The client fee that is estimated to be added to the total estimated transfer amount, based on the user's requested transfer amount and client fee percentage.
+        processingFeeRetainMethod:
+          allOf:
+          - $ref: '#/components/schemas/ProcessingFeeRetainMethod'
+        transferType:
+          allOf:
+          - $ref: '#/components/schemas/TransferTypeEnum'
+          description: 'Deposit: The user is transferring crypto to a wallet they own on your platform.
+
+            Payment: The user is transferring crypto to a wallet your company owns in exchange for receiving a good or service.
+
+            Onramp: The user is using balances and linked payment methods in an exchange account to fund the purchase of crypto in their wallet on your platform.'
+        isCustomClientFeeProvided:
+          type: boolean
+        amountWithCustomClientFee:
+          type: number
+          description: 'Amount in symbol after the client fees are applied. This field represents the exact amount
+
+            of the asset that will be requested for transfer.'
+          format: double
+        isFeeIncluded:
+          type: boolean
+          description: 'Indicates if all the fees are included in the amount. For example, if this field''s value is `true`
+
+            and the user wants to send 1 BTC and the sum of all fees is 0.1 BTC, the user will be charged 1 BTC, and
+
+            the target address will receive 0.9 BTC.
+
+            If the fees are no inclusive, the user will be charged 1.1 BTC and the target address will receive 1 BTC.'
+        amountToReceive:
+          type: number
+          description: 'Indicates the final amount to receive after all fees are applied. In case fees are not inclusive (`IsFeeIncluded` is `false`),
+
+            this field will be equal to the `Amount` field.'
+          format: double
+        amountToReceiveInFiat:
+          type: number
+          description: 'Indicates the final amount in fiat to receive after all fees are applied. In case fees are not inclusive (`IsFeeIncluded` is `false`),
+
+            this field will be equal to the `AmountInFiat` field.'
+          format: double
+      additionalProperties: false
+    PreviewTransferResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/PreviewTransferResponse'
+      additionalProperties: false
+    ConfigureTransferStatus:
+      enum:
+      - succeeded
+      - failed
+      - validationFailed
+      - notAuthorizedTo
+      - notAuthorizedFrom
+      - kycRequired
+      - fromIntegrationNotSupported
+      - toIntegrationNotSupported
+      type: string
+    TransferModelPaginationResponse:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TransferModel'
+          description: list of items
+        total:
+          type: integer
+          description: Total number of items
+          format: int32
+      additionalProperties: false
+    TransferStatus:
+      enum:
+      - pending
+      - succeeded
+      - failed
+      type: string
+    TransferModelPaginationResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/TransferModelPaginationResponse'
       additionalProperties: false
     ExecuteTransferRequest:
       required:
@@ -1521,21 +2251,194 @@ components:
           description: Id of the Preview of the transfer.
           format: uuid
         mfaCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Multi-factor auth code that should be provided if the status of the transfer was `MfaRequired`.
-          nullable: true
       additionalProperties: false
-    PreviewTransferRequest:
-      required:
-      - fromAuthToken
-      - fromType
+    NetworkModelResponseApiResult:
       type: object
       properties:
-        fromAuthToken:
-          minLength: 1
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/NetworkModelResponse'
+      additionalProperties: false
+    ExecuteTransferResponse:
+      type: object
+      properties:
+        status:
+          enum:
+          - succeeded
+          - failed
+          - mfaRequired
+          - emailConfirmationRequired
+          - deviceConfirmationRequired
+          - mfaFailed
+          - addressWhitelistRequired
+          - secondMfaRequired
+          - deFiWalletConfirmationRequired
+          allOf:
+          - $ref: '#/components/schemas/ExecuteTransferStatus'
+          description: The status of the transfer.
+        mfaType:
+          allOf:
+          - $ref: '#/components/schemas/ExecuteTransferMfaType'
+          description: The type of the MFA when the status is `MfaRequired`.
+        verificationSteps:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExecuteTransferMfaType'
+          description: The type of the MFA when the status is `MfaRequired`.
+        qrCode:
+          type:
+          - string
+          - 'null'
+        qrCodeLink:
+          type:
+          - string
+          - 'null'
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Error message, if the operation did not complete successfully.
+        executeTransferResult:
+          allOf:
+          - $ref: '#/components/schemas/ExecuteTransferResultResponse'
+          description: Result of the transfer initiation.
+      additionalProperties: false
+    NetworkTransferIneligibilityReason:
+      enum:
+      - amountNotSufficient
+      - gasFeeAssetBalanceNotEnough
+      - noTargetNetworkFound
+      - refusedByInstitution
+      - eligibleWithFunding
+      - balanceBelowRequestedAmount
+      - requestedAmountBelowMinimum
+      - balanceBelowMinimum
+      - requestedAmountBelowFees
+      - requestedAmountBelowClientMinimum
+      - requestedAmountAboveClientMaximum
+      type: string
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      type: string
+    PreviewTransferStatus:
+      enum:
+      - succeeded
+      - failed
+      - requiresFunding
+      type: string
+    IntegrationNetworkResponse:
+      type: object
+      properties:
+        integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/IntegrationNetworksModelResponse'
+      additionalProperties: false
+    FailureReason:
+      enum:
+      - notSupportedOnIntegration
+      - notSupportedOnNetwork
+      - invalidAddressFormat
+      - notSupportedOnToken
+      type: string
+    IntegrationNetwork:
+      type: object
+      properties:
+        networkId:
           type: string
-          description: The authentication token to send the asset from.
-        fromType:
+          format: uuid
+        netwokName:
+          type:
+          - string
+          - 'null'
+        innerNetworkId:
+          type:
+          - string
+          - 'null'
+        networkLogo:
+          type:
+          - string
+          - 'null'
+        brokerType:
           enum:
           - robinhood
           - eTrade
@@ -1578,70 +2481,102 @@ components:
           - coinbasePrime
           allOf:
           - $ref: '#/components/schemas/BrokerType'
-          description: The type of the integration to send the asset from.
-        toAuthToken:
-          type: string
-          description: "The authentication token of the target integration. Can be used alternatively to the address in the `ToAddress` field.\r\nIf used, `toType` should also be provided."
-          nullable: true
-        toType:
-          allOf:
-          - $ref: '#/components/schemas/BrokerType'
-          description: The type of the target integration to send assets to. Used along with the `toAuthToken` alternatively to `ToAddress`.
-          nullable: true
-        networkId:
-          type: string
-          description: The network to send the asset over.
-          format: uuid
-        symbol:
-          type: string
-          description: The symbol of the digital asset to send.
-          nullable: true
-        toAddress:
-          type: string
-          description: The target address to send the asset to.
-          nullable: true
-        addressTag:
-          type: string
-          description: Secondary address identifier for coins like XRP,XMR etc.
-          nullable: true
-        amount:
-          type: number
-          description: The amount to send, in crypto.
-          format: double
-          nullable: true
-        amountInFiat:
-          type: number
-          description: The amount to send, in fiat currency. Can be used alternatively to `Amount`.
-          format: double
-          nullable: true
-        fiatCurrency:
-          type: string
-          description: Fiat currency that is to get corresponding converted fiat values of transfer and fee amounts. If not provided, defaults to `USD`.
-          nullable: true
       additionalProperties: false
-    BrokerCryptocurrencyTransactionStatus:
+    SmartContractTransferAllocation:
+      type: object
+      properties:
+        address:
+          type:
+          - string
+          - 'null'
+          description: Blockchain address of the Smart Contract
+        expirationTimestamp:
+          type: integer
+          description: The timestamp by which the transfer must be completely initiated. Currently, this means solving the MFA steps
+          format: int64
+      additionalProperties: false
+    TransferTypeEnum:
       enum:
-      - unknown
-      - failed
-      - frozen
+      - deposit
+      - payment
+      - onramp
+      type: string
+    ProcessingFeeRetainMethod:
+      type: object
+      properties:
+        type:
+          enum:
+          - default
+          - smartDeposit
+          allOf:
+          - $ref: '#/components/schemas/ProcessingFeeRetainType'
+        processingFeeAddress:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CryptocurrencyAddressType:
+      enum:
+      - ethAddress
+      - btcAddress
+      - ltcAddress
+      - solAddress
+      - algoAddress
+      - celoAddress
+      - cardanoAddress
+      - polygonAddress
+      - bnbAddress
+      - elrondAddress
+      - neoAddress
+      - xrpAddress
+      - flowAddress
+      - harmonyOneAddress
+      - tronAddress
+      - dogeAddress
+      - opAddress
+      type: string
+    ExecuteTransferMfaType:
+      enum:
+      - unspecified
+      - phone
+      - email
+      - totp
+      - face
+      type: string
+    TransferVerifyStatus:
+      enum:
       - succeeded
+      - failed
+      type: string
+    ExecuteTransferStatus:
+      enum:
+      - succeeded
+      - failed
       - mfaRequired
-      - pending
-      - expired
-      - canceled
-      - waitingForSignature
-      - waitingForClearing
-      - awaitingApproval
-      - awaitingConfirmation
-      - awaitingVerification
-      - rejected
-      - pendingCancel
-      - emailVerification
+      - emailConfirmationRequired
       - deviceConfirmationRequired
       - mfaFailed
       - addressWhitelistRequired
       - secondMfaRequired
+      - deFiWalletConfirmationRequired
       type: string
+    TransferFee:
+      type: object
+      properties:
+        fee:
+          type: number
+          description: The amount of the fee.
+          format: double
+        feeCurrency:
+          type:
+          - string
+          - 'null'
+          description: The currency of the fee. Does not match the currency of the transfer in some cases.
+        feeInFiat:
+          type: number
+          description: The value of the fee converted to the fiat currency.
+          format: double
+      additionalProperties: false
     QuoteTransferResponse:
       type: object
       properties:
@@ -1650,21 +2585,24 @@ components:
           description: Base amount of fiat currency being transferred (provided in request)
           format: double
         fiatCurrency:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 3 character currency code (provided in request)
-          nullable: true
         symbol:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Symbol of destination cryptocurrency (provided in request)
-          nullable: true
         networkId:
           type: string
           description: Unique id of destination network (provided in request)
           format: uuid
         toAddress:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The designated destination for sending the asset.
-          nullable: true
         brokerType:
           enum:
           - robinhood
@@ -1721,20 +2659,21 @@ components:
           description: Minimum amount in fiat eligible to transfer with selected asset, exchange, and network
           format: double
         maxEligibleAmount:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Maximum amount eligible to transfer with selected asset, exchange, and network
           format: double
-          nullable: true
         maxEligibleAmountFiat:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Maximum amount eligible in fiat to transfer with selected asset, exchange, and network
           format: double
-          nullable: true
         ineligibilityReason:
           allOf:
           - $ref: '#/components/schemas/NetworkTransferIneligibilityReason'
           description: The reason a transaction is ineligible, returns none if eligible
-          nullable: true
         brokerPrice:
           type: number
           description: Price quote from the broker, falls back to reference price
@@ -1763,345 +2702,14 @@ components:
           allOf:
           - $ref: '#/components/schemas/QuoteFees'
           description: Summary of all possible transfer fees
-          nullable: true
         fundingOptions:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/QuoteFundingOption'
           description: Summary of all possible funding options
-          nullable: true
       additionalProperties: false
-    SmartContractTransferAllocation:
-      type: object
-      properties:
-        address:
-          type: string
-          description: Blockchain address of the Smart Contract
-          nullable: true
-        expirationTimestamp:
-          type: integer
-          description: The timestamp by which the transfer must be completely initiated. Currently, this means solving the MFA steps
-          format: int64
-      additionalProperties: false
-    FailureReason:
-      enum:
-      - notSupportedOnIntegration
-      - notSupportedOnNetwork
-      - invalidAddressFormat
-      - notSupportedOnToken
-      type: string
-    QuoteFeesInCrypto:
-      type: object
-      properties:
-        paymentMethodFeeMax:
-          type: number
-          description: Max fee charged if funded by payment method
-          format: double
-        tradingFeeMax:
-          type: number
-          description: Max fee charged to buy crypto
-          format: double
-        withdrawalFee:
-          type: number
-          description: Fee charged to withdraw crypto
-          format: double
-        partnerFee:
-          type: number
-          description: Fee charged by partner
-          format: double
-        networkFee:
-          type: number
-          description: Fee charged for network transaction
-          format: double
-        minFees:
-          type: number
-          description: Min of total fees charged in crypto
-          format: double
-        maxFees:
-          type: number
-          description: Max of total fees charged in crypto
-          format: double
-      additionalProperties: false
-    TransferVerifyStatus:
-      enum:
-      - succeeded
-      - failed
-      type: string
-    TransferBalanceFundingAvailabilityStatus:
-      enum:
-      - disabled
-      - available
-      - requiresAmountLowering
-      - notApplicable
-      - unavailable
-      type: string
-    PreviewTransferStatus:
-      enum:
-      - succeeded
-      - failed
-      - requiresFunding
-      type: string
-    TransferBalanceFundingAvailabilityBase:
-      type: object
-      properties:
-        status:
-          enum:
-          - disabled
-          - available
-          - requiresAmountLowering
-          - notApplicable
-          - unavailable
-          allOf:
-          - $ref: '#/components/schemas/TransferBalanceFundingAvailabilityStatus'
-      additionalProperties: false
-    QuoteFeesInFiat:
-      type: object
-      properties:
-        paymentMethodFeeMaxFiat:
-          type: number
-          description: Max fee charged if funded by payment method
-          format: double
-        tradingFeeMaxFiat:
-          type: number
-          description: Max fee charged to buy crypto
-          format: double
-        withdrawalFeeFiat:
-          type: number
-          description: Fee charged to withdraw crypto
-          format: double
-        partnerFeeFiat:
-          type: number
-          description: Fee charged by partner
-          format: double
-        networkFeeFiat:
-          type: number
-          description: Fee charged for network transaction
-          format: double
-        minFeesFiat:
-          type: number
-          description: Min of total fees charged in fiat
-          format: double
-        maxFeesFiat:
-          type: number
-          description: Max of total fees charged in fiat
-          format: double
-      additionalProperties: false
-    TransferVerificationRequest:
-      type: object
-      properties:
-        integrationId:
-          type: string
-          nullable: true
-        token:
-          type: string
-          nullable: true
-        networkId:
-          type: string
-          nullable: true
-        targetAddress:
-          type: string
-          nullable: true
-      additionalProperties: false
-    NetworkModelResponse:
-      type: object
-      properties:
-        networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/NetworkResponseWithIntegrations'
-          nullable: true
-      additionalProperties: false
-    ConfigureTransferResponse:
-      type: object
-      properties:
-        status:
-          enum:
-          - succeeded
-          - failed
-          - validationFailed
-          - notAuthorizedTo
-          - notAuthorizedFrom
-          - kycRequired
-          - fromIntegrationNotSupported
-          - toIntegrationNotSupported
-          allOf:
-          - $ref: '#/components/schemas/ConfigureTransferStatus'
-          description: Status of the operation.
-        errorMessage:
-          type: string
-          description: Error message, if the operation did not complete successfully.
-          nullable: true
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConfigureTransferResultHolding'
-          description: List of holdings on the source account.
-          nullable: true
-        amountInFiat:
-          type: number
-          description: Amount in USD to transfer. If not provided users can specify amount by themselves.
-          format: double
-          nullable: true
-        minimumTransferAmountInFiat:
-          type: number
-          description: Minimum transfer amount in fiat
-          format: double
-          nullable: true
-        maximumTransferAmountInFiat:
-          type: number
-          description: Maximum transfer amount in fiat
-          format: double
-          nullable: true
-        transferBalanceFundingAvailability:
-          allOf:
-          - $ref: '#/components/schemas/TransferBalanceFundingAvailabilityBase'
-          nullable: true
-      additionalProperties: false
-    TransferTypeEnum:
-      enum:
-      - deposit
-      - payment
-      - onramp
-      type: string
-    B2BBrokerCryptocurrencyDepositAddressResponseApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type: string
-          description: A message generated by the API
-          nullable: true
-        displayMessage:
-          type: string
-          description: User-friendly display message that can be presented to the end user
-          nullable: true
-        errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
-        errorData:
-          nullable: true
-          readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/B2BBrokerCryptocurrencyDepositAddressResponse'
-          nullable: true
-      additionalProperties: false
-    ExecuteTransferResultResponse:
-      type: object
-      properties:
-        transferId:
-          type: string
-          description: The Id of the transfer by the integration.
-          nullable: true
-        status:
-          enum:
-          - unknown
-          - failed
-          - frozen
-          - succeeded
-          - mfaRequired
-          - pending
-          - expired
-          - canceled
-          - waitingForSignature
-          - waitingForClearing
-          - awaitingApproval
-          - awaitingConfirmation
-          - awaitingVerification
-          - rejected
-          - pendingCancel
-          - emailVerification
-          - deviceConfirmationRequired
-          - mfaFailed
-          - addressWhitelistRequired
-          - secondMfaRequired
-          allOf:
-          - $ref: '#/components/schemas/BrokerCryptocurrencyTransactionStatus'
-          description: The current status of the transfer.
-        statusDetails:
-          type: string
-          description: Details of the current status of the transfer, as provided by the integration.
-          nullable: true
-        fromAddress:
-          type: string
-          description: The address of the source account or wallet.
-          nullable: true
-        toAddress:
-          type: string
-          description: The address of the target account or wallet.
-          nullable: true
-        symbol:
-          type: string
-          description: Transferred symbol.
-          nullable: true
-        networkName:
-          type: string
-          description: The name of the used network.
-          nullable: true
-        networkId:
-          type: string
-          description: The Id of the used network in Front system.
-          format: uuid
-        hash:
-          type: string
-          description: The hash of the blockchain transaction.
-          nullable: true
-        amount:
-          type: number
-          description: The transferred amount, in the symbol of the transfer.
-          format: double
-        amountInFiat:
-          type: number
-          description: The transferred amount, converted to the fiat currency.
-          format: double
-        totalAmountInFiat:
-          type: number
-          description: Total amount of the transfer including all fees, converted to fiat.
-          format: double
-        completedConfirmations:
-          type: integer
-          description: Current number of network confirmations.
-          format: int64
-          nullable: true
-        institutionTransferFee:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: The fee that was taken by the institution.
-          nullable: true
-        networkGasFee:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: "The gas fee that was taken by the network. Depending on the integration, the network gas fee might be\r\ncovered by the `InstitutionTransferFee`."
-          nullable: true
-        smartContract:
-          allOf:
-          - $ref: '#/components/schemas/SmartContractTransferAllocation'
-          description: Details of the allocated Smart Contract in case of 'Deposit' type transfers.
-          nullable: true
-      additionalProperties: false
-    TransferOrderByFields:
-      enum:
-      - id
-      - clientTransferId
-      - userId
-      - fromType
-      - amountInFiat
-      - status
-      - createdTimestamp
-      type: string
     IntegrationNetworksModelResponse:
       type: object
       properties:
@@ -2150,349 +2758,18 @@ components:
           - $ref: '#/components/schemas/BrokerType'
           description: Type of the integration.
         networks:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/NetworkResponse'
           description: The list of supported networks and corresponding tokens for the integration.
-          nullable: true
         supportsOutgoingTransfers:
           type: boolean
           description: Specifies if the integration supports outgoing transfers.
         supportsIncomingTransfers:
           type: boolean
           description: Specifies if the integration supports incoming transfers.
-      additionalProperties: false
-    ProcessingFeeRetainMethod:
-      type: object
-      properties:
-        type:
-          enum:
-          - default
-          - smartDeposit
-          allOf:
-          - $ref: '#/components/schemas/ProcessingFeeRetainType'
-        processingFeeAddress:
-          type: string
-          nullable: true
-      additionalProperties: false
-    TransferBalanceFundingAvailability:
-      type: object
-      properties:
-        status:
-          enum:
-          - disabled
-          - available
-          - requiresAmountLowering
-          - notApplicable
-          - unavailable
-          allOf:
-          - $ref: '#/components/schemas/TransferBalanceFundingAvailabilityStatus'
-        transferTotalAmount:
-          type: number
-          description: The total transfer amount in crypto after all fees are applied
-          format: double
-        unitPrice:
-          type: number
-          description: The price of the cryptocurrency asset in the fiat currency.
-          format: double
-        gasFeeBuffer:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: Represents the safety margin amount to cover gas fee volatility.
-          nullable: true
-        symbol:
-          type: string
-          nullable: true
-        transferTotalAmountInFiat:
-          type: number
-          description: The total transfer amount in fiat after all fees are applied.
-          format: double
-      additionalProperties: false
-    ExecuteTransferResponseApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type: string
-          description: A message generated by the API
-          nullable: true
-        displayMessage:
-          type: string
-          description: User-friendly display message that can be presented to the end user
-          nullable: true
-        errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
-        errorData:
-          nullable: true
-          readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/ExecuteTransferResponse'
-          nullable: true
-      additionalProperties: false
-    TransferStatus:
-      enum:
-      - pending
-      - succeeded
-      - failed
-      type: string
-    NetworkTransferIneligibilityReason:
-      enum:
-      - amountNotSufficient
-      - gasFeeAssetBalanceNotEnough
-      - noTargetNetworkFound
-      - refusedByInstitution
-      - eligibleWithFunding
-      - balanceBelowRequestedAmount
-      - requestedAmountBelowMinimum
-      - balanceBelowMinimum
-      - requestedAmountBelowFees
-      - requestedAmountBelowClientMinimum
-      - requestedAmountAboveClientMaximum
-      type: string
-    PreviewTransferResult:
-      type: object
-      properties:
-        previewId:
-          type: string
-          description: The Id of the preview of the transfer. Should be used to commit the transfer using `Execute` endpoint.
-          format: uuid
-        previewExpiresIn:
-          type: integer
-          description: The period of time in seconds during which the transfer can be committed.
-          format: int32
-        fromAddress:
-          type: string
-          description: Obtained address that will be used to send the transfer. Not guaranteed to be returned by some of integrations.
-          nullable: true
-        toAddress:
-          type: string
-          description: The target address to send the asset to.
-          nullable: true
-        addressTag:
-          type: string
-          description: Secondary address identifier for coins like XRP, XMR etc.
-          nullable: true
-        symbol:
-          type: string
-          description: Symbol of the asset to be sent.
-          nullable: true
-        amount:
-          type: number
-          description: "Amount in symbol. If the transfer was requested using `AmounInFiat` field, this field represents the exact amount\r\nof the asset that will be transferred."
-          format: double
-        amountInFiat:
-          type: number
-          description: "Transfer amount in fiat. If the transfer was requested in crypto amount using the `Amount` field,\r\nthis field contains the corresponding converted to fiat value."
-          format: double
-        totalEstimatedAmountInFiat:
-          type: number
-          description: Total estimated amount of the transfer including all fees, converted to fiat.
-          format: double
-        networkId:
-          type: string
-          description: Id of the network in Front system.
-          format: uuid
-        networkName:
-          type: string
-          description: Name of the network in Front system.
-          nullable: true
-        contractAddress:
-          type: string
-          description: Blockchain address of the transferred token's contract
-          nullable: true
-        institutionTransferFee:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: "The fee that is taken by the institution. Depending on the institution, can cover the gas fee. Some institutions do not\r\ntake the transfer fee and only network fee is used for the transfer."
-          nullable: true
-        estimatedNetworkGasFee:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: "The gas fee that is estimated to be taken by the network. Depending on the integration, the network gas fee might be\r\ncovered by the `InstitutionTransferFee`."
-          nullable: true
-        decimalPlaces:
-          type: integer
-          description: Number of decimal places used to represent the token's smallest unit
-          format: int32
-          nullable: true
-        unitPrice:
-          type: number
-          description: The price of the cryptocurrency asset in the fiat currency.
-          format: double
-        clientTransactionId:
-          maxLength: 128
-          minLength: 0
-          type: string
-          description: Transaction id provided by the client
-          nullable: true
-        clientFee:
-          maximum: 1
-          minimum: 0
-          type: number
-          description: "A percentage fee (input as a ratio, eg. 0.02500 = 2.500%) added onto your users' gross payments.\r\nThis will override any default fee entered in your Mesh dashboard for an individual transaction.\r\nPlease note: this fee should only be used for Payments (when the transfer destination is an address owned by your company),\r\nand not for Deposits (when the transfer destination is an address owned by the end user).\r\nIf used for Deposits, it will increase the size of the user's Deposit by the fee amount,\r\nbut will incorrectly show to the user as a fee."
-          format: double
-          nullable: true
-        customClientFee:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: The client fee that is estimated to be added to the total estimated transfer amount, based on the user's requested transfer amount and client fee percentage.
-          nullable: true
-        processingFeeRetainMethod:
-          allOf:
-          - $ref: '#/components/schemas/ProcessingFeeRetainMethod'
-          nullable: true
-        transferType:
-          allOf:
-          - $ref: '#/components/schemas/TransferTypeEnum'
-          description: "Deposit: The user is transferring crypto to a wallet they own on your platform.\r\nPayment: The user is transferring crypto to a wallet your company owns in exchange for receiving a good or service.\r\nOnramp: The user is using balances and linked payment methods in an exchange account to fund the purchase of crypto in their wallet on your platform."
-          nullable: true
-        isCustomClientFeeProvided:
-          type: boolean
-        amountWithCustomClientFee:
-          type: number
-          description: "Amount in symbol after the client fees are applied. This field represents the exact amount\r\nof the asset that will be requested for transfer."
-          format: double
-        isFeeIncluded:
-          type: boolean
-          description: "Indicates if all the fees are included in the amount. For example, if this field's value is `true`\r\nand the user wants to send 1 BTC and the sum of all fees is 0.1 BTC, the user will be charged 1 BTC, and\r\nthe target address will receive 0.9 BTC.\r\nIf the fees are no inclusive, the user will be charged 1.1 BTC and the target address will receive 1 BTC."
-        amountToReceive:
-          type: number
-          description: "Indicates the final amount to receive after all fees are applied. In case fees are not inclusive (`IsFeeIncluded` is `false`),\r\nthis field will be equal to the `Amount` field."
-          format: double
-        amountToReceiveInFiat:
-          type: number
-          description: "Indicates the final amount in fiat to receive after all fees are applied. In case fees are not inclusive (`IsFeeIncluded` is `false`),\r\nthis field will be equal to the `AmountInFiat` field."
-          format: double
-      additionalProperties: false
-    QuoteFundingOption:
-      type: object
-      properties:
-        fundingOption:
-          enum:
-          - existingCryptocurrencyBalance
-          - buyingPowerPurchase
-          - paymentMethodDepositUsage
-          - cryptocurrencyConversion
-          - stableCoinNoFeeConversion
-          - cryptocurrencyBuyingPowerConversion
-          allOf:
-          - $ref: '#/components/schemas/CryptocurrencyFundingOptionType'
-          description: Funding option being quoted
-        paymentMethodType:
-          allOf:
-          - $ref: '#/components/schemas/BrokerPaymentMethodType'
-          description: Payment method being quoted for PaymentMethodDepositUsage funding option
-          nullable: true
-        paymentMethodFeeFiat:
-          type: number
-          description: Fee charged for this payment method
-          format: double
-        tradingFeeFiat:
-          type: number
-          description: Fee charged to buy crypto if necessary for this funding option
-          format: double
-      additionalProperties: false
-    BrokerType:
-      enum:
-      - robinhood
-      - eTrade
-      - alpaca
-      - tdAmeritrade
-      - weBull
-      - stash
-      - interactiveBrokers
-      - public
-      - coinbase
-      - kraken
-      - coinbasePro
-      - cryptoCom
-      - openSea
-      - binanceUs
-      - gemini
-      - cryptocurrencyAddress
-      - cryptocurrencyWallet
-      - okCoin
-      - bittrex
-      - kuCoin
-      - etoro
-      - cexIo
-      - binanceInternational
-      - bitstamp
-      - gateIo
-      - acorns
-      - okx
-      - bitFlyer
-      - coinlist
-      - huobi
-      - bitfinex
-      - deFiWallet
-      - krakenDirect
-      - vanguard
-      - binanceInternationalDirect
-      - bitfinexDirect
-      - bybit
-      - paxos
-      - coinbasePrime
-      type: string
-    NetworkModelResponseApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type: string
-          description: A message generated by the API
-          nullable: true
-        displayMessage:
-          type: string
-          description: User-friendly display message that can be presented to the end user
-          nullable: true
-        errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
-        errorData:
-          nullable: true
-          readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/NetworkModelResponse'
-          nullable: true
-      additionalProperties: false
-    IntegrationNetworkResponse:
-      type: object
-      properties:
-        integrations:
-          type: array
-          items:
-            $ref: '#/components/schemas/IntegrationNetworksModelResponse'
-          nullable: true
       additionalProperties: false
     TransferModel:
       type: object
@@ -2502,17 +2779,20 @@ components:
           description: Mesh transfer identifier.
           format: uuid
         clientTransactionId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Client transaction identifier.
-          nullable: true
         institutionTransactionId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Integration transaction identifier.
-          nullable: true
         userId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Client's user identifier.
-          nullable: true
         status:
           enum:
           - pending
@@ -2526,21 +2806,24 @@ components:
           description: Tranfer amount in fiat.
           format: double
         amountInFiatCurrencyCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Tranfer amount in fiat currency code.
-          nullable: true
         amount:
           type: number
           description: Tranfer amount.
           format: double
         symbol:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Tranfer cryptocurrency symbol.
-          nullable: true
         networkName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Tranfer network name.
-          nullable: true
         createdTimestamp:
           type: integer
           description: Created timestamp.
@@ -2549,41 +2832,202 @@ components:
           allOf:
           - $ref: '#/components/schemas/TransferIntegrationModel'
           description: From integration.
-          nullable: true
         hash:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transfer hash.
-          nullable: true
         gasFee:
           allOf:
           - $ref: '#/components/schemas/TransferFee'
           description: Transfer network gas fee.
-          nullable: true
         withdrawalFee:
           allOf:
           - $ref: '#/components/schemas/TransferFee'
           description: Financial insitution withdrawal fee.
-          nullable: true
         processingFee:
           allOf:
           - $ref: '#/components/schemas/TransferFee'
           description: Tranfer processing fee.
-          nullable: true
         executedTimestamp:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Transfer executed Unix timestamp.
           format: int64
-          nullable: true
         sourceAmount:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Amount what was actually transferred from source account.
           format: double
-          nullable: true
         destinationAmount:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Amount what destination actually received.
           format: double
-          nullable: true
+      additionalProperties: false
+    QuoteFeesInCrypto:
+      type: object
+      properties:
+        paymentMethodFeeMax:
+          type: number
+          description: Max fee charged if funded by payment method
+          format: double
+        tradingFeeMax:
+          type: number
+          description: Max fee charged to buy crypto
+          format: double
+        withdrawalFee:
+          type: number
+          description: Fee charged to withdraw crypto
+          format: double
+        partnerFee:
+          type: number
+          description: Fee charged by partner
+          format: double
+        networkFee:
+          type: number
+          description: Fee charged for network transaction
+          format: double
+        minFees:
+          type: number
+          description: Min of total fees charged in crypto
+          format: double
+        maxFees:
+          type: number
+          description: Max of total fees charged in crypto
+          format: double
+      additionalProperties: false
+    B2BBrokerCryptocurrencyDepositAddressResponse:
+      type: object
+      properties:
+        symbol:
+          type:
+          - string
+          - 'null'
+        address:
+          type:
+          - string
+          - 'null'
+        chain:
+          type:
+          - string
+          - 'null'
+        memo:
+          type:
+          - string
+          - 'null'
+        minimumDepositAmount:
+          type:
+          - string
+          - 'null'
+        networkId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        brokerResponseStatus:
+          allOf:
+          - $ref: '#/components/schemas/BrokerResponseStatus'
+        errorMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ConfigureTransferResultNetwork:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the network.
+        id:
+          type: string
+          description: The Id of the network in Front system.
+          format: uuid
+        minimumAmount:
+          type:
+          - number
+          - 'null'
+          description: Then minimum amount that can be withdrawn using this network.
+          format: double
+        maximumAmount:
+          type:
+          - number
+          - 'null'
+          description: The maximum amount that can be withdrawn using this network.
+          format: double
+        totalEstimatedTransferFeeInFiat:
+          type:
+          - number
+          - 'null'
+          description: 'Total estimated transfer fee converted to fiat. Can consist of the fee taken by the financial institution and the
+
+            gas fee.'
+          format: double
+        minimumAmountInFiat:
+          type:
+          - number
+          - 'null'
+          description: The minimum amount that can be withdrawn using this network, converted to fiat currency.
+          format: double
+        maximumAmountInFiat:
+          type:
+          - number
+          - 'null'
+          description: The maximum amount that can be withdrawn using this network, converted to fiat currency.
+          format: double
+        estimatedNetworkGasFee:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: 'The gas fee that is estimated to be taken by the network. Depending on the integration, the network gas fee might be
+
+            covered by the `InstitutionTransferFee`.'
+        institutionTransferFee:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: 'The fee that is taken by the institution. Depending on the institution, can cover the gas fee. Some institutions do not
+
+            take the transfer fee and only network fee is used for the transfer.'
+        eligibleForTransfer:
+          type: boolean
+          description: Specifies if the asset is eligible for a transfer over the current network.
+        ineligibilityReason:
+          allOf:
+          - $ref: '#/components/schemas/NetworkTransferIneligibilityReason'
+          description: The reason indicating why the transfer cannot be performed over this network.
+        eligibleForTransferWithFunding:
+          type: boolean
+        toAddress:
+          type:
+          - string
+          - 'null'
+          description: The designated destination for sending the asset.
+        transferAmount:
+          type:
+          - number
+          - 'null'
+          description: Token's amount to transfer specified by the client.
+          format: double
+        minimumRequiredForTransferAmount:
+          type:
+          - number
+          - 'null'
+          description: 'The minimum amount of cryptocurrency that is required to be present in the account to perform the transfer.
+
+            Unlike `minimum` field that indicates the minimum amount that can generally be transferred, this field indicates the minimum
+
+            that can be transferred given the current transfer configuration values, such as `amountInFiat` and `clientFee`.'
+          format: double
+        logoUrl:
+          type:
+          - string
+          - 'null'
+          description: Logo url for network.
+          format: uri
       additionalProperties: false
     QuoteTransferRequest:
       required:
@@ -2660,16 +3104,362 @@ components:
           - $ref: '#/components/schemas/BrokerType'
           description: The type of the integration to send the asset from
         feeFlat:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Flat fee in crypto to be charged as a partner fee
           format: double
-          nullable: true
         feePercentage:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Percentage of transfer amount to be charged as a partner fee, expressed as decimal (ie 0.1 = 10%)
           format: double
-          nullable: true
       additionalProperties: false
+    B2BBrokerCryptocurrencyDepositAddressResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptocurrencyDepositAddressResponse'
+      additionalProperties: false
+    PreviewTransferRequest:
+      required:
+      - fromAuthToken
+      - fromType
+      type: object
+      properties:
+        fromAuthToken:
+          minLength: 1
+          type: string
+          description: The authentication token to send the asset from.
+        fromType:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: The type of the integration to send the asset from.
+        toAuthToken:
+          type:
+          - string
+          - 'null'
+          description: 'The authentication token of the target integration. Can be used alternatively to the address in the `ToAddress` field.
+
+            If used, `toType` should also be provided.'
+        toType:
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: The type of the target integration to send assets to. Used along with the `toAuthToken` alternatively to `ToAddress`.
+        networkId:
+          type: string
+          description: The network to send the asset over.
+          format: uuid
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of the digital asset to send.
+        toAddress:
+          type:
+          - string
+          - 'null'
+          description: The target address to send the asset to.
+        addressTag:
+          type:
+          - string
+          - 'null'
+          description: Secondary address identifier for coins like XRP,XMR etc.
+        amount:
+          type:
+          - number
+          - 'null'
+          description: The amount to send, in crypto.
+          format: double
+        amountInFiat:
+          type:
+          - number
+          - 'null'
+          description: The amount to send, in fiat currency. Can be used alternatively to `Amount`.
+          format: double
+        fiatCurrency:
+          type:
+          - string
+          - 'null'
+          description: Fiat currency that is to get corresponding converted fiat values of transfer and fee amounts. If not provided, defaults to `USD`.
+      additionalProperties: false
+    ExecuteTransferResultResponse:
+      type: object
+      properties:
+        transferId:
+          type:
+          - string
+          - 'null'
+          description: The Id of the transfer by the integration.
+        status:
+          enum:
+          - unknown
+          - failed
+          - frozen
+          - succeeded
+          - mfaRequired
+          - pending
+          - expired
+          - canceled
+          - waitingForSignature
+          - waitingForClearing
+          - awaitingApproval
+          - awaitingConfirmation
+          - awaitingVerification
+          - rejected
+          - pendingCancel
+          - emailVerification
+          - deviceConfirmationRequired
+          - mfaFailed
+          - addressWhitelistRequired
+          - secondMfaRequired
+          allOf:
+          - $ref: '#/components/schemas/BrokerCryptocurrencyTransactionStatus'
+          description: The current status of the transfer.
+        statusDetails:
+          type:
+          - string
+          - 'null'
+          description: Details of the current status of the transfer, as provided by the integration.
+        fromAddress:
+          type:
+          - string
+          - 'null'
+          description: The address of the source account or wallet.
+        toAddress:
+          type:
+          - string
+          - 'null'
+          description: The address of the target account or wallet.
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Transferred symbol.
+        networkName:
+          type:
+          - string
+          - 'null'
+          description: The name of the used network.
+        networkId:
+          type: string
+          description: The Id of the used network in Front system.
+          format: uuid
+        hash:
+          type:
+          - string
+          - 'null'
+          description: The hash of the blockchain transaction.
+        amount:
+          type: number
+          description: The transferred amount, in the symbol of the transfer.
+          format: double
+        amountInFiat:
+          type: number
+          description: The transferred amount, converted to the fiat currency.
+          format: double
+        totalAmountInFiat:
+          type: number
+          description: Total amount of the transfer including all fees, converted to fiat.
+          format: double
+        completedConfirmations:
+          type:
+          - integer
+          - 'null'
+          description: Current number of network confirmations.
+          format: int64
+        institutionTransferFee:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: The fee that was taken by the institution.
+        networkGasFee:
+          allOf:
+          - $ref: '#/components/schemas/TransferFee'
+          description: 'The gas fee that was taken by the network. Depending on the integration, the network gas fee might be
+
+            covered by the `InstitutionTransferFee`.'
+        smartContract:
+          allOf:
+          - $ref: '#/components/schemas/SmartContractTransferAllocation'
+          description: Details of the allocated Smart Contract in case of 'Deposit' type transfers.
+      additionalProperties: false
+    TokenNetworksResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/TokenNetworksResponse'
+      additionalProperties: false
+    TransferVerificationResponse:
+      type: object
+      properties:
+        status:
+          enum:
+          - succeeded
+          - failed
+          allOf:
+          - $ref: '#/components/schemas/TransferVerifyStatus'
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        failureReason:
+          allOf:
+          - $ref: '#/components/schemas/FailureReason'
+      additionalProperties: false
+    QuoteTransferResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/QuoteTransferResponse'
+      additionalProperties: false
+    TransferBalanceFundingAvailabilityStatus:
+      enum:
+      - disabled
+      - available
+      - requiresAmountLowering
+      - notApplicable
+      - unavailable
+      type: string
     ConfigureTransferRequest:
       required:
       - fromAuthToken
@@ -2725,130 +3515,101 @@ components:
           - $ref: '#/components/schemas/BrokerType'
           description: The type of the integration to send assets from.
         toAuthToken:
-          type: string
-          description: "The authentication token of the target integration. Can be used alternatively to the list of requested address (`toAddresses`).\r\nIf used, `toType` should also be provided."
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: 'The authentication token of the target integration. Can be used alternatively to the list of requested address (`toAddresses`).
+
+            If used, `toType` should also be provided.'
         toType:
           allOf:
           - $ref: '#/components/schemas/BrokerType'
           description: The type of the target integration to send assets to. Used along with the `toAuthToken` alternatively to `toAddresses`.
-          nullable: true
         toAddresses:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/TransferToAddress'
-          description: "A list of available addresses provided by the API client. The list can contain all supported addresses by the client.\r\nFront API validates the addresses and returns the list of supported tokens and networks as the result of the operation."
-          nullable: true
+          description: 'A list of available addresses provided by the API client. The list can contain all supported addresses by the client.
+
+            Front API validates the addresses and returns the list of supported tokens and networks as the result of the operation.'
         symbol:
-          type: string
+          type:
+          - string
+          - 'null'
           description: If provided, Front API returns only networks that support transferring of this symbol.
-          nullable: true
         amount:
-          type: number
+          type:
+          - number
+          - 'null'
           description: If provided, Front API configures the response to only return holdings with enough amount of this crypto for the transfer
           format: double
-          nullable: true
         amountInFiat:
-          type: number
+          type:
+          - number
+          - 'null'
           description: If provided, Front API configures the response to only contain holdings with enough value (converted to fiat) for the transfer.
           format: double
-          nullable: true
         fiatCurrency:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Fiat currency that is to get corresponding converted fiat values of transfer and fee amounts. If not provided, defaults to `USD`.
-          nullable: true
         networkId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: If provided, from API configures the response to include the requested network only.
           format: uuid
-          nullable: true
       additionalProperties: false
-    TokenNetworksResponse:
+    ConfigureTransferResponseApiResult:
       type: object
       properties:
-        tokens:
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenNetworksModel'
-          nullable: true
-      additionalProperties: false
-    ConfigureTransferStatus:
-      enum:
-      - succeeded
-      - failed
-      - validationFailed
-      - notAuthorizedTo
-      - notAuthorizedFrom
-      - kycRequired
-      - fromIntegrationNotSupported
-      - toIntegrationNotSupported
-      type: string
-    IntegrationNetwork:
-      type: object
-      properties:
-        networkId:
-          type: string
-          format: uuid
-        netwokName:
-          type: string
-          nullable: true
-        innerNetworkId:
-          type: string
-          nullable: true
-        networkLogo:
-          type: string
-          nullable: true
-        brokerType:
+        status:
           enum:
-          - robinhood
-          - eTrade
-          - alpaca
-          - tdAmeritrade
-          - weBull
-          - stash
-          - interactiveBrokers
-          - public
-          - coinbase
-          - kraken
-          - coinbasePro
-          - cryptoCom
-          - openSea
-          - binanceUs
-          - gemini
-          - cryptocurrencyAddress
-          - cryptocurrencyWallet
-          - okCoin
-          - bittrex
-          - kuCoin
-          - etoro
-          - cexIo
-          - binanceInternational
-          - bitstamp
-          - gateIo
-          - acorns
-          - okx
-          - bitFlyer
-          - coinlist
-          - huobi
-          - bitfinex
-          - deFiWallet
-          - krakenDirect
-          - vanguard
-          - binanceInternationalDirect
-          - bitfinexDirect
-          - bybit
-          - paxos
-          - coinbasePrime
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
           allOf:
-          - $ref: '#/components/schemas/BrokerType'
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/ConfigureTransferResponse'
       additionalProperties: false
     ConfigureTransferResultHolding:
       type: object
       properties:
         symbol:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The symbol of the digital asset on the source account.
-          nullable: true
         availableBalance:
           type: number
           description: The available balance of the digital asset.
@@ -2861,516 +3622,28 @@ components:
           type: boolean
           description: Specifies if the asset is eligible for a transfer.
         networks:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/ConfigureTransferResultNetwork'
           description: Supported networks.
-          nullable: true
         ineligibilityReason:
           allOf:
           - $ref: '#/components/schemas/HoldingTransferIneligibilityReason'
           description: The reason indicating why the transfer of the current asset cannot be performed.
-          nullable: true
         eligibleForTransferWithFunding:
           type: boolean
-          description: "Indicates that the asset is not eligible for a transfer with the current holding balance,\r\nbut can be made eligible after funding the balance using the cryptocurrency balance funding feature."
+          description: 'Indicates that the asset is not eligible for a transfer with the current holding balance,
+
+            but can be made eligible after funding the balance using the cryptocurrency balance funding feature.'
         logoUrl:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Logo url for holding.
           format: uri
-          nullable: true
       additionalProperties: false
-    QuoteFees:
-      type: object
-      properties:
-        inFiat:
-          allOf:
-          - $ref: '#/components/schemas/QuoteFeesInFiat'
-          description: Summary of all possible transfer fees in fiat
-          nullable: true
-        inCrypto:
-          allOf:
-          - $ref: '#/components/schemas/QuoteFeesInCrypto'
-          description: Summary of all possible transfer fees in crypto
-          nullable: true
-      additionalProperties: false
-    TransferModelPaginationResponseApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type: string
-          description: A message generated by the API
-          nullable: true
-        displayMessage:
-          type: string
-          description: User-friendly display message that can be presented to the end user
-          nullable: true
-        errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
-        errorData:
-          nullable: true
-          readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/TransferModelPaginationResponse'
-          nullable: true
-      additionalProperties: false
-    ExecuteTransferResponse:
-      type: object
-      properties:
-        status:
-          enum:
-          - succeeded
-          - failed
-          - mfaRequired
-          - emailConfirmationRequired
-          - deviceConfirmationRequired
-          - mfaFailed
-          - addressWhitelistRequired
-          - secondMfaRequired
-          - deFiWalletConfirmationRequired
-          allOf:
-          - $ref: '#/components/schemas/ExecuteTransferStatus'
-          description: The status of the transfer.
-        mfaType:
-          allOf:
-          - $ref: '#/components/schemas/ExecuteTransferMfaType'
-          description: The type of the MFA when the status is `MfaRequired`.
-          nullable: true
-        verificationSteps:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExecuteTransferMfaType'
-          description: The type of the MFA when the status is `MfaRequired`.
-          nullable: true
-        qrCode:
-          type: string
-          nullable: true
-        qrCodeLink:
-          type: string
-          nullable: true
-        errorMessage:
-          type: string
-          description: Error message, if the operation did not complete successfully.
-          nullable: true
-        executeTransferResult:
-          allOf:
-          - $ref: '#/components/schemas/ExecuteTransferResultResponse'
-          description: Result of the transfer initiation.
-          nullable: true
-      additionalProperties: false
-    CryptocurrencyFundingOptionType:
-      enum:
-      - existingCryptocurrencyBalance
-      - buyingPowerPurchase
-      - paymentMethodDepositUsage
-      - cryptocurrencyConversion
-      - stableCoinNoFeeConversion
-      - cryptocurrencyBuyingPowerConversion
-      type: string
-    TransferModelPaginationResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransferModel'
-          description: list of items
-          nullable: true
-        total:
-          type: integer
-          description: Total number of items
-          format: int32
-      additionalProperties: false
-    CryptocurrencyAddressType:
-      enum:
-      - ethAddress
-      - btcAddress
-      - ltcAddress
-      - solAddress
-      - algoAddress
-      - celoAddress
-      - cardanoAddress
-      - polygonAddress
-      - bnbAddress
-      - elrondAddress
-      - neoAddress
-      - xrpAddress
-      - flowAddress
-      - harmonyOneAddress
-      - tronAddress
-      - dogeAddress
-      - opAddress
-      type: string
-    ApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type: string
-          description: A message generated by the API
-          nullable: true
-        displayMessage:
-          type: string
-          description: User-friendly display message that can be presented to the end user
-          nullable: true
-        errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
-        errorData:
-          nullable: true
-          readOnly: true
-      additionalProperties: false
-    NetworkResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The Id of the network in Mesh system. Should be used to initiate transfers.
-          format: uuid
-        name:
-          type: string
-          description: The name if the network.
-          nullable: true
-        chainId:
-          type: string
-          description: The Inner id of the chain, used for reference. For example, Polygon's (MATIC) chain Id is 137.
-          nullable: true
-        logoUrl:
-          type: string
-          description: Network logo URL.
-          nullable: true
-        supportedTokens:
-          type: array
-          items:
-            type: string
-          description: The list of tokens that are currently supported to be transferred using the network.
-          nullable: true
-        nativeSymbol:
-          type: string
-          description: The symbol of the network's native cryptocurrency.
-          nullable: true
-      additionalProperties: false
-      description: Crypto network.
-    ApiResultStatus:
-      enum:
-      - ok
-      - serverFailure
-      - permissionDenied
-      - badRequest
-      - notFound
-      - conflict
-      - tooManyRequest
-      - locked
-      type: string
-    TransferVerificationResponse:
-      type: object
-      properties:
-        status:
-          enum:
-          - succeeded
-          - failed
-          allOf:
-          - $ref: '#/components/schemas/TransferVerifyStatus'
-        errorMessage:
-          type: string
-          nullable: true
-        failureReason:
-          allOf:
-          - $ref: '#/components/schemas/FailureReason'
-          nullable: true
-      additionalProperties: false
-    NetworkResponseWithIntegrations:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The Id of the network in Mesh system. Should be used to initiate transfers.
-          format: uuid
-        name:
-          type: string
-          description: The name if the network.
-          nullable: true
-        chainId:
-          type: string
-          description: The Inner id of the chain, used for reference. For example, Polygon's (MATIC) chain Id is 137.
-          nullable: true
-        logoUrl:
-          type: string
-          description: Network logo URL.
-          nullable: true
-        supportedTokens:
-          type: array
-          items:
-            type: string
-          description: The list of tokens that are currently supported to be transferred using the network.
-          nullable: true
-        nativeSymbol:
-          type: string
-          description: The symbol of the network's native cryptocurrency.
-          nullable: true
-        tokens:
-          type: array
-          items:
-            $ref: '#/components/schemas/NetworkResponseToken'
-          description: The list of tokens that are currently supported to be transferred using the network.
-          nullable: true
-        supportedBrokerTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/BrokerType'
-          description: The list of types of integrations that are currently supported to perform transfers over the network.
-          nullable: true
-      additionalProperties: false
-      description: Crypto network.
-    NetworkResponseToken:
-      type: object
-      properties:
-        symbol:
-          type: string
-          nullable: true
-        logoUrl:
-          type: string
-          nullable: true
-      additionalProperties: false
-    TransferFee:
-      type: object
-      properties:
-        fee:
-          type: number
-          description: The amount of the fee.
-          format: double
-        feeCurrency:
-          type: string
-          description: The currency of the fee. Does not match the currency of the transfer in some cases.
-          nullable: true
-        feeInFiat:
-          type: number
-          description: The value of the fee converted to the fiat currency.
-          format: double
-      additionalProperties: false
-    PreviewTransferResponseApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type: string
-          description: A message generated by the API
-          nullable: true
-        displayMessage:
-          type: string
-          description: User-friendly display message that can be presented to the end user
-          nullable: true
-        errorType:
-          type: string
-          description: "Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.\r\nAll possible error types are available in the documentation."
-          nullable: true
-        errorData:
-          nullable: true
-          readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/PreviewTransferResponse'
-          nullable: true
-      additionalProperties: false
-    BrokerResponseStatus:
-      enum:
-      - unknown
-      - mfaRequired
-      - kycRequired
-      type: string
-    TransferToAddress:
-      type: object
-      properties:
-        networkId:
-          type: string
-          description: "The Id of the network in Front system. The list of all available networks can be obtained by\r\nusing `GET /transfers/managed/networks` endpoint."
-          format: uuid
-        symbol:
-          type: string
-          description: The symbol of the digital asset.
-          nullable: true
-        address:
-          type: string
-          description: The address to send the asset to.
-          nullable: true
-        addressTag:
-          type: string
-          description: Secondary address identifier for coins like XRP,XMR etc.
-          nullable: true
-      additionalProperties: false
-    B2BBrokerCryptocurrencyDepositAddressResponse:
-      type: object
-      properties:
-        symbol:
-          type: string
-          nullable: true
-        address:
-          type: string
-          nullable: true
-        chain:
-          type: string
-          nullable: true
-        memo:
-          type: string
-          nullable: true
-        minimumDepositAmount:
-          type: string
-          nullable: true
-        networkId:
-          type: string
-          format: uuid
-          nullable: true
-        brokerResponseStatus:
-          allOf:
-          - $ref: '#/components/schemas/BrokerResponseStatus'
-          nullable: true
-        errorMessage:
-          type: string
-          nullable: true
-      additionalProperties: false
-    ConfigureTransferResultNetwork:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the network.
-          nullable: true
-        id:
-          type: string
-          description: The Id of the network in Front system.
-          format: uuid
-        minimumAmount:
-          type: number
-          description: Then minimum amount that can be withdrawn using this network.
-          format: double
-          nullable: true
-        maximumAmount:
-          type: number
-          description: The maximum amount that can be withdrawn using this network.
-          format: double
-          nullable: true
-        totalEstimatedTransferFeeInFiat:
-          type: number
-          description: "Total estimated transfer fee converted to fiat. Can consist of the fee taken by the financial institution and the\r\ngas fee."
-          format: double
-          nullable: true
-        minimumAmountInFiat:
-          type: number
-          description: The minimum amount that can be withdrawn using this network, converted to fiat currency.
-          format: double
-          nullable: true
-        maximumAmountInFiat:
-          type: number
-          description: The maximum amount that can be withdrawn using this network, converted to fiat currency.
-          format: double
-          nullable: true
-        estimatedNetworkGasFee:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: "The gas fee that is estimated to be taken by the network. Depending on the integration, the network gas fee might be\r\ncovered by the `InstitutionTransferFee`."
-          nullable: true
-        institutionTransferFee:
-          allOf:
-          - $ref: '#/components/schemas/TransferFee'
-          description: "The fee that is taken by the institution. Depending on the institution, can cover the gas fee. Some institutions do not\r\ntake the transfer fee and only network fee is used for the transfer."
-          nullable: true
-        eligibleForTransfer:
-          type: boolean
-          description: Specifies if the asset is eligible for a transfer over the current network.
-        ineligibilityReason:
-          allOf:
-          - $ref: '#/components/schemas/NetworkTransferIneligibilityReason'
-          description: The reason indicating why the transfer cannot be performed over this network.
-          nullable: true
-        eligibleForTransferWithFunding:
-          type: boolean
-        toAddress:
-          type: string
-          description: The designated destination for sending the asset.
-          nullable: true
-        transferAmount:
-          type: number
-          description: Token's amount to transfer specified by the client.
-          format: double
-          nullable: true
-        minimumRequiredForTransferAmount:
-          type: number
-          description: "The minimum amount of cryptocurrency that is required to be present in the account to perform the transfer.\r\nUnlike `minimum` field that indicates the minimum amount that can generally be transferred, this field indicates the minimum\r\nthat can be transferred given the current transfer configuration values, such as `amountInFiat` and `clientFee`."
-          format: double
-          nullable: true
-        logoUrl:
-          type: string
-          description: Logo url for network.
-          format: uri
-          nullable: true
-      additionalProperties: false
-    ProcessingFeeRetainType:
-      enum:
-      - default
-      - smartDeposit
-      type: string
-    NetworkResponseBase:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The Id of the network in Mesh system. Should be used to initiate transfers.
-          format: uuid
-        name:
-          type: string
-          description: The name if the network.
-          nullable: true
-        chainId:
-          type: string
-          description: The Inner id of the chain, used for reference. For example, Polygon's (MATIC) chain Id is 137.
-          nullable: true
-        logoUrl:
-          type: string
-          description: Network logo URL.
-          nullable: true
-      additionalProperties: false
-      description: Crypto network.
   securitySchemes:
     Client-Secret:
       type: apiKey
