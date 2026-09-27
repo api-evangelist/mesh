@@ -53,7 +53,7 @@ tags:
 - Cryptocurrency
 - Payments
 - Digital Assets
-- Financial-Services
+- Financial Services
 - Wallets
 - Exchange
 - Transfers
@@ -77,6 +77,7 @@ tags_raw:
 - Fintech
 - On-Ramp
 - Blockchain
+- Financial-Services
 apis:
 - aid: mesh:mesh-assets-api
   name: Mesh Assets API

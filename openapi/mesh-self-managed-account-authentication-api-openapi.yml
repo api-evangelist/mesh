@@ -206,14 +206,44 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    MfaScheme:
+    B2BBrokerAuthPromptResponse:
+      type: object
+      properties:
+        status:
+          enum:
+          - failed
+          - redirect
+          - openInBrokerModule
+          allOf:
+          - $ref: '#/components/schemas/BrokerAuthPromptStatus'
+        redirectLink:
+          type:
+          - string
+          - 'null'
+        linkToken:
+          type:
+          - string
+          - 'null'
+        oAuthToken:
+          type:
+          - string
+          - 'null'
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        displayMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BrokerAuthPromptStatus:
       enum:
-      - mfaCode
-      - challenge
-      - deviceConfirmation
-      - securityQuestion
+      - failed
+      - redirect
+      - openInBrokerModule
       type: string
-    BrokerAuthenticationSchemeIReadOnlyCollectionApiResult:
+    B2BBrokerAuthResponseApiResult:
       type: object
       properties:
         status:
@@ -249,35 +279,8 @@ components:
         errorData:
           readOnly: true
         content:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/BrokerAuthenticationScheme'
-      additionalProperties: false
-    ApiResultStatus:
-      enum:
-      - ok
-      - serverFailure
-      - permissionDenied
-      - badRequest
-      - notFound
-      - conflict
-      - tooManyRequest
-      - locked
-      type: string
-    AuthenticationFieldDescription:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          description: Name of the field, as expected from the API
-        description:
-          type:
-          - string
-          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAuthResponse'
       additionalProperties: false
     B2BBrokerAuthPromptResponseApiResult:
       type: object
@@ -318,80 +321,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/B2BBrokerAuthPromptResponse'
       additionalProperties: false
-    AuthenticationModel:
-      type: object
-      properties:
-        authResponse:
-          allOf:
-          - $ref: '#/components/schemas/B2BBrokerAuthResponse'
-        fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AuthenticationFieldDescription'
-          description: Set of fields that are expected to be provided based on the status of the AuthResponse
-      additionalProperties: false
-    BrokerBrandInfo:
-      type: object
-      properties:
-        brokerLogo:
-          type:
-          - string
-          - 'null'
-        brokerPrimaryColor:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    BrokerAccount:
-      type: object
-      properties:
-        meshAccountId:
-          type: string
-          format: uuid
-        frontAccountId:
-          type: string
-          format: uuid
-          readOnly: true
-          deprecated: true
-        accountId:
-          type:
-          - string
-          - 'null'
-        accountName:
-          type:
-          - string
-          - 'null'
-        fund:
-          type:
-          - number
-          - 'null'
-          description: 'Buying power of the account. Typically consists of cash plus available margin.
-
-            For non-margin accounts fund contains cash only'
-          format: double
-        cash:
-          type:
-          - number
-          - 'null'
-          description: Cash balance in USD
-          format: double
-        isReconnected:
-          type:
-          - boolean
-          - 'null'
-          description: 'Indicates if this account was already connected by the current user and device.
-
-            Can be null.'
-        balances:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/BrokerFiatBalance'
-          description: The list of all asset balances of account
-      additionalProperties: false
     BrokerAuthStatus:
       enum:
       - failed
@@ -407,70 +336,6 @@ components:
       - captchaChallenge
       - faceVerification
       type: string
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
-    B2BBrokerAuthResponseApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type:
-          - string
-          - 'null'
-          description: A message generated by the API
-        displayMessage:
-          type:
-          - string
-          - 'null'
-          description: User-friendly display message that can be presented to the end user
-        errorType:
-          type:
-          - string
-          - 'null'
-          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
-
-            All possible error types are available in the documentation.'
-        errorData:
-          readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/B2BBrokerAuthResponse'
-      additionalProperties: false
     AuthenticationSchemeType:
       enum:
       - usernamePassword
@@ -478,94 +343,19 @@ components:
       - apiKey
       - blockchainAddress
       type: string
-    BrokerAccountTokens:
+    AuthenticationFieldDescription:
       type: object
       properties:
-        account:
-          allOf:
-          - $ref: '#/components/schemas/BrokerAccount'
-        accessToken:
+        name:
           type:
           - string
           - 'null'
-        refreshToken:
+          description: Name of the field, as expected from the API
+        description:
           type:
           - string
           - 'null'
       additionalProperties: false
-    B2BBrokerAuthPromptResponse:
-      type: object
-      properties:
-        status:
-          enum:
-          - failed
-          - redirect
-          - openInBrokerModule
-          allOf:
-          - $ref: '#/components/schemas/BrokerAuthPromptStatus'
-        redirectLink:
-          type:
-          - string
-          - 'null'
-        linkToken:
-          type:
-          - string
-          - 'null'
-        oAuthToken:
-          type:
-          - string
-          - 'null'
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        displayMessage:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    BrokerType:
-      enum:
-      - robinhood
-      - eTrade
-      - alpaca
-      - tdAmeritrade
-      - weBull
-      - stash
-      - interactiveBrokers
-      - public
-      - coinbase
-      - kraken
-      - coinbasePro
-      - cryptoCom
-      - openSea
-      - binanceUs
-      - gemini
-      - cryptocurrencyAddress
-      - cryptocurrencyWallet
-      - okCoin
-      - bittrex
-      - kuCoin
-      - etoro
-      - cexIo
-      - binanceInternational
-      - bitstamp
-      - gateIo
-      - acorns
-      - okx
-      - bitFlyer
-      - coinlist
-      - huobi
-      - bitfinex
-      - deFiWallet
-      - krakenDirect
-      - vanguard
-      - binanceInternationalDirect
-      - bitfinexDirect
-      - bybit
-      - paxos
-      - coinbasePrime
-      type: string
     B2BBrokerAuthRequest:
       required:
       - type
@@ -685,28 +475,33 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    MfaType:
-      enum:
-      - phone
-      - email
-      - totp
-      - phoneAndEmail
-      - requireNextSecurityQuestion
-      - readEmail
-      - face
-      type: string
-    BrokerAuthPromptStatus:
-      enum:
-      - failed
-      - redirect
-      - openInBrokerModule
-      type: string
-    AuthFlowStep:
-      enum:
-      - loginPassword
-      - mfaFlow
-      - faceVerification
-      type: string
+    BrokerAccountTokens:
+      type: object
+      properties:
+        account:
+          allOf:
+          - $ref: '#/components/schemas/BrokerAccount'
+        accessToken:
+          type:
+          - string
+          - 'null'
+        refreshToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BrokerBrandInfo:
+      type: object
+      properties:
+        brokerLogo:
+          type:
+          - string
+          - 'null'
+        brokerPrimaryColor:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     CountryInfo:
       type: object
       properties:
@@ -722,6 +517,148 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    BrokerAccount:
+      type: object
+      properties:
+        meshAccountId:
+          type: string
+          format: uuid
+        frontAccountId:
+          type: string
+          format: uuid
+          readOnly: true
+          deprecated: true
+        accountId:
+          type:
+          - string
+          - 'null'
+        accountName:
+          type:
+          - string
+          - 'null'
+        fund:
+          type:
+          - number
+          - 'null'
+          description: 'Buying power of the account. Typically consists of cash plus available margin.
+
+            For non-margin accounts fund contains cash only'
+          format: double
+        cash:
+          type:
+          - number
+          - 'null'
+          description: Cash balance in USD
+          format: double
+        isReconnected:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates if this account was already connected by the current user and device.
+
+            Can be null.'
+        balances:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerFiatBalance'
+          description: The list of all asset balances of account
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    MfaScheme:
+      enum:
+      - mfaCode
+      - challenge
+      - deviceConfirmation
+      - securityQuestion
+      type: string
+    AuthenticationModel:
+      type: object
+      properties:
+        authResponse:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAuthResponse'
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AuthenticationFieldDescription'
+          description: Set of fields that are expected to be provided based on the status of the AuthResponse
+      additionalProperties: false
+    AuthFlowStep:
+      enum:
+      - loginPassword
+      - mfaFlow
+      - faceVerification
+      type: string
+    BrokerAuthenticationSchemeIReadOnlyCollectionApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerAuthenticationScheme'
       additionalProperties: false
     BrokerAuthenticationScheme:
       type: object
@@ -801,6 +738,56 @@ components:
           - string
           - 'null'
           description: Optional URL with the instructions explaining how to create a set of API key/secret for the integration, can be shown to the end user.
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
+    MfaType:
+      enum:
+      - phone
+      - email
+      - totp
+      - phoneAndEmail
+      - requireNextSecurityQuestion
+      - readEmail
+      - face
+      type: string
+    BrokerFiatBalance:
+      type: object
+      properties:
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Account balance currency
+        buyingPower:
+          type:
+          - number
+          - 'null'
+          description: 'BuyingPower indicates total amount of money the user can spend for buying stock. Always includes cash and
+
+            can also include margin'
+          format: double
+        cryptoBuyingPower:
+          type:
+          - number
+          - 'null'
+          description: BuyingPower indicates total amount of money the user can spend for buying crypto.
+          format: double
+        cash:
+          type:
+          - number
+          - 'null'
+          description: Account cash indicates total amount of money
+          format: double
       additionalProperties: false
     B2BBrokerAuthResponse:
       type: object
@@ -907,35 +894,48 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    BrokerFiatBalance:
-      type: object
-      properties:
-        symbol:
-          type:
-          - string
-          - 'null'
-          description: Account balance currency
-        buyingPower:
-          type:
-          - number
-          - 'null'
-          description: 'BuyingPower indicates total amount of money the user can spend for buying stock. Always includes cash and
-
-            can also include margin'
-          format: double
-        cryptoBuyingPower:
-          type:
-          - number
-          - 'null'
-          description: BuyingPower indicates total amount of money the user can spend for buying crypto.
-          format: double
-        cash:
-          type:
-          - number
-          - 'null'
-          description: Account cash indicates total amount of money
-          format: double
-      additionalProperties: false
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      type: string
   securitySchemes:
     Client-Secret:
       type: apiKey
