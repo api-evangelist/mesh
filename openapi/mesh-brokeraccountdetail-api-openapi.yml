@@ -85,22 +85,14 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    B2BBrokerAccountDetailsRequest:
-      required:
-      - authToken
-      - integrationId
-      type: object
-      properties:
-        authToken:
-          minLength: 1
-          type: string
-          description: Auth token that allows connecting to the target institution.
-        integrationId:
-          type: string
-          description: The Id which uniquely identifies the integration.
-          format: uuid
-      additionalProperties: false
-    ApiResult:
+    UserIdentificationType:
+      enum:
+      - none
+      - idCard
+      - driversLicense
+      - passport
+      type: string
+    B2BBrokerAccountDetailsResponseApiResult:
       type: object
       properties:
         status:
@@ -135,25 +127,10 @@ components:
             All possible error types are available in the documentation.'
         errorData:
           readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAccountDetailsResponse'
       additionalProperties: false
-    ApiResultStatus:
-      enum:
-      - ok
-      - serverFailure
-      - permissionDenied
-      - badRequest
-      - notFound
-      - conflict
-      - tooManyRequest
-      - locked
-      type: string
-    UserIdentificationType:
-      enum:
-      - none
-      - idCard
-      - driversLicense
-      - passport
-      type: string
     B2BBrokerAccountDetailsResponse:
       type: object
       properties:
@@ -223,7 +200,7 @@ components:
           - 'null'
           format: int64
       additionalProperties: false
-    B2BBrokerAccountDetailsResponseApiResult:
+    ApiResult:
       type: object
       properties:
         status:
@@ -258,9 +235,32 @@ components:
             All possible error types are available in the documentation.'
         errorData:
           readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/B2BBrokerAccountDetailsResponse'
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
+    B2BBrokerAccountDetailsRequest:
+      required:
+      - authToken
+      - integrationId
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution.
+        integrationId:
+          type: string
+          description: The Id which uniquely identifies the integration.
+          format: uuid
       additionalProperties: false
   securitySchemes:
     Client-Secret:

@@ -155,7 +155,7 @@ components:
           allOf:
           - $ref: '#/components/schemas/AssetType'
       additionalProperties: false
-    ApiResult:
+    B2BPriceInfoApiResult:
       type: object
       properties:
         status:
@@ -190,7 +190,15 @@ components:
             All possible error types are available in the documentation.'
         errorData:
           readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BPriceInfo'
       additionalProperties: false
+    AssetType:
+      enum:
+      - equity
+      - cryptocurrency
+      type: string
     AssetPaginationResponse:
       type: object
       properties:
@@ -245,28 +253,7 @@ components:
           allOf:
           - $ref: '#/components/schemas/AssetPaginationResponse'
       additionalProperties: false
-    B2BPriceInfo:
-      type: object
-      properties:
-        price:
-          type: number
-          format: double
-        timestamp:
-          type: integer
-          format: int64
-      additionalProperties: false
-    ApiResultStatus:
-      enum:
-      - ok
-      - serverFailure
-      - permissionDenied
-      - badRequest
-      - notFound
-      - conflict
-      - tooManyRequest
-      - locked
-      type: string
-    B2BPriceInfoApiResult:
+    ApiResult:
       type: object
       properties:
         status:
@@ -301,15 +288,28 @@ components:
             All possible error types are available in the documentation.'
         errorData:
           readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/B2BPriceInfo'
       additionalProperties: false
-    AssetType:
+    ApiResultStatus:
       enum:
-      - equity
-      - cryptocurrency
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
       type: string
+    B2BPriceInfo:
+      type: object
+      properties:
+        price:
+          type: number
+          format: double
+        timestamp:
+          type: integer
+          format: int64
+      additionalProperties: false
   securitySchemes:
     Client-Secret:
       type: apiKey
