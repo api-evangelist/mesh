@@ -1,0 +1,958 @@
+openapi: 3.2.0
+info:
+  title: Mesh Connect Integration Catalog Subscription API
+  description: 'Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+- url: https://sandbox-integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: CatalogSubscription
+paths:
+  /api/v1/subscription/build-subscribe:
+    post:
+      tags:
+      - CatalogSubscription
+      summary: Build the next unsigned subscribe transaction.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BuildSubscribeRequestBody'
+              description: 'Request body for build-subscribe: the signing wallet plus the end-user terms (per-period cap, period
+
+                length, optional expiry). Token/network, pull destination, and delegatee are resolved server-side.'
+      responses:
+        '200':
+          description: Subscribe transaction built.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildSubscriptionResponseApiResult'
+        '400':
+          description: "The request is invalid (e.g. FromAddressRequired), the terms failed validation, the\n            wallet cannot cover the flow's rent + fees (InsufficientSolBalance), or the wallet has no associated\n            token account for the subscription currency (SourceTokenAccountMissing)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: 'Unauthorized: end-user JWT is missing or invalid.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Solana subscriptions are not enabled for this client.
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1SubscriptionBuildSubscribe
+      x-operation-id-source: derived
+  /api/v1/subscription/register-subscribe:
+    post:
+      tags:
+      - CatalogSubscription
+      summary: Record that the user broadcast the final `createDelegation` tx and advance the…
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RegisterSubscribeRequestBody'
+              description: 'Request body for register-subscribe: confirms the user broadcast the final `createDelegation`
+
+                transaction so the row advances `Pending → UserClaimActive` before the puller''s first scan.'
+      responses:
+        '200':
+          description: Registered — UserClaimActive (or Active once confirmed on-chain).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterSubscriptionResponseApiResult'
+        '400':
+          description: The request is invalid or the subscription isn't pending.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: 'Unauthorized: end-user JWT is missing or invalid.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Solana subscriptions are not enabled for this client.
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1SubscriptionRegisterSubscribe
+      x-operation-id-source: derived
+  /api/v1/subscription/build-unsubscribe:
+    post:
+      tags:
+      - CatalogSubscription
+      summary: Build the unsigned revoke transaction for the subscription identified by…
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BuildUnsubscribeRequestBody'
+              description: 'Request body for build-unsubscribe: the `subscriptionId` (the `id` from get-subscriptions) to
+
+                cancel. The delegation account and signing wallet are resolved server-side.'
+      responses:
+        '200':
+          description: Revoke transaction built.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildSubscriptionResponseApiResult'
+        '400':
+          description: The request is invalid (e.g. SubscriptionIdRequired) or the subscription cannot be revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: 'Unauthorized: end-user JWT is missing or invalid.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Solana subscriptions are not enabled for this client.
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1SubscriptionBuildUnsubscribe
+      x-operation-id-source: derived
+  /api/v1/subscription/register-unsubscribe:
+    post:
+      tags:
+      - CatalogSubscription
+      summary: Record that the user broadcast the `revokeDelegation` tx and advance the…
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RegisterUnsubscribeRequestBody'
+              description: 'Request body for register-unsubscribe: confirms the user broadcast the `revokeDelegation`
+
+                transaction so the row advances to `UserClaimCancelled` before the puller reconciles.'
+      responses:
+        '200':
+          description: Registered — UserClaimCancelled (or Cancelled once confirmed on-chain).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterSubscriptionResponseApiResult'
+        '400':
+          description: The request is invalid or the subscription isn't in a cancellable state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: 'Unauthorized: end-user JWT is missing or invalid.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Solana subscriptions are not enabled for this client.
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1SubscriptionRegisterUnsubscribe
+      x-operation-id-source: derived
+  /api/v1/subscription/get:
+    get:
+      tags:
+      - CatalogSubscription
+      summary: 'List the caller''s subscriptions for a wallet: the recurring delegations…'
+      parameters:
+      - name: address
+        in: query
+        description: Required Base58 wallet address; the results are scoped to this wallet.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Subscriptions obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionsResponseApiResult'
+        '400':
+          description: The delegator address is missing (DelegatorAddressRequired) or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: 'Unauthorized: end-user JWT is missing or invalid.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Solana subscriptions are not enabled for this client.
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: getApiV1SubscriptionGet
+      x-operation-id-source: derived
+components:
+  schemas:
+    RegisterUnsubscribeRequestBody:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+          description: The subscription id (same handle passed to build-unsubscribe) being cancelled.
+          format: uuid
+        transactionHash:
+          type:
+          - string
+          - 'null'
+          description: Base58 signature of the broadcast `revokeDelegation` transaction.
+      additionalProperties: false
+      description: 'Request body for register-unsubscribe: confirms the user broadcast the `revokeDelegation`
+
+        transaction so the row advances to `UserClaimCancelled` before the puller reconciles.'
+    SubscriptionParameters:
+      type: object
+      properties:
+        network:
+          type:
+          - string
+          - 'null'
+          description: Blockchain network (currently `"Solana"`).
+        currency:
+          type:
+          - string
+          - 'null'
+          description: Display symbol of the token being delegated (e.g. `"USDC"`).
+        tokenMint:
+          type:
+          - string
+          - 'null'
+          description: The SPL token mint address (Base58).
+        delegatee:
+          type:
+          - string
+          - 'null'
+          description: The party authorized to pull funds each period (Base58).
+        amountInFiat:
+          type: number
+          description: Max the delegatee may pull per period, in fiat USD (e.g. `1` = $1).
+          format: double
+        periodLengthSeconds:
+          type: integer
+          description: Length of each spending period in seconds (e.g. `86400` = 1 day).
+          format: int64
+        expiryTs:
+          type: integer
+          description: Unix timestamp after which the delegation expires; `0` when it never expires.
+          format: int64
+        firstChargeTs:
+          type:
+          - integer
+          - 'null'
+          description: 'Unix timestamp of the first period''s start (the authored on-chain `start_ts`) — the earliest the
+
+            first charge can occur: "now" at build time, or one period out with `startNextPeriod`. Null
+
+            (omitted) on the revoke path, where the original start is not known.'
+          format: int64
+        neverExpires:
+          type: boolean
+          description: '`true` when the delegation never expires (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionParameters.ExpiryTs = 0).'
+      additionalProperties: false
+      description: 'Human-readable subscription terms for FE display, mirroring the values encoded into the on-chain
+
+        `createRecurringDelegation` instruction.'
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      - unavailableForLegalReasons
+      type: string
+    SubscriptionStatus:
+      enum:
+      - pending
+      - userClaimActive
+      - active
+      - cancelPending
+      - userClaimCancelled
+      - cancelFailed
+      - cancelled
+      - expired
+      - failed
+      - onChainMismatch
+      - abandoned
+      - unregistered
+      type: string
+      description: 'Lifecycle status of a subscription. Persisted and serialized BY NAME, so members may be reordered but never
+
+        renamed. Ownership: the puller owns Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStatus.Active, lifecycle sync owns the transient states, and the
+
+        settled ones (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStatus.OnChainMismatch, Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStatus.CancelFailed, Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStatus.Expired,
+
+        Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStatus.Unregistered) move only on user action.'
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+      additionalProperties: false
+    SubscriptionSummaryView:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Our subscription id; pass it to build-unsubscribe.
+          format: uuid
+        status:
+          enum:
+          - pending
+          - userClaimActive
+          - active
+          - cancelPending
+          - userClaimCancelled
+          - cancelFailed
+          - cancelled
+          - expired
+          - failed
+          - onChainMismatch
+          - abandoned
+          - unregistered
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionStatus'
+          description: Mesh lifecycle status of the subscription (the DB row's status).
+        canUnsubscribe:
+          type: boolean
+          description: "`true` when build/register-unsubscribe would accept a revoke for this row — the FE renders the\n            Unsubscribe entry off this flag alone. Same predicate the endpoints guard on, so an offered unsubscribe\n            is always accepted."
+        currency:
+          type:
+          - string
+          - 'null'
+          description: Display symbol of the delegated token (e.g. `"USDC"`).
+        tokenMint:
+          type:
+          - string
+          - 'null'
+          description: The SPL token mint address (Base58).
+        amountInFiat:
+          type: number
+          description: Max amount the delegatee may pull per period, in fiat.
+          format: double
+        periodLengthSeconds:
+          type: integer
+          description: Period length in seconds (e.g. `86400` = 1 day).
+          format: int64
+        expiryTs:
+          type: integer
+          description: Unix timestamp after which the delegation expires; `0` when it never expires.
+          format: int64
+        neverExpires:
+          type: boolean
+          description: '`true` when the delegation never expires (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionSummaryView.ExpiryTs = 0).'
+        createdTs:
+          type: integer
+          description: Unix timestamp the subscription was created (for "subscribed since" display).
+          format: int64
+        walletAddress:
+          type:
+          - string
+          - 'null'
+          description: Base58 delegator wallet that granted the delegation.
+        network:
+          type:
+          - string
+          - 'null'
+          description: Network name the delegation lives on (currently `"Solana"`).
+        delegationAccount:
+          type:
+          - string
+          - 'null'
+          description: The RecurringDelegation account address (Base58). Informational; unsubscribe by Id.
+        delegatee:
+          type:
+          - string
+          - 'null'
+          description: The party authorized to pull each period — the Controller's MeshDelegate PDA (Base58).
+        currentPeriodStartTs:
+          type: integer
+          description: Unix start of the current spending period, rolled forward from the immutable anchor (never past expiry).
+          format: int64
+        currentPeriodEndTs:
+          type: integer
+          description: Unix end of the current spending period.
+          format: int64
+        pulledInFiat:
+          type: number
+          description: 'Amount already consumed in the current period, in fiat. Summed from our pull ledger: confirmed pulls plus
+
+            any still in flight (an attempt is recorded before it is broadcast), so this never under-reports funds that
+
+            may already have left the wallet. An in-flight attempt that ultimately fails is dropped on a later read.'
+          format: double
+        availableInFiat:
+          type: number
+          description: 'Amount pullable right now, in fiat: the period''s unconsumed remainder, or `0` before a deferred start
+
+            or after expiry. A conservative floor rather than a live on-chain allowance — derived from Mesh''s own pull
+
+            ledger (Mesh''s puller key is the only party that can pull), with in-flight attempts already deducted. The
+
+            on-chain program remains the ultimate cap enforcer; do not build reconciliation on this figure alone.'
+          format: double
+        nextPullTs:
+          type:
+          - integer
+          - 'null'
+          description: 'Earliest Unix time the next pull can occur: the future start while a deferred delegation hasn''t started,
+
+            "now" while allowance remains, else the next period boundary. `null` when no pull is expected —
+
+            expired, no billable period left, pulling permanently stopped (`OnChainMismatch`), or a cancel
+
+            intent recorded. The charge lands at the puller''s first run at or after this time.'
+          format: int64
+      additionalProperties: false
+      description: 'One subscription, in BOTH surfaces that list them: the per-integration init summary
+
+        (`integrations[].subscriptions` in the catalog init / exchange-initial response) and
+
+        `subscription/get` (the same rows, scoped to one wallet address). A DB-only projection of the
+
+        caller''s `Subscriptions` rows — no chain read on either path, so neither surface''s latency depends
+
+        on Solana RPC and the two can never disagree. Live per-period usage (pulled/available amounts, current
+
+        period window) is derived from our own `SubscriptionPulls` ledger rather than read from the chain:
+
+        Mesh''s puller key is the only party that can pull, so the ledger is authoritative for "how much was taken
+
+        this period". The puller / lifecycle-sync timers keep Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionSummaryView.Status reconciled against the chain.
+
+        Deliberately NOT `[SafeToLog]`: carries end-user wallet addresses and subscription terms.'
+    BuildSubscriptionResponse:
+      type: object
+      properties:
+        step:
+          enum:
+          - initializeAuthority
+          - createDelegation
+          - revokeDelegation
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionStep'
+          description: Which transaction this payload represents.
+        isFinal:
+          type: boolean
+          description: "`false` when the widget must broadcast this tx and call again for the next step; `true` on\n            the last transaction in the flow."
+        transaction:
+          allOf:
+          - $ref: '#/components/schemas/ExecuteWithBridgingResponse'
+          description: 'The single-instruction bridge payload the widget signs and broadcasts, in the
+
+            Org.Front.Core.Contracts.Models.Brokers.B2B.ManagedTransfers.Catalog.ExecuteWithBridgingResponse shape the `bridgeandexecute` path returns.'
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionParameters'
+          description: The subscription terms this transaction authorizes, for FE display. Present on every step.
+        subscriptionId:
+          type:
+          - string
+          - 'null'
+          description: 'The `Pending` subscription''s id — the handle passed to register-subscribe / build-unsubscribe.
+
+            Present only on the final Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStep.CreateDelegation step (null otherwise, e.g. on
+
+            the Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStep.InitializeAuthority step which creates no row).'
+          format: uuid
+      additionalProperties: false
+      description: 'Response for build-subscription (stateless two-phase flow). Returns
+
+        Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStep.InitializeAuthority (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.BuildSubscriptionResponse.IsFinal`false`) when the wallet''s
+
+        authority doesn''t exist yet, otherwise Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStep.CreateDelegation
+
+        (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.BuildSubscriptionResponse.IsFinal`true`).'
+    ExecuteWithBridgingResponse:
+      type: object
+      properties:
+        steps:
+          type:
+          - array
+          - 'null'
+          items: {}
+      additionalProperties: false
+    GetSubscriptionsResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/GetSubscriptionsResponse'
+          description: 'Response for get-subscriptions: the caller''s subscriptions granted by one wallet. Items are the same
+
+            Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionSummaryView the catalog-init (exchange-initial) response embeds per integration
+
+            — one projection, two scopings — so the home screen and this endpoint always agree.'
+      additionalProperties: false
+    SubscriptionStep:
+      enum:
+      - initializeAuthority
+      - createDelegation
+      - revokeDelegation
+      type: string
+      description: 'Which subscription transaction Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.BuildSubscriptionResponse carries. Serialized as a
+
+        camelCase string by the API''s global `JsonStringEnumConverter`.'
+    RegisterSubscriptionResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/RegisterSubscriptionResponse'
+          description: 'Response for register-subscribe / register-unsubscribe. Register is non-blocking for valid requests: it advances to the
+
+            optimistic `UserClaim*` state immediately and, in the same call, opportunistically finalizes to
+
+            `Active` / `Cancelled` if the transaction is already visible on-chain. The caller polls (re-calls
+
+            register, or get) until Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.RegisterSubscriptionResponse.OnChainConfirmed is true.'
+      additionalProperties: false
+    BuildUnsubscribeRequestBody:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+          description: The subscription's id (from get-subscriptions) to revoke.
+          format: uuid
+      additionalProperties: false
+      description: 'Request body for build-unsubscribe: the `subscriptionId` (the `id` from get-subscriptions) to
+
+        cancel. The delegation account and signing wallet are resolved server-side.'
+    RegisterSubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The subscription's id.
+          format: uuid
+        status:
+          enum:
+          - pending
+          - userClaimActive
+          - active
+          - cancelPending
+          - userClaimCancelled
+          - cancelFailed
+          - cancelled
+          - expired
+          - failed
+          - onChainMismatch
+          - abandoned
+          - unregistered
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionStatus'
+          description: 'Authoritative lifecycle state. Right after register this is `UserClaimActive` /
+
+            `UserClaimCancelled`; it becomes `Active` / `Cancelled` once the transaction is confirmed
+
+            on-chain (by this call or the puller backstop).'
+        onChainConfirmed:
+          type: boolean
+          description: "`false` while the operation is not yet confirmed on-chain (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.RegisterSubscriptionResponse.Status is a\n            `UserClaim*` state) — keep polling; `true` once Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.RegisterSubscriptionResponse.Status is `Active` /\n            `Cancelled`."
+      additionalProperties: false
+      description: 'Response for register-subscribe / register-unsubscribe. Register is non-blocking for valid requests: it advances to the
+
+        optimistic `UserClaim*` state immediately and, in the same call, opportunistically finalizes to
+
+        `Active` / `Cancelled` if the transaction is already visible on-chain. The caller polls (re-calls
+
+        register, or get) until Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.RegisterSubscriptionResponse.OnChainConfirmed is true.'
+    RegisterSubscribeRequestBody:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+          description: The subscription id returned by the build-subscribe final step.
+          format: uuid
+        transactionHash:
+          type:
+          - string
+          - 'null'
+          description: Base58 signature of the broadcast `createDelegation` transaction.
+      additionalProperties: false
+      description: 'Request body for register-subscribe: confirms the user broadcast the final `createDelegation`
+
+        transaction so the row advances `Pending → UserClaimActive` before the puller''s first scan.'
+    GetSubscriptionsResponse:
+      type: object
+      properties:
+        subscriptions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SubscriptionSummaryView'
+          description: The caller's subscriptions for the requested wallet, newest first.
+      additionalProperties: false
+      description: 'Response for get-subscriptions: the caller''s subscriptions granted by one wallet. Items are the same
+
+        Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionSummaryView the catalog-init (exchange-initial) response embeds per integration
+
+        — one projection, two scopings — so the home screen and this endpoint always agree.'
+    BuildSubscribeRequestBody:
+      type: object
+      properties:
+        fromAddress:
+          type:
+          - string
+          - 'null'
+          description: The Solana wallet (delegator) that signs and broadcasts the subscription transaction.
+        fiatAmountPerPeriod:
+          type: number
+          description: Max fiat per period, human-readable (e.g. `1` = $1). Must be > 0 and within the token's decimals.
+          format: double
+        periodLengthSeconds:
+          type: integer
+          description: Period length in seconds (e.g. `86400` = 1 day). Between `1` and `31536000` (1 year).
+          format: int64
+        expiryTs:
+          type:
+          - integer
+          - 'null'
+          description: 'Required Unix timestamp (seconds) after which the delegation expires. Must be in the future and within
+
+            the configured max horizon. "Never expires" (`null` / `0`) is not currently allowed.'
+          format: int64
+        startNextPeriod:
+          type: boolean
+          description: 'When `true`, defers the first charge by one full period (on-chain
+
+            `start_ts = now + PeriodLengthSeconds`; the program rejects earlier pulls). Default `false`.'
+      additionalProperties: false
+      description: 'Request body for build-subscribe: the signing wallet plus the end-user terms (per-period cap, period
+
+        length, optional expiry). Token/network, pull destination, and delegatee are resolved server-side.'
+    BuildSubscriptionResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/BuildSubscriptionResponse'
+          description: 'Response for build-subscription (stateless two-phase flow). Returns
+
+            Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStep.InitializeAuthority (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.BuildSubscriptionResponse.IsFinal`false`) when the wallet''s
+
+            authority doesn''t exist yet, otherwise Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.SubscriptionStep.CreateDelegation
+
+            (Org.Front.Core.Contracts.Models.Brokers.B2B.Subscriptions.BuildSubscriptionResponse.IsFinal`true`).'
+      additionalProperties: false
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

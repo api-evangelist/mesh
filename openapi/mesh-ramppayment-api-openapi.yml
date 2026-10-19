@@ -1,0 +1,652 @@
+openapi: 3.2.0
+info:
+  title: Mesh Connect Integration Ramp Payment API
+  description: 'Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+- url: https://sandbox-integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: RampPayment
+paths:
+  /api/v1/onramp/sessions/{sessionId}/initiate_payment:
+    post:
+      tags:
+      - RampPayment
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponseApiResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      summary: Create api onramp sessions by session id initiate payment
+      x-summary-source: derived
+      operationId: postApiV1OnrampSessionsBySessionIdInitiatePayment
+      x-operation-id-source: derived
+  /api/v1/onramp/quote:
+    get:
+      tags:
+      - RampPayment
+      parameters:
+      - name: Type
+        in: query
+        schema:
+          enum:
+          - onRamp
+          - offRamp
+          allOf:
+          - $ref: '#/components/schemas/RampType'
+      - name: Amount
+        in: query
+        schema:
+          type: number
+          format: double
+      - name: CountryCode
+        in: query
+        required: true
+        schema:
+          maxLength: 2
+          minLength: 0
+          type: string
+      - name: TargetAsset
+        in: query
+        required: true
+        schema:
+          maxLength: 32
+          minLength: 0
+          type: string
+      - name: NetworkId
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: FiatCurrency
+        in: query
+        required: true
+        schema:
+          maxLength: 3
+          minLength: 0
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentQuoteResponseApiResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema: {}
+      summary: Get api onramp quote
+      x-summary-source: derived
+      operationId: getApiV1OnrampQuote
+      x-operation-id-source: derived
+  /api/v1/onramp/sessions/{sessionId}/refresh_payment_status:
+    post:
+      tags:
+      - RampPayment
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      summary: Create api onramp sessions by session id refresh payment status
+      x-summary-source: derived
+      operationId: postApiV1OnrampSessionsBySessionIdRefreshPaymentStatus
+      x-operation-id-source: derived
+components:
+  schemas:
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      - unavailableForLegalReasons
+      type: string
+    PaymentResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/PaymentResponse'
+          description: 'Canonical payment order returned by M:Org.Front.Core.Contracts.Adapters.Ramp.IPaymentProvider.InitiateBuy(Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInitiateRequest,System.Threading.CancellationToken)
+
+            / M:Org.Front.Core.Contracts.Adapters.Ramp.IPaymentProvider.InitiateSell(Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInitiateRequest,System.Threading.CancellationToken) and by
+
+            M:Org.Front.Core.Contracts.Adapters.Ramp.IPaymentProvider.ConvertToPaymentResponse(System.String) for status updates.'
+      additionalProperties: false
+    HostedRedirectInstructions:
+      type: object
+      properties:
+        widgetUrl:
+          type:
+          - string
+          - 'null'
+          description: Absolute URL the FE must navigate / iframe.
+          format: uri
+        expiresAt:
+          type:
+          - string
+          - 'null'
+          description: Hard expiry of the widget session, UTC. Null if the vendor does not surface one.
+          format: date-time
+        instructions:
+          type:
+          - string
+          - 'null'
+          description: Optional human-readable hint shown alongside the iframe. Rail-agnostic copy.
+      additionalProperties: false
+      description: 'Vendor-rendered hosted-page payment instructions. Carried inside a
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions envelope when
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind is
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructionsKind.HostedRedirect. Used by vendors
+
+        (Unlimit/GateFi, Transak, MoonPay) that render the rail UX inside their
+
+        own iframe; the Mesh FE iframes Org.Front.Core.Contracts.Adapters.Ramp.Models.HostedRedirectInstructions.WidgetUrl rather than
+
+        re-rendering rail data.'
+    PixInstructions:
+      type: object
+      properties:
+        qrCodePayload:
+          type:
+          - string
+          - 'null'
+        qrCodeImagePngBase64:
+          type:
+          - string
+          - 'null'
+        pixKey:
+          type:
+          - string
+          - 'null'
+        instructions:
+          type:
+          - string
+          - 'null'
+        expiresAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      description: 'Brazil-specific PIX payment instructions. Carried inside a
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions envelope when
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind is
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructionsKind.Pix.'
+    PaymentAttemptStatus:
+      enum:
+      - initiated
+      - pending
+      - fiatReceived
+      - settled
+      - failed
+      - cancelled
+      - refunded
+      type: string
+      description: 'Canonical payment-vendor status. Separate from the session-level FSM;
+
+        the orchestrator decides how to project these onto session transitions.'
+    RampType:
+      enum:
+      - onRamp
+      - offRamp
+      type: string
+    PaymentQuoteResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/PaymentQuoteResponse'
+      additionalProperties: false
+    PaymentQuoteResponse:
+      type: object
+      properties:
+        vendor:
+          type:
+          - string
+          - 'null'
+        fiatAmount:
+          type: number
+          format: double
+        fiatCurrency:
+          type:
+          - string
+          - 'null'
+        cryptoAmount:
+          type: number
+          format: double
+        cryptoCurrency:
+          type:
+          - string
+          - 'null'
+        rate:
+          type:
+          - number
+          - 'null'
+          format: double
+        totalFee:
+          type:
+          - number
+          - 'null'
+          format: double
+      additionalProperties: false
+    PaymentInstructions:
+      required:
+      - kind
+      type: object
+      properties:
+        kind:
+          enum:
+          - pix
+          - hostedRedirect
+          allOf:
+          - $ref: '#/components/schemas/PaymentInstructionsKind'
+          description: Rail discriminator. Identifies which payload property is populated.
+        pix:
+          allOf:
+          - $ref: '#/components/schemas/PixInstructions'
+          description: PIX payload; non-null iff Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind is Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructionsKind.Pix.
+        hostedRedirect:
+          allOf:
+          - $ref: '#/components/schemas/HostedRedirectInstructions'
+          description: Hosted-redirect payload; non-null iff Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind is Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructionsKind.HostedRedirect.
+      additionalProperties: false
+      description: 'Rail-specific payment instructions returned to the FE widget. Shaped as a
+
+        closed tagged union keyed by Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind so the canonical contract
+
+        does not rely on JSON polymorphism or a custom `JsonConverter`:
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind tells the FE which payload property to read, and exactly
+
+        one of the rail-specific properties is non-null.'
+    PaymentInstructionsKind:
+      enum:
+      - pix
+      - hostedRedirect
+      type: string
+      description: 'Discriminator for the rail-specific payload carried inside a
+
+        Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions envelope. Used by the FE widget to
+
+        decide which renderer to instantiate, and by backend callers to dispatch
+
+        without relying on JSON polymorphism.'
+    PaymentResponse:
+      type: object
+      properties:
+        vendor:
+          type:
+          - string
+          - 'null'
+        vendorOrderId:
+          type:
+          - string
+          - 'null'
+        merchantOrderNo:
+          type:
+          - string
+          - 'null'
+        status:
+          enum:
+          - initiated
+          - pending
+          - fiatReceived
+          - settled
+          - failed
+          - cancelled
+          - refunded
+          allOf:
+          - $ref: '#/components/schemas/PaymentAttemptStatus'
+          description: 'Canonical payment-vendor status. Separate from the session-level FSM;
+
+            the orchestrator decides how to project these onto session transitions.'
+        fiatAmount:
+          type: number
+          format: double
+        fiatCurrency:
+          type:
+          - string
+          - 'null'
+        targetAsset:
+          type:
+          - string
+          - 'null'
+        targetChain:
+          type:
+          - string
+          - 'null'
+        instructions:
+          allOf:
+          - $ref: '#/components/schemas/PaymentInstructions'
+          description: 'Rail-specific payment instructions returned to the FE widget. Shaped as a
+
+            closed tagged union keyed by Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind so the canonical contract
+
+            does not rely on JSON polymorphism or a custom `JsonConverter`:
+
+            Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInstructions.Kind tells the FE which payload property to read, and exactly
+
+            one of the rail-specific properties is non-null.'
+        settledCryptoAmount:
+          type:
+          - number
+          - 'null'
+          format: double
+        txHash:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      description: 'Canonical payment order returned by M:Org.Front.Core.Contracts.Adapters.Ramp.IPaymentProvider.InitiateBuy(Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInitiateRequest,System.Threading.CancellationToken)
+
+        / M:Org.Front.Core.Contracts.Adapters.Ramp.IPaymentProvider.InitiateSell(Org.Front.Core.Contracts.Adapters.Ramp.Models.PaymentInitiateRequest,System.Threading.CancellationToken) and by
+
+        M:Org.Front.Core.Contracts.Adapters.Ramp.IPaymentProvider.ConvertToPaymentResponse(System.String) for status updates.'
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

@@ -1,36 +1,33 @@
 {
   "provider": "mesh",
   "sources": [
-    "_original/mesh-integration-api-openapi.json"
+    "_original/mesh-openapi.json"
   ],
   "outputs": [
     "mesh-assets-api-openapi.yml",
     "mesh-balance-api-openapi.yml",
-    "mesh-brokeraccountdetail-api-openapi.yml",
+    "mesh-blockchainquery-api-openapi.yml",
+    "mesh-cataloggassponsorship-api-openapi.yml",
+    "mesh-catalogsubscription-api-openapi.yml",
+    "mesh-headless-bridging-api-openapi.yml",
+    "mesh-integrations-account-information-api-openapi.yml",
     "mesh-managed-account-authentication-api-openapi.yml",
     "mesh-managed-transfers-api-openapi.yml",
     "mesh-portfolio-api-openapi.yml",
-    "mesh-self-managed-account-authentication-api-openapi.yml",
-    "mesh-transactions-api-openapi.yml",
-    "mesh-transfers-api-openapi.yml"
+    "mesh-rampkyc-api-openapi.yml",
+    "mesh-ramppayment-api-openapi.yml",
+    "mesh-rampsession-api-openapi.yml",
+    "mesh-tokennetworkpairs-api-openapi.yml",
+    "mesh-transfers-api-openapi.yml",
+    "mesh-wallets-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "mesh-integration-api-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "mesh-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+10 apis, 16 total)"
   ],
-  "skipped": [
-    "mesh-assets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-balance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-brokeraccountdetail-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-managed-account-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-managed-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-portfolio-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-self-managed-account-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "mesh-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

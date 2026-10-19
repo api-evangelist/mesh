@@ -1,0 +1,12 @@
+{
+ "url": "https://integration-api.meshconnect.com/swagger/v1/swagger.json",
+ "final": "https://integration-api.meshconnect.com/swagger/v1/swagger.json",
+ "status": 200,
+ "content_type": "application/json;charset=utf-8",
+ "bytes": 610973,
+ "sha256": "e1af0ca50745a302b72b34ee4a9c75d99d16f4568abe5f58574ada4e400057de",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

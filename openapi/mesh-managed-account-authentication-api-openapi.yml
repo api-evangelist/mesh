@@ -13,6 +13,7 @@ info:
   version: '1.0'
 servers:
 - url: https://integration-api.meshconnect.com
+- url: https://sandbox-integration-api.meshconnect.com
 security:
 - Client-Secret: []
   Client-Id: []
@@ -20,249 +21,12 @@ tags:
 - name: Managed Account Authentication
   description: The recommended approach for account authentication. Front manages multiple authentication flows and handles all authentication steps such as MFA codes and OAuth redirect through our web and mobile SDKs.
 paths:
-  /api/v1/cataloglink:
-    get:
-      tags:
-      - Managed Account Authentication
-      summary: Get catalog link
-      description: Get personalized catalog link for client
-      parameters:
-      - name: UserId
-        in: query
-        description: 'A unique Id representing the end user. Typically this will be a user Id from the
-
-          client application. Personally identifiable information, such as an email address or phone number,
-
-          should not be used. 50 characters length maximum.'
-        required: true
-        schema:
-          maxLength: 50
-          type: string
-      - name: BrokerType
-        in: query
-        description: 'Type of integration to redirect to. Will redirect to catalog if not provided.
-
-          Not supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet.'
-        schema:
-          allOf:
-          - $ref: '#/components/schemas/BrokerType'
-      - name: EnableTransfers
-        in: query
-        description: 'Link Configuration identifier - an optional paramater for used configuration.
-
-          If not provided default configuration with all avaialbe integrations will be used.'
-        schema:
-          type: boolean
-      - name: RestrictMultipleAccounts
-        in: query
-        description: 'The final screen of Link allows users to “continue” back to your app or “Link another account.”
-
-          If this param is present then this button will be hidden.'
-        schema:
-          type: boolean
-      responses:
-        '200':
-          description: Catalog link created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CatalogLinkApiResult'
-              example:
-                content:
-                  url: https://web.meshconnect.com/broker-connect?auth_code={authCode}
-                  iFrameUrl: https://web.meshconnect.com/b2b-iframe/{clientId}/broker-connect?auth_code={authCode}
-                status: ok
-                message: ''
-                errorType: ''
-        '404':
-          description: API Client not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResult'
-              example:
-                status: notFound
-                message: Error message
-                displayMessage: Optional display message
-                errorType: missingField
-        '400':
-          description: 'BadRequest can happen in following cases:
-
-            <list type="number"><item><description>userId parameter not specified</description></item><item><description>Callback url parameter is invalid</description></item><item><description>Client does not have callback url specified</description></item></list>'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResult'
-              example:
-                status: badRequest
-                message: Error message
-                displayMessage: Optional display message
-                errorType: missingField
-        '401':
-          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
-          content:
-            application/json:
-              schema: {}
-      deprecated: true
-      operationId: getApiV1Cataloglink
-      x-operation-id-source: derived
-    post:
-      tags:
-      - Managed Account Authentication
-      summary: Get catalog link with parameters
-      description: Get personalized catalog link for client supplying parameters for Link actions, such as transfers
-      parameters:
-      - name: UserId
-        in: query
-        description: 'A unique Id representing the end user. Typically this will be a user Id from the
-
-          client application. Personally identifiable information, such as an email address or phone number,
-
-          should not be used. 50 characters length maximum.'
-        required: true
-        schema:
-          maxLength: 50
-          type: string
-      - name: BrokerType
-        in: query
-        description: 'Type of integration to redirect to. Will redirect to catalog if not provided.
-
-          Not supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet.'
-        schema:
-          allOf:
-          - $ref: '#/components/schemas/BrokerType'
-      - name: EnableTransfers
-        in: query
-        description: 'Link Configuration identifier - an optional paramater for used configuration.
-
-          If not provided default configuration with all avaialbe integrations will be used.'
-        schema:
-          type: boolean
-      - name: RestrictMultipleAccounts
-        in: query
-        description: 'The final screen of Link allows users to “continue” back to your app or “Link another account.”
-
-          If this param is present then this button will be hidden.'
-        schema:
-          type: boolean
-      requestBody:
-        description: Data to execute transfer.
-        content:
-          application/json:
-            schema:
-              allOf:
-              - $ref: '#/components/schemas/InitializeTransfersForLinkRequest'
-            example:
-              toAddresses:
-              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                symbol: ETH
-                address: '0x00000000000000000000000'
-              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                symbol: USDC
-                address: '0x00000000000000000000000'
-              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                symbol: MATIC
-                address: '0x00000000000000000000000'
-              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                symbol: USDC
-                address: '0x00000000000000000000000'
-              clientFee: 0
-              isCustomClientFeeProvided: false
-              isInclusiveFeeEnabled: false
-          text/json:
-            schema:
-              allOf:
-              - $ref: '#/components/schemas/InitializeTransfersForLinkRequest'
-            example:
-              toAddresses:
-              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                symbol: ETH
-                address: '0x00000000000000000000000'
-              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                symbol: USDC
-                address: '0x00000000000000000000000'
-              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                symbol: MATIC
-                address: '0x00000000000000000000000'
-              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                symbol: USDC
-                address: '0x00000000000000000000000'
-              clientFee: 0
-              isCustomClientFeeProvided: false
-              isInclusiveFeeEnabled: false
-          application/*+json:
-            schema:
-              allOf:
-              - $ref: '#/components/schemas/InitializeTransfersForLinkRequest'
-            example:
-              toAddresses:
-              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                symbol: ETH
-                address: '0x00000000000000000000000'
-              - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                symbol: USDC
-                address: '0x00000000000000000000000'
-              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                symbol: MATIC
-                address: '0x00000000000000000000000'
-              - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                symbol: USDC
-                address: '0x00000000000000000000000'
-              clientFee: 0
-              isCustomClientFeeProvided: false
-              isInclusiveFeeEnabled: false
-      responses:
-        '200':
-          description: Catalog link created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CatalogLinkApiResult'
-              example:
-                content:
-                  url: https://web.meshconnect.com/broker-connect?auth_code={authCode}
-                  iFrameUrl: https://web.meshconnect.com/b2b-iframe/{clientId}/broker-connect?auth_code={authCode}
-                status: ok
-                message: ''
-                errorType: ''
-        '404':
-          description: API Client not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResult'
-              example:
-                status: notFound
-                message: Error message
-                displayMessage: Optional display message
-                errorType: missingField
-        '400':
-          description: 'BadRequest can happen in following cases:
-
-            <list type="number"><item><description>userId parameter not specified</description></item><item><description>Callback url parameter is invalid</description></item><item><description>Client does not have callback url specified</description></item></list>'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResult'
-              example:
-                status: badRequest
-                message: Error message
-                displayMessage: Optional display message
-                errorType: missingField
-        '401':
-          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
-          content:
-            application/json:
-              schema: {}
-      deprecated: true
-      operationId: postApiV1Cataloglink
-      x-operation-id-source: derived
   /api/v1/linktoken:
     post:
       tags:
       - Managed Account Authentication
-      summary: Get Link token with parameters
-      description: Get a short lived, one-time use token for initializing a Link session using the client-side SDKs
+      summary: Get Link token
+      description: Get a short-lived, one-time use token for initializing a Link session using the client-side SDKs
       requestBody:
         description: Create Link token request.
         content:
@@ -270,74 +34,146 @@ paths:
             schema:
               allOf:
               - $ref: '#/components/schemas/GetLinkTokenRequest'
-            example:
-              userId: UserId
-              configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
-              restrictMultipleAccounts: true
-              transferOptions:
-                toAddresses:
-                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                  symbol: ETH
-                  address: '0x00000000000000000000000'
-                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                  symbol: USDC
-                  address: '0x00000000000000000000000'
-                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                  symbol: MATIC
-                  address: '0x00000000000000000000000'
-                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                  symbol: USDC
-                  address: '0x00000000000000000000000'
-                amountInFiat: 10
-                isInclusiveFeeEnabled: false
+            examples:
+              Deposit:
+                value:
+                  userId: UserId
+                  configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
+                  restrictMultipleAccounts: true
+                  transferOptions:
+                    toAddresses:
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: ETH
+                      address: '0x00000000000000000000000'
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: USDC
+                      address: '0x00000000000000000000000'
+                    - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                      symbol: MATIC
+                      address: '0x00000000000000000000000'
+                    - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                      symbol: USDC
+                      address: '0x00000000000000000000000'
+                    amountInFiat: 10
+                    isInclusiveFeeEnabled: false
+                    generatePayLink: false
+                  disableApiKeyGeneration: false
+              Withdrawal:
+                value:
+                  userId: UserId
+                  restrictMultipleAccounts: false
+                  transferOptions:
+                    fromPairs:
+                    - networkId: 0291810a-5947-424d-9a59-e88bb33e999d
+                      symbol: USDC
+                      maxAmount: 99.99
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: USDC
+                      maxAmount: 99.99
+                    - networkId: aa883b03-120d-477c-a588-37c2afd3ca71
+                      symbol: USDC
+                      maxAmount: 99.99
+                    transactionId: TransactionId
+                    transferType: withdrawal
+                    isInclusiveFeeEnabled: false
+                    generatePayLink: false
+                  disableApiKeyGeneration: false
           text/json:
             schema:
               allOf:
               - $ref: '#/components/schemas/GetLinkTokenRequest'
-            example:
-              userId: UserId
-              configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
-              restrictMultipleAccounts: true
-              transferOptions:
-                toAddresses:
-                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                  symbol: ETH
-                  address: '0x00000000000000000000000'
-                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                  symbol: USDC
-                  address: '0x00000000000000000000000'
-                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                  symbol: MATIC
-                  address: '0x00000000000000000000000'
-                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                  symbol: USDC
-                  address: '0x00000000000000000000000'
-                amountInFiat: 10
-                isInclusiveFeeEnabled: false
+            examples:
+              Deposit:
+                value:
+                  userId: UserId
+                  configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
+                  restrictMultipleAccounts: true
+                  transferOptions:
+                    toAddresses:
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: ETH
+                      address: '0x00000000000000000000000'
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: USDC
+                      address: '0x00000000000000000000000'
+                    - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                      symbol: MATIC
+                      address: '0x00000000000000000000000'
+                    - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                      symbol: USDC
+                      address: '0x00000000000000000000000'
+                    amountInFiat: 10
+                    isInclusiveFeeEnabled: false
+                    generatePayLink: false
+                  disableApiKeyGeneration: false
+              Withdrawal:
+                value:
+                  userId: UserId
+                  restrictMultipleAccounts: false
+                  transferOptions:
+                    fromPairs:
+                    - networkId: 0291810a-5947-424d-9a59-e88bb33e999d
+                      symbol: USDC
+                      maxAmount: 99.99
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: USDC
+                      maxAmount: 99.99
+                    - networkId: aa883b03-120d-477c-a588-37c2afd3ca71
+                      symbol: USDC
+                      maxAmount: 99.99
+                    transactionId: TransactionId
+                    transferType: withdrawal
+                    isInclusiveFeeEnabled: false
+                    generatePayLink: false
+                  disableApiKeyGeneration: false
           application/*+json:
             schema:
               allOf:
               - $ref: '#/components/schemas/GetLinkTokenRequest'
-            example:
-              userId: UserId
-              configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
-              restrictMultipleAccounts: true
-              transferOptions:
-                toAddresses:
-                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                  symbol: ETH
-                  address: '0x00000000000000000000000'
-                - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
-                  symbol: USDC
-                  address: '0x00000000000000000000000'
-                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                  symbol: MATIC
-                  address: '0x00000000000000000000000'
-                - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
-                  symbol: USDC
-                  address: '0x00000000000000000000000'
-                amountInFiat: 10
-                isInclusiveFeeEnabled: false
+            examples:
+              Deposit:
+                value:
+                  userId: UserId
+                  configurationId: 18a20b11-e47f-43b9-8546-94284e9ee547
+                  restrictMultipleAccounts: true
+                  transferOptions:
+                    toAddresses:
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: ETH
+                      address: '0x00000000000000000000000'
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: USDC
+                      address: '0x00000000000000000000000'
+                    - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                      symbol: MATIC
+                      address: '0x00000000000000000000000'
+                    - networkId: 7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12
+                      symbol: USDC
+                      address: '0x00000000000000000000000'
+                    amountInFiat: 10
+                    isInclusiveFeeEnabled: false
+                    generatePayLink: false
+                  disableApiKeyGeneration: false
+              Withdrawal:
+                value:
+                  userId: UserId
+                  restrictMultipleAccounts: false
+                  transferOptions:
+                    fromPairs:
+                    - networkId: 0291810a-5947-424d-9a59-e88bb33e999d
+                      symbol: USDC
+                      maxAmount: 99.99
+                    - networkId: e3c7fdd8-b1fc-4e51-85ae-bb276e075611
+                      symbol: USDC
+                      maxAmount: 99.99
+                    - networkId: aa883b03-120d-477c-a588-37c2afd3ca71
+                      symbol: USDC
+                      maxAmount: 99.99
+                    transactionId: TransactionId
+                    transferType: withdrawal
+                    isInclusiveFeeEnabled: false
+                    generatePayLink: false
+                  disableApiKeyGeneration: false
       responses:
         '200':
           description: Link token created.
@@ -347,9 +183,11 @@ paths:
                 $ref: '#/components/schemas/LinkTokenModelApiResult'
               example:
                 content:
-                  linkToken: aHR0cHM6Ly93ZWIuZ2V0ZnJvbnQuY29tL2IyYi1pZnJhbWUve2NsaWVudElkfS9icm9rZXItY29ubmVjdD9hdXRoX2NvZGU9e2F1dGhDb2RlfQ==
+                  linkToken: aHR0cHM6Ly93ZWIubWVzaGNvbm5lY3QuY29tL2IyYi1pZnJhbWUve2NsaWVudElkfS9icm9rZXItY29ubmVjdD9hdXRoX2NvZGU9e2F1dGhDb2RlfQ==
                 status: ok
                 message: ''
+                errorHash: 8d443794
+                teamCode: P4
                 errorType: ''
         '404':
           description: API Client not found.
@@ -361,11 +199,13 @@ paths:
                 status: notFound
                 message: Error message
                 displayMessage: Optional display message
+                errorHash: 7dcbb73d
+                teamCode: P4
                 errorType: missingField
         '400':
           description: 'BadRequest can happen in following cases:
 
-            <list type="number"><item><description>userId parameter not specified</description></item></list>'
+            <list type="number"><item><description>userId parameter not specified</description></item><item><description>Network not supported by the selected DeFi wallet.</description></item></list>'
           content:
             application/json:
               schema:
@@ -374,9 +214,11 @@ paths:
                 status: badRequest
                 message: Error message
                 displayMessage: Optional display message
+                errorHash: 7dcbb73d
+                teamCode: P4
                 errorType: missingField
         '401':
-          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          description: 'Unauthorized: Client ID or Client Secret are not correct or missing.'
           content:
             application/json:
               schema: {}
@@ -402,12 +244,7 @@ paths:
 
         If MFA is triggered, a second refresh request should be sent.
 
-        Second request should contain MFA code and access token obtained from initial response.
-
-
-        Bitfinex Direct: Expired Access Token is used as Refresh token. Use this endpoint to
-
-        trade it for a new one'
+        Second request should contain MFA code and access token obtained from initial response'
       requestBody:
         content:
           application/json:
@@ -419,7 +256,7 @@ paths:
               type: coinbase
       responses:
         '200':
-          description: Success
+          description: OK
           content:
             application/json:
               schema:
@@ -433,6 +270,8 @@ paths:
                     refreshToken: New secret refresh token
                 status: ok
                 message: ''
+                errorHash: 9d3039e8
+                teamCode: P4
                 errorType: ''
         '400':
           description: Bad Request
@@ -444,6 +283,8 @@ paths:
                 status: badRequest
                 message: Unauthorized token
                 displayMessage: Could not refresh the authentication token. The provided data is not correct
+                errorHash: 1bc4f94f
+                teamCode: P4
                 errorType: badRequest
         '401':
           description: Unauthorized
@@ -483,7 +324,7 @@ paths:
               type: robinhood
       responses:
         '200':
-          description: Success
+          description: OK
           content:
             application/json:
               schema:
@@ -491,6 +332,8 @@ paths:
               example:
                 status: ok
                 message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
                 errorType: ''
         '400':
           description: Bad Request
@@ -502,6 +345,8 @@ paths:
                 status: badRequest
                 message: Error message
                 displayMessage: Optional display message
+                errorHash: 7dcbb73d
+                teamCode: P4
                 errorType: missingField
         '401':
           description: Unauthorized
@@ -514,11 +359,11 @@ paths:
     get:
       tags:
       - Managed Account Authentication
-      summary: Get health status
+      summary: Get integrations health status
       description: Get the list of supported institutions and their health statuses.
       responses:
         '200':
-          description: Success
+          description: OK
           content:
             application/json:
               schema:
@@ -551,29 +396,32 @@ paths:
                   - transfers
                   - holdings
                   deFiWalletData:
-                    id: 00000000-0000-0000-0000-000000000000
+                    id: 34aeb688-decb-485f-9d80-b66466783394
                     name: MetaMask
                 status: ok
                 message: ''
+                errorHash: f585284a
+                teamCode: P4
                 errorType: ''
         '401':
           description: Unauthorized
           content:
             application/json:
               schema: {}
+      deprecated: true
       operationId: getApiV1Status
       x-operation-id-source: derived
   /api/v1/integrations:
     get:
       tags:
       - Managed Account Authentication
-      summary: Retrieve the list of all available integrations
+      summary: Get available integrations
       description: 'Returns a list of integrations with details including the integration ID, name, type,
 
         DeFi wallet provider ID, and categories.'
       responses:
         '200':
-          description: Success
+          description: OK
           content:
             application/json:
               schema:
@@ -581,34 +429,363 @@ paths:
               example:
                 content:
                   items:
-                  - id: b7efa542-0b16-4a2a-8f89-00143298e615
-                    name: CoinbasePro
-                    type: coinbasePro
+                  - id: 47624467-e52e-4938-a41a-7926b6c27acf
+                    name: Coinbase
+                    type: coinbase
+                    style:
+                      fieldActiveLight: 0052FF
+                      buttonPrimaryLight: 0052FF
+                      buttonHoverLight: 014CEC
+                      buttonTextLight: FFFFFF
+                      buttonTextHoverLight: FFFFFF
+                      fieldActiveDark: 578BFA
+                      buttonPrimaryDark: 578BFA
+                      buttonHoverDark: 507FE5
+                      buttonTextDark: 0A0B0D
+                      buttonTextHoverDark: 0A0B0D
                     logo:
-                      logoWhiteUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_White.svg
-                      logoBlackUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_Black.svg
-                      logoColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_Color.svg
-                      iconWhiteUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_White.svg
-                      iconBlackUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_Black.svg
-                      iconColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_Color.svg
+                      logoLightUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Logo_Light.svg
+                      logoDarkUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Logo_Dark.svg
+                      logoWhiteUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Logo_White.svg
+                      logoBlackUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Logo_Black.svg
+                      logoColorUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Logo_Color.svg
+                      iconLightUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Icon_Light.svg
+                      iconDarkUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Icon_Dark.svg
+                      iconWhiteUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Icon_White.svg
+                      iconBlackUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Icon_Black.svg
+                      iconColorUrl: https://file-cdn.meshconnect.com/public/logos/Coinbase_Icon_Color.svg
+                      base64Logo: iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAA1VBMVEUAAAAAgP8AVf8AM/8AVdUAROgAQ+kAROkAROkAQ+oAQuoAROoAQ+gAROkAQ+kAQ+kAROkAQ+kAQ+kAROkAQugAQ+kAQ+kAROkAQ+kAQ+kAQ+kAQ+kAQ+kXVesOTuoAQ+kBROkERukFR+kNTeoOTeoUUusZVeshW+wpYe0qYu0uZe0yaO00ae05be5fifFgivGMqvWSr/amvfeqwPi7zfnE0/rO2/vU3/vY4vzc5fze5/zh6fzi6vzl7P3m7f3p7/3u8v7x9f73+f75+/76+//+/v////94Z10/AAAAH3RSTlMAAgMFBk9QUlNUVVZXiImKi4ykptfY2dvc3fHz9Pr8ZrpFhQAAAAFiS0dERhe6+e0AAADPSURBVBgZncHXVsJAFAXQExM6UhJCwEGPYsfesKCiAvf/P8m5swIhPLI3thbUo3gwiKNagJxyn6leCZmdNte0PCy1mdNAqswNRThBn+r0/n3+/XRAKwmg6lTnnyI/s2c6VaiI6kVerzg8phNCdWmNZHHBlRjK0LqVCTMGytC6kwkze1BdWteyGHElhopoHY7l7YZHJ3RCqBrV5VTk9288pKpABT2qs4eP2dfjPq3Eh1PihgJSLebsYslrck3DQ6aYMJUUkONXw44xnbDiY1v/vNIqVzlyMewAAAAASUVORK5CYII=
                     cryptoTransfersSupported: true
+                    brokerGroup: coinbase
                   - id: 3d8f5c31-9fc0-4b61-bdfb-00fb18cbb9ad
                     name: CoinCircle
                     type: deFiWallet
                     deFiWalletProviderId: 36d8d9c0c7fe2957149ce8e878f3a01...
                     categories:
                     - deFiWallet
+                    style:
+                      fieldActiveLight: 0052FF
+                      buttonPrimaryLight: 0052FF
+                      buttonHoverLight: 014CEC
+                      buttonTextLight: FFFFFF
+                      buttonTextHoverLight: FFFFFF
+                      fieldActiveDark: 578BFA
+                      buttonPrimaryDark: 578BFA
+                      buttonHoverDark: 507FE5
+                      buttonTextDark: 0A0B0D
+                      buttonTextHoverDark: 0A0B0D
                     logo:
-                      logoColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/CoinCircle_Logo_Color.svg
-                      iconColorUrl: https://frontuserfilecdn.azureedge.net/public/logos/CoinCircle_Icon_Color.svg
+                      logoColorUrl: https://file-cdn.meshconnect.com/public/logos/CoinCircle_Logo_Color.svg
+                      iconColorUrl: https://file-cdn.meshconnect.com/public/logos/CoinCircle_Icon_Color.svg
                     cryptoTransfersSupported: true
+                    brokerGroup: none
                 status: ok
                 message: ''
+                errorHash: d48f676e
+                teamCode: P4
                 errorType: ''
+      deprecated: true
       operationId: getApiV1Integrations
       x-operation-id-source: derived
 components:
   schemas:
+    IntegrationStyle:
+      type: object
+      properties:
+        fieldActiveLight:
+          type:
+          - string
+          - 'null'
+          description: Field Active Light Hex Color
+        buttonPrimaryLight:
+          type:
+          - string
+          - 'null'
+          description: Button Primary Light Hex Color
+        buttonHoverLight:
+          type:
+          - string
+          - 'null'
+          description: Button Hover Light Hex Color
+        buttonTextLight:
+          type:
+          - string
+          - 'null'
+          description: Button Text Light Hex Color
+        buttonTextHoverLight:
+          type:
+          - string
+          - 'null'
+          description: Button Text Hover Light Hex Color
+        fieldActiveDark:
+          type:
+          - string
+          - 'null'
+          description: Field Active Dark Hex Color
+        buttonPrimaryDark:
+          type:
+          - string
+          - 'null'
+          description: Button Primary Dark Hex Color
+        buttonHoverDark:
+          type:
+          - string
+          - 'null'
+          description: Button Hover Dark Hex Color
+        buttonTextDark:
+          type:
+          - string
+          - 'null'
+          description: Button Text Dark Hex Color
+        buttonTextHoverDark:
+          type:
+          - string
+          - 'null'
+          description: Button Text Hover Dark Hex Color
+      additionalProperties: false
+      description: Integration style
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+      additionalProperties: false
+    B2BBrokerRefreshTokenResponse:
+      type: object
+      properties:
+        status:
+          enum:
+          - failed
+          - succeeded
+          - mfaRequired
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerAuthStatus'
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        account:
+          allOf:
+          - $ref: '#/components/schemas/BrokerAccount'
+          deprecated: true
+        accessToken:
+          type:
+          - string
+          - 'null'
+          deprecated: true
+        refreshToken:
+          type:
+          - string
+          - 'null'
+          deprecated: true
+        expiresInSeconds:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        refreshTokenExpiresInSeconds:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        brokerAccountTokens:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerAccountTokens'
+      additionalProperties: false
+    GoodsDetails:
+      type: object
+      properties:
+        goodsType:
+          type:
+          - string
+          - 'null'
+          description: 'The type of the goods for the order (01: Tangible Goods, 02: Virtual Goods).'
+        goodsCategory:
+          type:
+          - string
+          - 'null'
+          description: The category of goods (e.g., Electronics, Food).
+        referenceGoodsId:
+          type:
+          - string
+          - 'null'
+          description: A unique reference ID to identify the goods.
+        goodsName:
+          type:
+          - string
+          - 'null'
+          description: The name of the goods.
+        goodsDetail:
+          type:
+          - string
+          - 'null'
+          description: Additional details about the goods (optional).
+      additionalProperties: false
+    B2BBrokersHealthStatus:
+      type: object
+      properties:
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          - btcTurkDirect
+          - kuCoinDirect
+          - okxOAuth
+          - paribuDirect
+          - robinhoodConnect
+          - blockchainCom
+          - bitsoDirect
+          - binanceConnect
+          - binanceOAuth
+          - revolutConnect
+          - binancePay
+          - bybitDirect
+          - paribuOAuth
+          - payPalConnect
+          - binanceTrDirect
+          - coinbaseRamp
+          - bybitDirectMobile
+          - sandbox
+          - cryptoComPay
+          - bybitEuDirect
+          - uphold
+          - binancePayOnchain
+          - sandboxCoinbase
+          - bybitPay
+          - krakenOAuth
+          - bluvoKrakenOAuth
+          - cashApp
+          - sandboxKrakenOAuth
+          - krakPay
+          - unlimit
+          - alchemyPay
+          - okxPay
+          - bybitPayPsp
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: Type of the integration
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the integration
+        isUp:
+          type: boolean
+          description: Is the communication with the integration up
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the outage
+        downTimeStart:
+          type:
+          - integer
+          - 'null'
+          description: Unix timestamp in seconds indicating when the outage occurred
+          format: int64
+        downTimeEnd:
+          type:
+          - integer
+          - 'null'
+          description: Unix timestamp in seconds indicating expected end of the outage
+          format: int64
+        supportedProducts:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerFeature'
+          description: Get products supported by the financial institution
+        deFiWalletData:
+          allOf:
+          - $ref: '#/components/schemas/DeFiWalletHealthStatusInfo'
+          description: Short information about DeFiWallet
+      additionalProperties: false
     BrokerBaseRequest:
       required:
       - authToken
@@ -660,388 +837,42 @@ components:
           - bybit
           - paxos
           - coinbasePrime
+          - btcTurkDirect
+          - kuCoinDirect
+          - okxOAuth
+          - paribuDirect
+          - robinhoodConnect
+          - blockchainCom
+          - bitsoDirect
+          - binanceConnect
+          - binanceOAuth
+          - revolutConnect
+          - binancePay
+          - bybitDirect
+          - paribuOAuth
+          - payPalConnect
+          - binanceTrDirect
+          - coinbaseRamp
+          - bybitDirectMobile
+          - sandbox
+          - cryptoComPay
+          - bybitEuDirect
+          - uphold
+          - binancePayOnchain
+          - sandboxCoinbase
+          - bybitPay
+          - krakenOAuth
+          - bluvoKrakenOAuth
+          - cashApp
+          - sandboxKrakenOAuth
+          - krakPay
+          - unlimit
+          - alchemyPay
+          - okxPay
+          - bybitPayPsp
           allOf:
           - $ref: '#/components/schemas/BrokerType'
           description: Type of the institution to connect
-      additionalProperties: false
-    B2BBrokerRefreshTokenResponse:
-      type: object
-      properties:
-        status:
-          enum:
-          - failed
-          - succeeded
-          - mfaRequired
-          allOf:
-          - $ref: '#/components/schemas/B2BBrokerAuthStatus'
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        displayMessage:
-          type:
-          - string
-          - 'null'
-        account:
-          allOf:
-          - $ref: '#/components/schemas/BrokerAccount'
-          deprecated: true
-        accessToken:
-          type:
-          - string
-          - 'null'
-          deprecated: true
-        refreshToken:
-          type:
-          - string
-          - 'null'
-          deprecated: true
-        expiresInSeconds:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        refreshTokenExpiresInSeconds:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        brokerAccountTokens:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/BrokerAccountTokens'
-      additionalProperties: false
-    IntegrationsResponse:
-      type: object
-      properties:
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/IntegrationModel'
-          description: Integrations list.
-      additionalProperties: false
-      description: Integration response.
-    LinkTokenTransferOptions:
-      type: object
-      properties:
-        toAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TransferToAddressWithAmount'
-          description: 'The list of destination addresses with corresponding networks are asset symbols that
-
-            can be used to initiate incoming transfers. If this parameter is present, the Link
-
-            session will continue to transfer flow after connecting the origin account.'
-        amountInFiat:
-          type:
-          - number
-          - 'null'
-          description: Amount in USD to transfer. If not provided users can specify amount by themselves.
-          format: double
-        transactionId:
-          maxLength: 128
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Transaction ID Provided by client to track transaction in future calls
-        clientFee:
-          maximum: 1
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: 'A percentage fee (input as a ratio, eg. 0.02500 = 2.500%) added onto your users'' gross payments to your company.
-
-            This will override any default fee entered in your Mesh dashboard for an individual transaction.
-
-            Please note: this fee should only be used for Payments (when the transfer destination is an address owned by your company),
-
-            and not for Deposits (when the transfer destination is an address owned by the end user).
-
-            If used for Deposits, it will increase the size of the user''s Deposit by the fee amount,
-
-            but will incorrectly show to the user as a fee.'
-          format: double
-        transferType:
-          allOf:
-          - $ref: '#/components/schemas/TransferTypeEnum'
-          description: 'Deposit: The user is transferring crypto to a wallet they own on your platform.
-
-            Payment: The user is transferring crypto to a wallet your company owns in exchange for receiving a good or service.
-
-            Onramp: The user is using balances and linked payment methods in an exchange account to fund the purchase of crypto in their wallet on your platform.'
-        fundingOptions:
-          allOf:
-          - $ref: '#/components/schemas/TransferCryptocurrencyFundingOptions'
-          description: 'Specifies the permitted options to use the end user''s available buying power
-
-            and/or payment methods to supplement the cryptocurrency balance if it is insufficient
-
-            for the transfer.'
-        isInclusiveFeeEnabled:
-          type: boolean
-          description: Specifies if all the fees are included in the amount to transfer.
-      additionalProperties: false
-    IntegrationLogo:
-      type: object
-      properties:
-        logoWhiteUrl:
-          type:
-          - string
-          - 'null'
-          description: White logo url.
-        logoBlackUrl:
-          type:
-          - string
-          - 'null'
-          description: Black logo url.
-        logoColorUrl:
-          type:
-          - string
-          - 'null'
-          description: Colored logo url.
-        iconWhiteUrl:
-          type:
-          - string
-          - 'null'
-          description: White icon url.
-        iconBlackUrl:
-          type:
-          - string
-          - 'null'
-          description: Balck icon url.
-        iconColorUrl:
-          type:
-          - string
-          - 'null'
-          description: Colored logo url.
-      additionalProperties: false
-      description: Integreation logos.
-    GetLinkTokenRequest:
-      required:
-      - userId
-      type: object
-      properties:
-        userId:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: 'A unique Id representing the end user. Typically this will be a user Id from the
-
-            client application. Personally identifiable information, such as an email address or phone number,
-
-            should not be used. 50 characters length maximum.'
-        brokerType:
-          allOf:
-          - $ref: '#/components/schemas/BrokerType'
-          description: 'Type of integration to redirect to. Will redirect to catalog if not provided.
-
-            Not supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet.'
-          deprecated: true
-        restrictMultipleAccounts:
-          type: boolean
-          description: 'The final screen of Link allows users to “continue” back to your app or “Link another account.”
-
-            If this param is present then this button will be hidden.'
-        transferOptions:
-          allOf:
-          - $ref: '#/components/schemas/LinkTokenTransferOptions'
-          description: Encapsulates transaction-related parameters, including destination addresses and the amount to transfer in fiat currency.
-        integrationId:
-          type:
-          - string
-          - 'null'
-          description: A unique identifier representing a specific integration obtained from the list of available integrations.
-          format: uuid
-      additionalProperties: false
-    BrokerType:
-      enum:
-      - robinhood
-      - eTrade
-      - alpaca
-      - tdAmeritrade
-      - weBull
-      - stash
-      - interactiveBrokers
-      - public
-      - coinbase
-      - kraken
-      - coinbasePro
-      - cryptoCom
-      - openSea
-      - binanceUs
-      - gemini
-      - cryptocurrencyAddress
-      - cryptocurrencyWallet
-      - okCoin
-      - bittrex
-      - kuCoin
-      - etoro
-      - cexIo
-      - binanceInternational
-      - bitstamp
-      - gateIo
-      - acorns
-      - okx
-      - bitFlyer
-      - coinlist
-      - huobi
-      - bitfinex
-      - deFiWallet
-      - krakenDirect
-      - vanguard
-      - binanceInternationalDirect
-      - bitfinexDirect
-      - bybit
-      - paxos
-      - coinbasePrime
-      type: string
-    TransferTypeEnum:
-      enum:
-      - deposit
-      - payment
-      - onramp
-      type: string
-    BrokerAccountTokens:
-      type: object
-      properties:
-        account:
-          allOf:
-          - $ref: '#/components/schemas/BrokerAccount'
-        accessToken:
-          type:
-          - string
-          - 'null'
-        refreshToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    B2BBrokerRefreshTokenResponseApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type:
-          - string
-          - 'null'
-          description: A message generated by the API
-        displayMessage:
-          type:
-          - string
-          - 'null'
-          description: User-friendly display message that can be presented to the end user
-        errorType:
-          type:
-          - string
-          - 'null'
-          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
-
-            All possible error types are available in the documentation.'
-        errorData:
-          readOnly: true
-        content:
-          allOf:
-          - $ref: '#/components/schemas/B2BBrokerRefreshTokenResponse'
-      additionalProperties: false
-    B2BBrokerAuthStatus:
-      enum:
-      - failed
-      - succeeded
-      - mfaRequired
-      type: string
-    B2BBrokersHealthStatusListApiResult:
-      type: object
-      properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type:
-          - string
-          - 'null'
-          description: A message generated by the API
-        displayMessage:
-          type:
-          - string
-          - 'null'
-          description: User-friendly display message that can be presented to the end user
-        errorType:
-          type:
-          - string
-          - 'null'
-          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
-
-            All possible error types are available in the documentation.'
-        errorData:
-          readOnly: true
-        content:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/B2BBrokersHealthStatus'
-      additionalProperties: false
-    TransferToAddressWithAmount:
-      type: object
-      properties:
-        networkId:
-          type: string
-          description: 'The Id of the network in Front system. The list of all available networks can be obtained by
-
-            using `GET /transfers/managed/networks` endpoint.'
-          format: uuid
-        symbol:
-          type:
-          - string
-          - 'null'
-          description: The symbol of the digital asset.
-        address:
-          type:
-          - string
-          - 'null'
-          description: The address to send the asset to.
-        addressTag:
-          type:
-          - string
-          - 'null'
-          description: Secondary address identifier for coins like XRP,XMR etc.
-        amount:
-          type:
-          - number
-          - 'null'
-          description: Amount of tokens to transfer by specified network.
-          format: double
       additionalProperties: false
     IntegrationModel:
       type: object
@@ -1096,6 +927,39 @@ components:
           - bybit
           - paxos
           - coinbasePrime
+          - btcTurkDirect
+          - kuCoinDirect
+          - okxOAuth
+          - paribuDirect
+          - robinhoodConnect
+          - blockchainCom
+          - bitsoDirect
+          - binanceConnect
+          - binanceOAuth
+          - revolutConnect
+          - binancePay
+          - bybitDirect
+          - paribuOAuth
+          - payPalConnect
+          - binanceTrDirect
+          - coinbaseRamp
+          - bybitDirectMobile
+          - sandbox
+          - cryptoComPay
+          - bybitEuDirect
+          - uphold
+          - binancePayOnchain
+          - sandboxCoinbase
+          - bybitPay
+          - krakenOAuth
+          - bluvoKrakenOAuth
+          - cashApp
+          - sandboxKrakenOAuth
+          - krakPay
+          - unlimit
+          - alchemyPay
+          - okxPay
+          - bybitPayPsp
           allOf:
           - $ref: '#/components/schemas/BrokerType'
           description: Integration type.
@@ -1111,96 +975,110 @@ components:
           items:
             $ref: '#/components/schemas/FinancialInstitutionIntegrationType'
           description: Integration categories.
+        style:
+          allOf:
+          - $ref: '#/components/schemas/IntegrationStyle'
+          description: Style object.
         logo:
           allOf:
           - $ref: '#/components/schemas/IntegrationLogo'
           description: Logo object.
+        forgotPasswordLink:
+          type:
+          - string
+          - 'null'
+          description: Forgot Password Link.
         cryptoTransfersSupported:
           type: boolean
           description: Indicates if crypto transfers supported by integration.
+        brokerGroup:
+          enum:
+          - none
+          - binance
+          - coinbase
+          - kraken
+          allOf:
+          - $ref: '#/components/schemas/BrokerGroup'
+          description: Logical exchange group the BrokerType belongs to (BrokerGroup.None when ungrouped).
       additionalProperties: false
       description: Integration model.
-    BrokerFeature:
-      enum:
-      - holdings
-      - balance
-      - orders
-      - transfers
-      - identity
-      - cryptocurrencyDepositAddresses
-      - accountNumber
-      - paymentMethods
-      - conversions
-      type: string
-    BrokerAccount:
+    TransferToAddressWithAmount:
       type: object
       properties:
-        meshAccountId:
+        networkId:
           type: string
+          description: 'The Id of the network in Front system. The list of all available networks can be obtained by
+
+            using `GET /transfers/managed/networks` endpoint.'
           format: uuid
-        frontAccountId:
-          type: string
-          format: uuid
-          readOnly: true
-          deprecated: true
-        accountId:
+        symbol:
           type:
           - string
           - 'null'
-        accountName:
+          description: The symbol of the digital asset.
+        address:
           type:
           - string
           - 'null'
-        fund:
+          description: The address to send the asset to.
+        addressTag:
+          type:
+          - string
+          - 'null'
+          description: Secondary address identifier for coins like XRP,XMR etc.
+        note:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Optional informational message shown to the end-user alongside this destination address
+
+            (for example "Only send USDC on Ethereum"). Maximum 200 characters.'
+        amount:
           type:
           - number
           - 'null'
-          description: 'Buying power of the account. Typically consists of cash plus available margin.
-
-            For non-margin accounts fund contains cash only'
+          description: Amount of tokens to transfer by specified network.
           format: double
-        cash:
+        displayAmountInFiat:
           type:
           - number
           - 'null'
-          description: Cash balance in USD
-          format: double
-        isReconnected:
-          type:
-          - boolean
-          - 'null'
-          description: 'Indicates if this account was already connected by the current user and device.
+          description: 'Transfer amount in fiat which is requested by client to be shown as amount in fiat.
 
-            Can be null.'
-        balances:
+            It will be shown to end-user if and only if it''s difference with actual amount in fiat is less that 1%.'
+          format: double
+        minAmount:
           type:
-          - array
+          - number
           - 'null'
-          items:
-            $ref: '#/components/schemas/BrokerFiatBalance'
-          description: The list of all asset balances of account
+          description: Minimum allowed amount of tokens to transfer by specified token/network combination.
+          format: double
+        minAmountInFiat:
+          type:
+          - number
+          - 'null'
+          description: Minimum allowed amount in fiat to transfer by specified token/network combination.
+          format: double
+        maxAmount:
+          type:
+          - number
+          - 'null'
+          description: Maximum allowed amount of tokens to transfer by specified token/network combination.
+          format: double
+        maxAmountInFiat:
+          type:
+          - number
+          - 'null'
+          description: Maximum allowed amount in fiat to transfer by specified token/network combination.
+          format: double
       additionalProperties: false
-    FinancialInstitutionIntegrationType:
+    WalletVerificationMethod:
       enum:
-      - brokerage
-      - bank
-      - exchange
-      - wallet
-      - address
-      - nftMarketplace
-      - deFiWallet
+      - signedMessage
       type: string
-    ApiResultStatus:
-      enum:
-      - ok
-      - serverFailure
-      - permissionDenied
-      - badRequest
-      - notFound
-      - conflict
-      - tooManyRequest
-      - locked
-      type: string
+      description: Verification method.
     BrokerFiatBalance:
       type: object
       properties:
@@ -1230,72 +1108,6 @@ components:
           description: Account cash indicates total amount of money
           format: double
       additionalProperties: false
-    InitializeTransfersForLinkRequest:
-      type: object
-      properties:
-        toAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TransferToAddressWithAmount'
-          description: 'The list of destination addresses with corresponding networks are asset symbols that
-
-            can be used to initiate incoming transfers.'
-        amountInFiat:
-          type:
-          - number
-          - 'null'
-          description: Amount in USD to transfer. If not provided users can specify amount by themselves.
-          format: double
-        transactionId:
-          maxLength: 128
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Transaction ID Provided by client to track transaction in future calls
-        clientFee:
-          maximum: 1
-          minimum: 0
-          type: number
-          description: 'A percentage fee (input as a ratio, eg. 0.02500 = 2.500%) added onto your users'' gross payments to your company.
-
-            This will override any default fee entered in your Mesh dashboard for an individual transaction.
-
-            Please note: this fee should only be used for Payments (when the transfer destination is an address owned by your company),
-
-            and not for Deposits (when the transfer destination is an address owned by the end user).
-
-            If used for Deposits, it will increase the size of the user''s Deposit by the fee amount,
-
-            but will incorrectly show to the user as a fee.'
-          format: double
-        transferType:
-          allOf:
-          - $ref: '#/components/schemas/TransferTypeEnum'
-          description: 'Deposit: The user is transferring crypto to a wallet they own on your platform.
-
-            Payment: The user is transferring crypto to a wallet your company owns in exchange for receiving a good or service.
-
-            Onramp: The user is using balances and linked payment methods in an exchange account to fund the purchase of crypto in their wallet on your platform.'
-      additionalProperties: false
-    CatalogLink:
-      type: object
-      properties:
-        url:
-          type:
-          - string
-          - 'null'
-          description: Url to open Front catalog that should be presented to the end user.
-          format: uri
-        iFrameUrl:
-          type:
-          - string
-          - 'null'
-          description: Url to open Front catalog in iFrame that should be presented to the end user.
-          format: uri
-      additionalProperties: false
     IntegrationsResponseApiResult:
       type: object
       properties:
@@ -1309,6 +1121,7 @@ components:
           - conflict
           - tooManyRequest
           - locked
+          - unavailableForLegalReasons
           allOf:
           - $ref: '#/components/schemas/ApiResultStatus'
           readOnly: true
@@ -1322,6 +1135,20 @@ components:
           - string
           - 'null'
           description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
         errorType:
           type:
           - string
@@ -1336,126 +1163,135 @@ components:
           - $ref: '#/components/schemas/IntegrationsResponse'
           description: Integration response.
       additionalProperties: false
-    ApiResult:
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      - unavailableForLegalReasons
+      type: string
+    FinancialInstitutionIntegrationType:
+      enum:
+      - brokerage
+      - bank
+      - exchange
+      - wallet
+      - address
+      - nftMarketplace
+      - deFiWallet
+      type: string
+    IntegrationsResponse:
       type: object
       properties:
-        status:
-          enum:
-          - ok
-          - serverFailure
-          - permissionDenied
-          - badRequest
-          - notFound
-          - conflict
-          - tooManyRequest
-          - locked
-          allOf:
-          - $ref: '#/components/schemas/ApiResultStatus'
-          readOnly: true
-        message:
-          type:
-          - string
-          - 'null'
-          description: A message generated by the API
-        displayMessage:
-          type:
-          - string
-          - 'null'
-          description: User-friendly display message that can be presented to the end user
-        errorType:
-          type:
-          - string
-          - 'null'
-          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
-
-            All possible error types are available in the documentation.'
-        errorData:
-          readOnly: true
-      additionalProperties: false
-    B2BBrokersHealthStatus:
-      type: object
-      properties:
-        type:
-          enum:
-          - robinhood
-          - eTrade
-          - alpaca
-          - tdAmeritrade
-          - weBull
-          - stash
-          - interactiveBrokers
-          - public
-          - coinbase
-          - kraken
-          - coinbasePro
-          - cryptoCom
-          - openSea
-          - binanceUs
-          - gemini
-          - cryptocurrencyAddress
-          - cryptocurrencyWallet
-          - okCoin
-          - bittrex
-          - kuCoin
-          - etoro
-          - cexIo
-          - binanceInternational
-          - bitstamp
-          - gateIo
-          - acorns
-          - okx
-          - bitFlyer
-          - coinlist
-          - huobi
-          - bitfinex
-          - deFiWallet
-          - krakenDirect
-          - vanguard
-          - binanceInternationalDirect
-          - bitfinexDirect
-          - bybit
-          - paxos
-          - coinbasePrime
-          allOf:
-          - $ref: '#/components/schemas/BrokerType'
-          description: Type of the integration
-        name:
-          type:
-          - string
-          - 'null'
-          description: Name of the integration
-        isUp:
-          type: boolean
-          description: Is the communication with the integration up
-        description:
-          type:
-          - string
-          - 'null'
-          description: Description of the outage
-        downTimeStart:
-          type:
-          - integer
-          - 'null'
-          description: Unix timestamp in seconds indicating when the outage occurred
-          format: int64
-        downTimeEnd:
-          type:
-          - integer
-          - 'null'
-          description: Unix timestamp in seconds indicating expected end of the outage
-          format: int64
-        supportedProducts:
+        items:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/BrokerFeature'
-          description: Get products supported by the financial institution
-        deFiWalletData:
-          allOf:
-          - $ref: '#/components/schemas/DeFiWalletHealthStatusInfo'
-          description: Short information about DeFiWallet
+            $ref: '#/components/schemas/IntegrationModel'
+          description: Integrations list.
       additionalProperties: false
+      description: Integration response.
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      - btcTurkDirect
+      - kuCoinDirect
+      - okxOAuth
+      - paribuDirect
+      - robinhoodConnect
+      - blockchainCom
+      - bitsoDirect
+      - binanceConnect
+      - binanceOAuth
+      - revolutConnect
+      - binancePay
+      - bybitDirect
+      - paribuOAuth
+      - payPalConnect
+      - binanceTrDirect
+      - coinbaseRamp
+      - bybitDirectMobile
+      - sandbox
+      - cryptoComPay
+      - bybitEuDirect
+      - uphold
+      - binancePayOnchain
+      - sandboxCoinbase
+      - bybitPay
+      - krakenOAuth
+      - bluvoKrakenOAuth
+      - cashApp
+      - sandboxKrakenOAuth
+      - krakPay
+      - unlimit
+      - alchemyPay
+      - okxPay
+      - bybitPayPsp
+      type: string
+    DeFiWalletHealthStatusInfo:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    B2BBrokerAuthStatus:
+      enum:
+      - failed
+      - succeeded
+      - mfaRequired
+      type: string
     LinkTokenModelApiResult:
       type: object
       properties:
@@ -1469,6 +1305,7 @@ components:
           - conflict
           - tooManyRequest
           - locked
+          - unavailableForLegalReasons
           allOf:
           - $ref: '#/components/schemas/ApiResultStatus'
           readOnly: true
@@ -1482,6 +1319,20 @@ components:
           - string
           - 'null'
           description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
         errorType:
           type:
           - string
@@ -1494,6 +1345,142 @@ components:
         content:
           allOf:
           - $ref: '#/components/schemas/LinkTokenModel'
+      additionalProperties: false
+    GetLinkTokenRequest:
+      required:
+      - userId
+      type: object
+      properties:
+        userId:
+          maxLength: 300
+          minLength: 1
+          type: string
+          description: 'A unique Id representing the end user. Typically this will be a user Id from the
+
+            client application. Personally identifiable information, such as an email address or phone number,
+
+            should not be used. 300 characters length maximum.'
+        brokerType:
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of integration to redirect to. Will redirect to catalog if not provided.
+
+            Not supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet.'
+          deprecated: true
+        restrictMultipleAccounts:
+          type: boolean
+          description: 'The final screen of Link allows users to “continue” back to your app or “Link another account.”
+
+            If this param is present then this button will be hidden.'
+        transferOptions:
+          allOf:
+          - $ref: '#/components/schemas/LinkTokenTransferOptions'
+          description: Encapsulates transaction-related parameters, including destination addresses and the amount to transfer in fiat currency.
+        integrationId:
+          type:
+          - string
+          - 'null'
+          description: A unique identifier representing a specific integration obtained from the list of available integrations.
+          format: uuid
+        disableApiKeyGeneration:
+          type: boolean
+          description: 'For direct integrations that also support API keys, Link presents the user with the option to generate an API key for seamless access.
+
+            If this param is true, this feature will be disabled.'
+        verifyWalletOptions:
+          allOf:
+          - $ref: '#/components/schemas/VerifyWalletOptions'
+          description: Encapsulates verify DeFi wallet parameters.
+        subClientId:
+          type:
+          - string
+          - 'null'
+          description: Sub Client ID, for B2B2B clients to tailor Link experience for their clients.
+          format: uuid
+      additionalProperties: false
+    TransferTypeEnum:
+      enum:
+      - deposit
+      - payment
+      - onramp
+      - fiatOnRamp
+      - fiatOffRamp
+      - subscribe
+      - unsubscribe
+      - withdrawal
+      type: string
+    BrokerFeature:
+      enum:
+      - holdings
+      - balance
+      - orders
+      - transfers
+      - identity
+      - cryptocurrencyDepositAddresses
+      - accountNumber
+      - paymentMethods
+      - conversions
+      type: string
+    BrokerGroup:
+      enum:
+      - none
+      - binance
+      - coinbase
+      - kraken
+      type: string
+    B2BBrokerRefreshTokenResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerRefreshTokenResponse'
       additionalProperties: false
     BrokerRefreshTokenRequest:
       required:
@@ -1542,6 +1529,39 @@ components:
           - bybit
           - paxos
           - coinbasePrime
+          - btcTurkDirect
+          - kuCoinDirect
+          - okxOAuth
+          - paribuDirect
+          - robinhoodConnect
+          - blockchainCom
+          - bitsoDirect
+          - binanceConnect
+          - binanceOAuth
+          - revolutConnect
+          - binancePay
+          - bybitDirect
+          - paribuOAuth
+          - payPalConnect
+          - binanceTrDirect
+          - coinbaseRamp
+          - bybitDirectMobile
+          - sandbox
+          - cryptoComPay
+          - bybitEuDirect
+          - uphold
+          - binancePayOnchain
+          - sandboxCoinbase
+          - bybitPay
+          - krakenOAuth
+          - bluvoKrakenOAuth
+          - cashApp
+          - sandboxKrakenOAuth
+          - krakPay
+          - unlimit
+          - alchemyPay
+          - okxPay
+          - bybitPayPsp
           allOf:
           - $ref: '#/components/schemas/BrokerType'
         refreshToken:
@@ -1581,29 +1601,383 @@ components:
             - 'null'
           description: Additional metadata
       additionalProperties: false
-    TransferCryptocurrencyFundingOptions:
+    IntegrationLogo:
       type: object
       properties:
-        enabled:
-          type: boolean
-          description: 'Indicates whether the Link is permitted to use the end user''s available buying power
-
-            and/or payment methods to supplement the cryptocurrency balance if it is insufficient
-
-            for the transfer.'
-      additionalProperties: false
-    DeFiWalletHealthStatusInfo:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
+        logoLightUrl:
           type:
           - string
           - 'null'
+          description: Light logo url.
+        logoDarkUrl:
+          type:
+          - string
+          - 'null'
+          description: Dark logo url.
+        logoWhiteUrl:
+          type:
+          - string
+          - 'null'
+          description: White logo url.
+        logoBlackUrl:
+          type:
+          - string
+          - 'null'
+          description: Black logo url.
+        logoColorUrl:
+          type:
+          - string
+          - 'null'
+          description: Colored logo url.
+        iconLightUrl:
+          type:
+          - string
+          - 'null'
+          description: White icon url.
+        iconDarkUrl:
+          type:
+          - string
+          - 'null'
+          description: Light icon url.
+        iconWhiteUrl:
+          type:
+          - string
+          - 'null'
+          description: Dark icon url.
+        iconBlackUrl:
+          type:
+          - string
+          - 'null'
+          description: Balck icon url.
+        iconColorUrl:
+          type:
+          - string
+          - 'null'
+          description: Colored logo url.
+        base64Logo:
+          type:
+          - string
+          - 'null'
+          description: Base64 PNG logo.
       additionalProperties: false
-    CatalogLinkApiResult:
+      description: Integreation logos.
+    TransferFromPair:
+      type: object
+      properties:
+        networkId:
+          type: string
+          description: 'Required. The Id of the network in Front system. The list of all available networks can be
+
+            obtained by using `GET /transfers/managed/networks` endpoint.'
+          format: uuid
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Required. The symbol of the digital asset your custodian pays out, e.g. "USDC".
+        maxAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Required. The most the user may withdraw from this pair, in units of the asset (not fiat):
+
+            typically the user''s withdrawable balance. Must be greater than zero.'
+          format: double
+      additionalProperties: false
+      description: 'An asset and network your custodian can pay a withdrawal from, with the most the user may
+
+        withdraw from it.'
+    VerifyWalletOptions:
+      type: object
+      properties:
+        message:
+          type:
+          - string
+          - 'null'
+          description: 'Verification message to sign.
+
+            Required if `signedMessage` is provided in <paramref name="VerificationMethods">VerificationMethods</paramref> list.'
+        verificationMethods:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WalletVerificationMethod'
+          description: List or required verification methods. By default - sign message with wallet key.
+        addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Addresses list to verify. If user verifies another address then verification will be failed.
+        networkId:
+          type:
+          - string
+          - 'null'
+          description: Network to verify. If user verifies another network address then verification will be failed.
+          format: uuid
+        networkType:
+          allOf:
+          - $ref: '#/components/schemas/NetworkType'
+          description: Network type to verify. If user verifies another network address then verification will be failed.
+      additionalProperties: false
+      description: DeFi wallet verification options.
+    BrokerAccountTokens:
+      type: object
+      properties:
+        account:
+          allOf:
+          - $ref: '#/components/schemas/BrokerAccount'
+        accessToken:
+          type:
+          - string
+          - 'null'
+        refreshToken:
+          type:
+          - string
+          - 'null'
+        tokenId:
+          type:
+          - string
+          - 'null'
+          description: Token identifier provided by Mesh when the actual integration's token is managed by Mesh's Token Management System.
+      additionalProperties: false
+    LinkTokenTransferOptions:
+      type: object
+      properties:
+        toAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TransferToAddressWithAmount'
+          description: 'The list of destination addresses with corresponding networks are asset symbols that
+
+            can be used to initiate incoming transfers. If this parameter is present, the Link
+
+            session will continue to transfer flow after connecting the origin account.'
+        fromPairs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TransferFromPair'
+          description: 'Withdrawal only, and required for it: the assets and networks your custodian can pay the
+
+            withdrawal from, 1 to 20 entries, each with its own `maxAmount`. Link offers the user the
+
+            destinations Mesh can deliver to from these pairs. Do not send `toAddresses` or
+
+            `amountInFiat` with a withdrawal.'
+        amountInFiat:
+          type:
+          - number
+          - 'null'
+          description: Amount in USD to transfer. If not provided users can specify amount by themselves.
+          format: double
+        transactionId:
+          maxLength: 128
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Transaction ID Provided by client to track transaction in future calls
+        clientFee:
+          maximum: 1
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 'A percentage fee (input as a ratio, eg. 0.02500 = 2.500%) added onto your users'' gross payments to your company.
+
+            This will override any default fee entered in your Mesh dashboard for an individual transaction.
+
+            Please note: this fee should only be used for Payments (when the transfer destination is an address owned by your company),
+
+            and not for Deposits (when the transfer destination is an address owned by the end user).
+
+            If used for Deposits, it will increase the size of the user''s Deposit by the fee amount,
+
+            but will incorrectly show to the user as a fee.'
+          format: double
+        transferType:
+          allOf:
+          - $ref: '#/components/schemas/TransferTypeEnum'
+          description: 'Deposit: The user is transferring crypto to a wallet they own on your platform.
+
+            Payment: The user is transferring crypto to a wallet your company owns in exchange for receiving a good or service.
+
+            Onramp: The user is using balances and linked payment methods in an exchange account to fund the purchase of crypto in their wallet on your platform.
+
+            FiatOnRamp: The user is purchasing crypto using a bank transfer (e.g. SPEI, SEPA) via a fiat-to-crypto ramp provider.
+
+            FiatOffRamp: The user is selling crypto to receive fiat via a bank transfer through a crypto-to-fiat ramp provider.
+
+            Withdrawal: Your custodian pays crypto out to a wallet or exchange account the user chooses in Link. Requires
+
+            `fromPairs`. After the user confirms, Mesh sends the `withdrawal.pay_in_requested` webhook with the address and
+
+            exact amount your custodian pays.'
+        isInclusiveFeeEnabled:
+          type: boolean
+          description: Specifies if all the fees are included in the amount to transfer.
+        description:
+          maxLength: 256
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Transaction description. (Binance Pay)
+        goodsDetails:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/GoodsDetails'
+          description: Goods details for the transaction. (Binance Pay)
+        generatePayLink:
+          type: boolean
+          description: 'Link presents the user with the option to generate a unique payment link for Mesh pay scenarios.
+
+            If this param is true, a unique payment link will be returned.'
+        payLinkReturnUrl:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'If this parameter is specified then user will be redirected to this url after UI is closed.
+
+            Returned for both success and unsuccess scenarios.'
+      additionalProperties: false
+    BrokerAccount:
+      type: object
+      properties:
+        meshAccountId:
+          type: string
+          format: uuid
+        frontAccountId:
+          type: string
+          format: uuid
+          readOnly: true
+          deprecated: true
+        accountId:
+          type:
+          - string
+          - 'null'
+        accountName:
+          type:
+          - string
+          - 'null'
+        fund:
+          type:
+          - number
+          - 'null'
+          description: 'Buying power of the account. Typically consists of cash plus available margin.
+
+            For non-margin accounts fund contains cash only'
+          format: double
+        cash:
+          type:
+          - number
+          - 'null'
+          description: Cash balance in USD
+          format: double
+        isReconnected:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates if this account was already connected by the current user and device.
+
+            Can be null.'
+        balances:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerFiatBalance'
+          description: The list of all asset balances of account
+      additionalProperties: false
+    NetworkType:
+      enum:
+      - unknown
+      - evm
+      - solana
+      - bitcoin
+      - cardano
+      - tron
+      - avalancheX
+      - tezos
+      - dogecoin
+      - ripple
+      - stellar
+      - litecoin
+      - sui
+      - aptos
+      - tvm
+      - injective
+      - cosmos
+      - starknet
+      - hedera
+      - filecoin
+      - kusama
+      - enjin
+      - bittensor
+      - terra
+      - terraClassic
+      - xpla
+      - celestia
+      - fogo
+      - assetHub
+      - astarNative
+      - cryptoOrg
+      - osmosis
+      - dydx
+      - juno
+      - oraichain
+      - axelar
+      - kyve
+      - band
+      - akash
+      - fetch
+      - thorchain
+      - dymension
+      - initia
+      - eos
+      - wax
+      - casper
+      - mina
+      - near
+      - algorand
+      - stacks
+      - icp
+      - multiversx
+      - icon
+      - nano
+      - chia
+      - siacoin
+      - ravencoin
+      - digibyte
+      - bitcoinCash
+      - ontology
+      - neo
+      - arweave
+      - vara
+      - polymesh
+      - qtum
+      - brc20
+      - flow
+      - ark
+      - nervos
+      - canton
+      - kava
+      - harmony
+      - ioTeX
+      - theta
+      - veChain
+      type: string
+    B2BBrokersHealthStatusListApiResult:
       type: object
       properties:
         status:
@@ -1616,6 +1990,7 @@ components:
           - conflict
           - tooManyRequest
           - locked
+          - unavailableForLegalReasons
           allOf:
           - $ref: '#/components/schemas/ApiResultStatus'
           readOnly: true
@@ -1629,6 +2004,20 @@ components:
           - string
           - 'null'
           description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
         errorType:
           type:
           - string
@@ -1639,13 +2028,20 @@ components:
         errorData:
           readOnly: true
         content:
-          allOf:
-          - $ref: '#/components/schemas/CatalogLink'
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/B2BBrokersHealthStatus'
       additionalProperties: false
     LinkTokenModel:
       type: object
       properties:
         linkToken:
+          type:
+          - string
+          - 'null'
+        paymentLink:
           type:
           - string
           - 'null'

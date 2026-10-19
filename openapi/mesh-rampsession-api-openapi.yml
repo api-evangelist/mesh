@@ -1,0 +1,451 @@
+openapi: 3.2.0
+info:
+  title: Mesh Connect Integration Ramp Session API
+  description: 'Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+- url: https://sandbox-integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: RampSession
+paths:
+  /api/v1/onramp/session:
+    post:
+      tags:
+      - RampSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateRampSessionRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateRampSessionRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateRampSessionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRampSessionResponseApiResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema: {}
+      summary: Create api onramp session
+      x-summary-source: derived
+      operationId: postApiV1OnrampSession
+      x-operation-id-source: derived
+  /api/v1/onramp/session/{sessionId}:
+    get:
+      tags:
+      - RampSession
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRampSessionResponseApiResult'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      summary: Get api onramp session by session id
+      x-summary-source: derived
+      operationId: getApiV1OnrampSessionBySessionId
+      x-operation-id-source: derived
+components:
+  schemas:
+    GetRampSessionResponse:
+      type: object
+      properties:
+        clientId:
+          type:
+          - string
+          - 'null'
+        status:
+          enum:
+          - unknown
+          - created
+          - awaitingOtpVerification
+          - emailVerified
+          - kycPending
+          - kycVerified
+          - kycFailed
+          - paymentPending
+          - fiatReceived
+          - settled
+          - paymentFailed
+          - refundPending
+          - expired
+          - cancelled
+          - refunded
+          allOf:
+          - $ref: '#/components/schemas/RampSessionStatus'
+          description: 'FSM states for Org.Front.Core.Contracts.Adapters.Persistence.Entities.Ramp.RampSession. Persisted as a string column so
+
+            the DB stays human-readable and new values can be added without column
+
+            migrations.'
+        amount:
+          type: number
+          format: double
+        fiatCurrency:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+        targetAsset:
+          type:
+          - string
+          - 'null'
+        chainName:
+          type:
+          - string
+          - 'null'
+        destinationWallet:
+          type:
+          - string
+          - 'null'
+        kycVendor:
+          type:
+          - string
+          - 'null'
+        paymentVendor:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CreateRampSessionResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/CreateRampSessionResponse'
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      - unavailableForLegalReasons
+      type: string
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+      additionalProperties: false
+    GetRampSessionResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/GetRampSessionResponse'
+      additionalProperties: false
+    RampType:
+      enum:
+      - onRamp
+      - offRamp
+      type: string
+    RampSessionStatus:
+      enum:
+      - unknown
+      - created
+      - awaitingOtpVerification
+      - emailVerified
+      - kycPending
+      - kycVerified
+      - kycFailed
+      - paymentPending
+      - fiatReceived
+      - settled
+      - paymentFailed
+      - refundPending
+      - expired
+      - cancelled
+      - refunded
+      type: string
+      description: 'FSM states for Org.Front.Core.Contracts.Adapters.Persistence.Entities.Ramp.RampSession. Persisted as a string column so
+
+        the DB stays human-readable and new values can be added without column
+
+        migrations.'
+    CreateRampSessionRequest:
+      required:
+      - destinationAddress
+      - fiatCurrency
+      - targetAsset
+      type: object
+      properties:
+        userId:
+          maxLength: 128
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        type:
+          enum:
+          - onRamp
+          - offRamp
+          allOf:
+          - $ref: '#/components/schemas/RampType'
+          description: 'Direction of the flow. Defaults to Org.Front.Core.Contracts.Adapters.Persistence.Entities.Ramp.RampType.OnRamp (buy);
+
+            Org.Front.Core.Contracts.Adapters.Persistence.Entities.Ramp.RampType.OffRamp selects the sell flow.'
+        amount:
+          type: number
+          format: double
+        countryCode:
+          type:
+          - string
+          - 'null'
+        destinationAddress:
+          maxLength: 128
+          minLength: 0
+          type: string
+        targetAsset:
+          maxLength: 32
+          minLength: 0
+          type: string
+        networkId:
+          type: string
+          format: uuid
+        fiatCurrency:
+          maxLength: 3
+          minLength: 0
+          type: string
+      additionalProperties: false
+    CreateRampSessionResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        hostedUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+      additionalProperties: false
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

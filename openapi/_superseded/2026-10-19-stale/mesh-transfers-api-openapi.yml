@@ -1,0 +1,1742 @@
+openapi: 3.2.0
+info:
+  title: Mesh Connect Integration Transfers API
+  description: 'Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: Transfers
+  description: '### Supported integrations:
+
+    ```Robinhood```
+
+    ```Coinbase```
+
+    ```Kraken```
+
+    ```CoinbasePro```
+
+    ```CryptoCom```
+
+    ```Binance```
+
+    ```Gemini```
+
+    ```OkCoin```
+
+    ```KuCoin```
+
+    ```BinanceInternational```
+
+    ```Bitstamp```
+
+    ```GateIo```
+
+    ```Okx```
+
+    ```Huobi```
+
+    ```Bitfinex```
+
+    ```KrakenDirect```
+
+    ```BinanceInternationalDirect```
+
+    ```Bybit```
+
+    ```Paxos```
+
+    ```CoinbasePrime```
+
+    ```DeFiWallet```
+
+
+    ### Integration-specific notes:
+
+
+    #### Robinhood:
+
+
+    Cryptocurrency transfers should be enabled in Robinhood settings.'
+paths:
+  /api/v1/transfers/list:
+    post:
+      tags:
+      - Transfers
+      summary: Get transfer history
+      description: 'Get entire history of cryptocurrency transfers (withdrawals or deposits) executed from an exchange.
+
+        Only supports Exchange integrations.'
+      requestBody:
+        description: Authentication token and integration type to obtain the list of transfers.
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransfersBrokerTransactionsListRequest'
+      responses:
+        '200':
+          description: Transfers obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerTransactionsListModelApiResult'
+              example:
+                content:
+                  transfers:
+                  - id: 8E25ACB5-A9E2-4D00-8772-A255F010A2A9
+                    status: succeeded
+                    type: deposit
+                    fromAddress: D5PumQwt...
+                    targetAddress: D641Fmzx...
+                    symbol: DOGE
+                    hash: 3310c6202aaeb44754a118ce11f255382d012060ade0d6d9f...
+                    amount: 15
+                    transactionAmount: 10
+                    createdTimestamp: 1653215600
+                    updatedTimestamp: 1653215600
+                    networkTransactionFee:
+                      amount: 5
+                      symbol: DOGE
+                    confirmations: 17
+                    blockchainMethod: transfer
+                  - id: 70E6E3CF-5ACF-49C5-A4E1-5FB85A567F26
+                    status: succeeded
+                    type: withdrawal
+                    fromAddress: 0x7BDE8361Fe587daD0e35448E754...
+                    targetAddress: 0x83C8F28c26bF6aaca652Df1DbBE...
+                    symbol: ETH
+                    hash: 0x77f3a280aa5cfe956a5759c24cf774325504070b32b4159...
+                    amount: 0.1
+                    transactionAmount: 0.099
+                    createdTimestamp: 1653211113
+                    updatedTimestamp: 1653211113
+                    networkTransactionFee:
+                      amount: 0.001
+                      symbol: ETH
+                    confirmations: 18
+                    blockchainMethod: transfer
+                  total: 2
+                  cursor: N2VkZDI0MDMtNmRhYy01NThhLTk5NDUDYzI12M3GQ3ZmQ2
+                  earliestTimestamp: 1653211113
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have read permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+      operationId: postApiV1TransfersList
+      x-operation-id-source: derived
+  /api/v1/transfers/details:
+    post:
+      tags:
+      - Transfers
+      summary: Get transfer details
+      description: 'Get details of a specific transfer (withdrawals or deposits) executed from an exchange.
+
+        Only supports Exchange integrations.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransfersBrokerCryptocurrencyTransactionDetailsRequest'
+            example:
+              transactionId: 63F1A6B6-BF45-4E51-A624-EC52B5680D48
+              authToken: Secret authentication token
+              type: robinhood
+      responses:
+        '200':
+          description: Transfer details obtained.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerCryptocurrencyTransactionApiResult'
+              example:
+                content:
+                  id: 8E25ACB5-A9E2-4D00-8772-A255F010A2A9
+                  status: succeeded
+                  type: deposit
+                  fromAddress: D5PumQwt...
+                  targetAddress: D641Fmzx...
+                  symbol: DOGE
+                  hash: 3310c6202aaeb44754a118ce11f255382d012060ade0d6d9f...
+                  amount: 15
+                  transactionAmount: 10
+                  createdTimestamp: 1653215600
+                  updatedTimestamp: 1653215600
+                  networkTransactionFee:
+                    amount: 5
+                    symbol: DOGE
+                  confirmations: 17
+                  blockchainMethod: transfer
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Transfer details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have read permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Transfer with provided id was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: notFound
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+      operationId: postApiV1TransfersDetails
+      x-operation-id-source: derived
+  /api/v1/transfers:
+    post:
+      tags:
+      - Transfers
+      summary: Initiate a transfer
+      description: 'Initiate a new cryptocurrency transfer on a blockchain, cryptocurrency broker or cryptocurrency exchange.
+
+        Obsolete endpoint, please use POST /transfers/managed/execute endpoint instead.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransfersBrokerCreateCryptocurrencyTransactionRequest'
+            examples:
+              Transfer using AddressType (DOGE over DOGE chain):
+                value:
+                  data: Some memo
+                  targetAddress: D641Fmzx...
+                  amount: 100
+                  fee: 5
+                  addressType: dogeAddress
+                  mfaCode: '000000'
+                  password: $sb7u26
+                  authToken: Secret authentication token
+                  type: coinbase
+              Transfer using symbol and chain (USDT as ERC-20 over Ethereum chain):
+                value:
+                  data: Some memo
+                  targetAddress: 0x4Df61A3CcfB...
+                  amount: 100
+                  fee: 0
+                  mfaCode: '000000'
+                  chain: ETH
+                  symbol: USDT
+                  authToken: Secret authentication token
+                  type: coinbase
+      responses:
+        '200':
+          description: Transfer successfully initiated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerCreateCryptocurrencyTransactionResponseApiResult'
+              example:
+                content:
+                  failed: false
+                  status: pending
+                  statusDetails: Accepted
+                  transaction:
+                    id: 8E25ACB5-A9E2-4D00-8772-A255F010A2A9
+                    status: pending
+                    type: withdrawal
+                    fromAddress: D5PumQwt...
+                    targetAddress: D641Fmzx...
+                    symbol: DOGE
+                    hash: 3310c6202aaeb44754a118ce11f255382d012060ade0d6d9f...
+                    amount: 105
+                    transactionAmount: 100
+                    createdTimestamp: 1653215600
+                    updatedTimestamp: 1653215600
+                    networkTransactionFee:
+                      amount: 5
+                      symbol: DOGE
+                    confirmations: 3
+                    blockchainMethod: transfer
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Transfer details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: The API key used does not have write permission to call this Mesh endpoint.
+          content:
+            application/json:
+              schema: {}
+      deprecated: true
+      operationId: postApiV1Transfers
+      x-operation-id-source: derived
+  /api/v1/transfers/address/get:
+    post:
+      tags:
+      - Transfers
+      summary: Get deposit address
+      description: Get or generate a cryptocurrency deposit address that can be used to transfer assets to the financial institution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransfersBrokerCryptocurrencyDepositAddressRequest'
+            example:
+              symbol: DOGE
+              chain: DOGE
+              authToken: Secret authentication token
+              type: robinhood
+      responses:
+        '200':
+          description: Address successfully obtained or generation initiated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerCryptocurrencyDepositAddressResponseApiResult'
+              example:
+                content:
+                  symbol: DOGE
+                  address: D641Fmzx...
+                  chain: DOGE
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Request details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '404':
+          description: Address for the required symbol is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: notFound
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+      operationId: postApiV1TransfersAddressGet
+      x-operation-id-source: derived
+  /api/v1/transfers/symbol/details:
+    post:
+      tags:
+      - Transfers
+      summary: Get details of asset
+      description: 'Get details of the asset for deposit or withdrawal. For example, several exchanges support same tokens over multiple
+
+        blockchains, and thus require the name of chain to be supplied for transfers. This endpoint allows getting such details.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TransfersBrokerCryptocurrencyDepositAddressRequest'
+            example:
+              symbol: DOGE
+              chain: DOGE
+              authToken: Secret authentication token
+              type: robinhood
+      responses:
+        '200':
+          description: Address successfully obtained or generation initiated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BBrokerCryptocurrencySymbolDetailsResponseApiResult'
+              example:
+                content:
+                  symbol: ETH
+                  addressTypes:
+                  - ethAddress
+                  chains:
+                  - chain: Ethereum
+                    fee: 1.0e-05
+                status: ok
+                message: ''
+                errorType: ''
+        '400':
+          description: Request details are not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: badRequest
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '404':
+          description: Asset details for provided symbol are not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: notFound
+                message: Error message
+                displayMessage: Optional display message
+                errorType: missingField
+        '401':
+          description: 'Unauthorized: Client Id or Client Secret are not correct or missing.'
+          content:
+            application/json:
+              schema: {}
+      operationId: postApiV1TransfersSymbolDetails
+      x-operation-id-source: derived
+components:
+  schemas:
+    BrokerCryptocurrencyChain:
+      type: object
+      properties:
+        chain:
+          type:
+          - string
+          - 'null'
+          description: Name of the chain, should be provided when initiating a transfer
+        feeDescription:
+          type:
+          - string
+          - 'null'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Notes or tips provided by the integration
+        fee:
+          type:
+          - number
+          - 'null'
+          format: double
+        minWithdrawAmount:
+          type:
+          - number
+          - 'null'
+          format: double
+        maxWithdrawAmount:
+          type:
+          - number
+          - 'null'
+          format: double
+        networkId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+      additionalProperties: false
+    B2BBrokerCryptocurrencyDepositAddressResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptocurrencyDepositAddressResponse'
+      additionalProperties: false
+    TransfersBrokerTransactionsListRequest:
+      required:
+      - authToken
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```Paxos```
+
+            ```CoinbasePrime```
+
+            ```DeFiWallet```
+
+            '
+        count:
+          type: integer
+          description: 'Number of records to include in the response. <br />
+
+            Default: `100` <br />
+
+            Maximum: `250`'
+          format: int32
+        cursor:
+          type:
+          - string
+          - 'null'
+          description: 'The cursor to retrieve the next page of transactions.
+
+            Providing it will cause the response to only return changes after this update.
+
+            If this field is not provided, the history of transactions will be returned starting with the first-added transaction.'
+        statuses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerCryptocurrencyTransactionStatus'
+          description: If this value is provided, result set is filtered to only include transaction with the provided statuses.
+        cryptocurrencyAddressType:
+          allOf:
+          - $ref: '#/components/schemas/CryptocurrencyAddressType'
+          description: For cryptocurrency address the type of address is required.
+        from:
+          type:
+          - integer
+          - 'null'
+          description: If this value is provided, result set is filtered to only include transactions created after this timestamp
+          format: int64
+      additionalProperties: false
+    B2BBrokerCreateCryptocurrencyTransactionResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCreateCryptocurrencyTransactionResponse'
+      additionalProperties: false
+    BrokerType:
+      enum:
+      - robinhood
+      - eTrade
+      - alpaca
+      - tdAmeritrade
+      - weBull
+      - stash
+      - interactiveBrokers
+      - public
+      - coinbase
+      - kraken
+      - coinbasePro
+      - cryptoCom
+      - openSea
+      - binanceUs
+      - gemini
+      - cryptocurrencyAddress
+      - cryptocurrencyWallet
+      - okCoin
+      - bittrex
+      - kuCoin
+      - etoro
+      - cexIo
+      - binanceInternational
+      - bitstamp
+      - gateIo
+      - acorns
+      - okx
+      - bitFlyer
+      - coinlist
+      - huobi
+      - bitfinex
+      - deFiWallet
+      - krakenDirect
+      - vanguard
+      - binanceInternationalDirect
+      - bitfinexDirect
+      - bybit
+      - paxos
+      - coinbasePrime
+      type: string
+    TransfersBrokerCryptocurrencyTransactionDetailsRequest:
+      required:
+      - authToken
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```Paxos```
+
+            ```CoinbasePrime```
+
+            ```DeFiWallet```
+
+            '
+        addressType:
+          allOf:
+          - $ref: '#/components/schemas/CryptocurrencyAddressType'
+          description: Type of the address of the transferred asset. Can be used instead of the `Symbol` field.
+        transactionId:
+          type:
+          - string
+          - 'null'
+          description: Transaction Id by the financial institution
+        transactionHash:
+          type:
+          - string
+          - 'null'
+          description: Hash of the transaction on the blockchain
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Symbol of the transferred asset. Can be provided instead of the `AddressType` field.
+      additionalProperties: false
+    B2BBrokerCryptocurrencyDepositAddressResponse:
+      type: object
+      properties:
+        symbol:
+          type:
+          - string
+          - 'null'
+        address:
+          type:
+          - string
+          - 'null'
+        chain:
+          type:
+          - string
+          - 'null'
+        memo:
+          type:
+          - string
+          - 'null'
+        minimumDepositAmount:
+          type:
+          - string
+          - 'null'
+        networkId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        brokerResponseStatus:
+          allOf:
+          - $ref: '#/components/schemas/BrokerResponseStatus'
+        errorMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BrokerCryptocurrencyTransactionType:
+      enum:
+      - unknown
+      - deposit
+      - withdrawal
+      type: string
+    B2BBrokerCryptocurrencySymbolDetailsResponse:
+      type: object
+      properties:
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Requested symbol
+        addressTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CryptocurrencyAddressType'
+          description: Supported address types
+        chains:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BrokerCryptocurrencyChain'
+          description: Supported chains. One of the values should be provided to execute transfers
+      additionalProperties: false
+    B2BBrokerTransactionsListModelApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerTransactionsListModel'
+      additionalProperties: false
+    BrokerCryptocurrencyTransactionStatus:
+      enum:
+      - unknown
+      - failed
+      - frozen
+      - succeeded
+      - mfaRequired
+      - pending
+      - expired
+      - canceled
+      - waitingForSignature
+      - waitingForClearing
+      - awaitingApproval
+      - awaitingConfirmation
+      - awaitingVerification
+      - rejected
+      - pendingCancel
+      - emailVerification
+      - deviceConfirmationRequired
+      - mfaFailed
+      - addressWhitelistRequired
+      - secondMfaRequired
+      type: string
+    BrokerCryptocurrencyTransactionNetworkFee:
+      type: object
+      properties:
+        gasPrice:
+          type:
+          - number
+          - 'null'
+          format: double
+        gasUsed:
+          type:
+          - number
+          - 'null'
+          format: double
+        amount:
+          type:
+          - number
+          - 'null'
+          format: double
+        symbol:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    MfaType:
+      enum:
+      - phone
+      - email
+      - totp
+      - phoneAndEmail
+      - requireNextSecurityQuestion
+      - readEmail
+      - face
+      type: string
+    B2BBrokerTransactionsListModel:
+      type: object
+      properties:
+        transfers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/B2BBrokerCryptocurrencyTransaction'
+          description: List of obtained transfers.
+        total:
+          type: integer
+          description: Total amount of records.
+          format: int64
+        cursor:
+          type:
+          - string
+          - 'null'
+          description: The cursor to retrieve the next page of transfers.
+        earliestTimestamp:
+          type: integer
+          description: Earliest transfer timestamp.
+          format: int64
+      additionalProperties: false
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      type: string
+    B2BBrokerCryptocurrencySymbolDetailsResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptocurrencySymbolDetailsResponse'
+      additionalProperties: false
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+      additionalProperties: false
+    B2BBrokerCryptocurrencyTransactionApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptocurrencyTransaction'
+      additionalProperties: false
+    B2BBrokerCryptocurrencyTransaction:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the transfer, if provided by the financial institution
+        status:
+          enum:
+          - unknown
+          - failed
+          - frozen
+          - succeeded
+          - mfaRequired
+          - pending
+          - expired
+          - canceled
+          - waitingForSignature
+          - waitingForClearing
+          - awaitingApproval
+          - awaitingConfirmation
+          - awaitingVerification
+          - rejected
+          - pendingCancel
+          - emailVerification
+          - deviceConfirmationRequired
+          - mfaFailed
+          - addressWhitelistRequired
+          - secondMfaRequired
+          allOf:
+          - $ref: '#/components/schemas/BrokerCryptocurrencyTransactionStatus'
+          description: Current status of the transaction
+        statusDetails:
+          type:
+          - string
+          - 'null'
+          description: Details of the current status of the transfer, as provided by the financial institution
+        type:
+          enum:
+          - unknown
+          - deposit
+          - withdrawal
+          allOf:
+          - $ref: '#/components/schemas/BrokerCryptocurrencyTransactionType'
+          description: The direction of the transaction
+        fromAddress:
+          type:
+          - string
+          - 'null'
+          description: Address where the transaction was sent from
+        targetAddress:
+          type:
+          - string
+          - 'null'
+          description: Address where the transaction was sent to
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Ticker of the transaction
+        chain:
+          type:
+          - string
+          - 'null'
+          description: Crypto Chain the transaction belongs to
+        memo:
+          type:
+          - string
+          - 'null'
+          description: Memo of the transaction (also called "Tag")
+        hash:
+          type:
+          - string
+          - 'null'
+          description: Hash of the transaction
+        amount:
+          type: number
+          description: Full amount affected the balance, typically transaction amount plus fee
+          format: double
+        transactionAmount:
+          type:
+          - number
+          - 'null'
+          description: Transaction amount
+          format: double
+        createdTimestamp:
+          type: integer
+          description: Unix timestamp in seconds indicating when the transaction was created
+          format: int64
+        updatedTimestamp:
+          type: integer
+          description: Unix timestamp in seconds indicating when the transaction was last updated
+          format: int64
+        networkTransactionFee:
+          allOf:
+          - $ref: '#/components/schemas/BrokerCryptocurrencyTransactionNetworkFee'
+          description: Fee taken by the network
+        transferFee:
+          type:
+          - number
+          - 'null'
+          description: Fee taken by the financial institution
+          format: double
+        confirmations:
+          type:
+          - integer
+          - 'null'
+          description: Number of confirmations on the blockchain
+          format: int64
+        blockchainMethodName:
+          type:
+          - string
+          - 'null'
+          description: Name of the executed blockchain function based on decoded input data
+        blockchainMethod:
+          enum:
+          - transfer
+          - swap
+          - mint
+          - withdraw
+          - claimRewards
+          - deposit
+          - approve
+          - forgeToken
+          - multicall
+          - migrateToken
+          - claim
+          - openSeaTransfer
+          - cancel
+          - commit
+          - run
+          - repay
+          - execute
+          - stake
+          - merge
+          allOf:
+          - $ref: '#/components/schemas/BrokerCryptocurrencyTransactionBlockchainMethod'
+          description: Executed blockchain function based on decoded input data. Not guaranteed to be identified
+      additionalProperties: false
+    TransfersBrokerCryptocurrencyDepositAddressRequest:
+      required:
+      - authToken
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```Paxos```
+
+            ```CoinbasePrime```
+
+            ```DeFiWallet```
+
+            '
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: 'Symbol of the required cryptocurrency, e.g. ETH or BTC.
+
+            Can be used instead of the `AddressType` field.'
+        addressType:
+          allOf:
+          - $ref: '#/components/schemas/CryptocurrencyAddressType'
+          description: 'Type of the address of symbol to be transferred. Providing `EthAddress` will assume a transfer of ETH over Ethereum blockchain.
+
+            Can be used instead of `Symbol` field.'
+        chain:
+          type:
+          - string
+          - 'null'
+          description: Chain of the required cryptocurrency, e.g. USDT has USDT-ERC20, USDT-TRC20, and USDT-Omni
+        mfaCode:
+          type:
+          - string
+          - 'null'
+          description: Some of integrations require MFA code to create a deposit address, e.g. KrakenDirect
+      additionalProperties: false
+    TransfersBrokerCreateCryptocurrencyTransactionRequest:
+      required:
+      - authToken
+      - targetAddress
+      - type
+      type: object
+      properties:
+        authToken:
+          minLength: 1
+          type: string
+          description: Auth token that allows connecting to the target institution
+        type:
+          enum:
+          - robinhood
+          - eTrade
+          - alpaca
+          - tdAmeritrade
+          - weBull
+          - stash
+          - interactiveBrokers
+          - public
+          - coinbase
+          - kraken
+          - coinbasePro
+          - cryptoCom
+          - openSea
+          - binanceUs
+          - gemini
+          - cryptocurrencyAddress
+          - cryptocurrencyWallet
+          - okCoin
+          - bittrex
+          - kuCoin
+          - etoro
+          - cexIo
+          - binanceInternational
+          - bitstamp
+          - gateIo
+          - acorns
+          - okx
+          - bitFlyer
+          - coinlist
+          - huobi
+          - bitfinex
+          - deFiWallet
+          - krakenDirect
+          - vanguard
+          - binanceInternationalDirect
+          - bitfinexDirect
+          - bybit
+          - paxos
+          - coinbasePrime
+          allOf:
+          - $ref: '#/components/schemas/BrokerType'
+          description: 'Type of the institution to connect
+
+
+            ### Supported integrations:
+
+            ```Robinhood```
+
+            ```Coinbase```
+
+            ```Kraken```
+
+            ```CoinbasePro```
+
+            ```CryptoCom```
+
+            ```Binance```
+
+            ```Gemini```
+
+            ```OkCoin```
+
+            ```KuCoin```
+
+            ```BinanceInternational```
+
+            ```Bitstamp```
+
+            ```GateIo```
+
+            ```Okx```
+
+            ```Huobi```
+
+            ```Bitfinex```
+
+            ```KrakenDirect```
+
+            ```BinanceInternationalDirect```
+
+            ```Bybit```
+
+            ```Paxos```
+
+            ```CoinbasePrime```
+
+            ```DeFiWallet```
+
+            '
+        data:
+          type:
+          - string
+          - 'null'
+          description: Additional data to send on-chain (optional, depends on an integration)
+        targetAddress:
+          minLength: 1
+          type: string
+          description: Target address to transfer the asset to
+        amount:
+          type: number
+          description: Amount to transfer
+          format: double
+        fee:
+          type: number
+          description: On-chain fee (optional, depends on an integration)
+          format: double
+        addressType:
+          allOf:
+          - $ref: '#/components/schemas/CryptocurrencyAddressType'
+          description: 'Type of the address of symbol to be transferred. Providing `EthAddress` will initiate a transfer of ETH over Ethereum blockchain.
+
+            Can be used instead of `Symbol` and `Chain` fields.
+
+            To transfer assets over non-default chains (e.g. sending USDT over ERC20) please `Symbol` and `Chain` fields.'
+        mfaCode:
+          type:
+          - string
+          - 'null'
+          description: 2 Factor auth code (optional, depends on an integration)
+        mfaType:
+          allOf:
+          - $ref: '#/components/schemas/MfaType'
+          description: 2 Factor auth type (optional, depends on an integration)
+        verificationSteps:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MfaType'
+        password:
+          type:
+          - string
+          - 'null'
+          description: Password or pass-phrase, required to send transfers (optional, depends on an integration)
+        chain:
+          type:
+          - string
+          - 'null'
+          description: 'Custom chain name, required by some of the integrations. E.g. USDT can be sent over USDT-ERC20, USDT-TRC20, and USDT-Omni.
+
+            Can be used to transfer assets over non-default chains (e.g. sending USDT over ERC20).
+
+            Please use `symbol/details` endpoint to get the list of all possible chains.'
+        memo:
+          type:
+          - string
+          - 'null'
+          description: Memo (also called "Tag") - address remark.
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: Symbol to be transferred. Can be provided instead of the `AddressType` field.
+        challengeId:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    B2BBrokerCreateCryptocurrencyTransactionResponse:
+      type: object
+      properties:
+        transactionId:
+          type:
+          - string
+          - 'null'
+          description: Transaction Id by the financial institution
+        failed:
+          type: boolean
+        mfaType:
+          allOf:
+          - $ref: '#/components/schemas/MfaType'
+        verificationSteps:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MfaType'
+        qrCode:
+          type:
+          - string
+          - 'null'
+        qrCodeLink:
+          type:
+          - string
+          - 'null'
+        status:
+          enum:
+          - unknown
+          - failed
+          - frozen
+          - succeeded
+          - mfaRequired
+          - pending
+          - expired
+          - canceled
+          - waitingForSignature
+          - waitingForClearing
+          - awaitingApproval
+          - awaitingConfirmation
+          - awaitingVerification
+          - rejected
+          - pendingCancel
+          - emailVerification
+          - deviceConfirmationRequired
+          - mfaFailed
+          - addressWhitelistRequired
+          - secondMfaRequired
+          allOf:
+          - $ref: '#/components/schemas/BrokerCryptocurrencyTransactionStatus'
+          description: Status of the operation
+        statusDetails:
+          type:
+          - string
+          - 'null'
+          description: Details of the current status of the transfer, as provided by the financial institution
+        transaction:
+          allOf:
+          - $ref: '#/components/schemas/B2BBrokerCryptocurrencyTransaction'
+          description: Details of the created transaction
+      additionalProperties: false
+    BrokerResponseStatus:
+      enum:
+      - unknown
+      - mfaRequired
+      - kycRequired
+      type: string
+    BrokerCryptocurrencyTransactionBlockchainMethod:
+      enum:
+      - transfer
+      - swap
+      - mint
+      - withdraw
+      - claimRewards
+      - deposit
+      - approve
+      - forgeToken
+      - multicall
+      - migrateToken
+      - claim
+      - openSeaTransfer
+      - cancel
+      - commit
+      - run
+      - repay
+      - execute
+      - stake
+      - merge
+      type: string
+    CryptocurrencyAddressType:
+      enum:
+      - ethAddress
+      - btcAddress
+      - ltcAddress
+      - solAddress
+      - algoAddress
+      - celoAddress
+      - cardanoAddress
+      - polygonAddress
+      - bnbAddress
+      - elrondAddress
+      - neoAddress
+      - xrpAddress
+      - flowAddress
+      - harmonyOneAddress
+      - tronAddress
+      - dogeAddress
+      - opAddress
+      type: string
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

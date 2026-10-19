@@ -1,0 +1,1278 @@
+openapi: 3.2.0
+info:
+  title: Mesh Connect Integration Headless Bridging API
+  description: 'Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+- url: https://sandbox-integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: Headless Bridging
+  description: Mesh's cross-chain bridging engine as a pure API, with no Mesh-hosted UI or SDK. Discover bridged routes, quote a pay-in amount and generate a single-use deposit address that bridges funds to the destination the user selected. Enabled per client; see https://docs.meshconnect.com/resources/headless-bridging.
+paths:
+  /api/v1/bridging/routes/deposit:
+    post:
+      tags:
+      - Headless Bridging
+      summary: Discover pay-in (source) bridging routes for one or more payout destinations
+      description: 'Networks and assets use CAIP-2 + token symbol.
+
+        Use `optimized` to collapse to one destination per distinct source (default) or return every matching origin→destination pair.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/GetBridgingDepositRoutesRequest'
+              description: Request body for `POST /api/v1/bridging/routes/deposit` — discover pay-in (source) options for fixed payout destinations.
+      responses:
+        '200':
+          description: Routes retrieved successfully. An empty `routes` array means no routes are currently available for the given destinations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBridgingRoutesResponseApiResult'
+        '400':
+          description: Request is missing required fields or contains invalid data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: Unauthorized — Client ID or Client Secret are missing or incorrect.
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Headless bridging is not enabled for this client (`permissionDenied`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1BridgingRoutesDeposit
+      x-operation-id-source: derived
+  /api/v1/bridging/routes/withdrawal:
+    post:
+      tags:
+      - Headless Bridging
+      summary: Discover payout (destination) bridging routes for fixed omnibus (source) legs
+      description: 'Provide at least one `sources` entry (CAIP-2 network + asset). When `optimized` is `true` (default),
+
+        returns at most one source per distinct destination. Set `optimized` to `false`
+
+        to list every matching origin→destination pair for those sources.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/GetBridgingWithdrawalRoutesRequest'
+              description: 'Request body for `POST /api/v1/bridging/routes/withdrawal` — discover payout (destination) options
+
+                when funding from fixed omnibus (source) legs.'
+      responses:
+        '200':
+          description: Routes retrieved successfully. An empty `routes` array means no routes are currently available for the given sources.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBridgingRoutesResponseApiResult'
+        '400':
+          description: Request is missing required fields or contains invalid data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: Unauthorized — Client ID or Client Secret are missing or incorrect.
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Headless bridging is not enabled for this client (`permissionDenied`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1BridgingRoutesWithdrawal
+      x-operation-id-source: derived
+  /api/v1/bridging/address:
+    post:
+      tags:
+      - Headless Bridging
+      summary: Create a one-time bridging deposit address for a selected origin→destination…
+      description: 'Returns a single-use address on the origin network for the origin asset. Funds must be
+
+        sent to that address on that chain; Mesh detects the deposit, executes the bridge, and delivers
+
+        to `destination.address` on the destination network.
+
+
+        **Deposit-style (user pay-in):** discover routes with `POST /api/v1/bridging/routes/deposit`.
+
+        The end user sends from their wallet to the returned deposit address.
+
+
+        **Withdrawal-style (platform pay-in):** discover routes with `POST /api/v1/bridging/routes/withdrawal`
+
+        to pair an omnibus `origin` with the user’s chosen destination. Your platform sends the origin
+
+        asset from that omnibus wallet to the deposit address; the user’s withdrawal address is `destination.address`.
+
+
+        **Idempotency:** a `transactionId` is single-use per `userId`. While the transfer is still
+
+        pending, re-submitting the same `transactionId` + `userId` with the same origin, destination and
+
+        address returns the previously created address unchanged (same `transferId`, same
+
+        `expirationTime`) rather than generating a new one, so network-error retries are safe. Re-submitting
+
+        with a different origin, destination or address is a `400`. Once the transfer has reached a terminal
+
+        state (succeeded, failed or expired), the same `transactionId` returns `409`; use a new
+
+        `transactionId` for a new address.
+
+
+        **Expiry:** `constraints.expirationTime` is fixed at creation (6 hours by default) and is the point at
+
+        which Mesh stops tracking the address. A transfer that has not been funded by then is marked failed; a
+
+        pay-in that arrives before then is bridged and the transfer moves to succeeded as soon as it settles. Do
+
+        not display or use the address after `expirationTime`: the provider may still bridge funds sent
+
+        later, but Mesh will not track them automatically.
+
+
+        **Minimum amount:** `constraints.minimumAmount` is the smallest pay-in (in the origin asset) Mesh
+
+        accepts on this route: the stricter of the route''s configured minimum and the platform USD floor
+
+        converted at the current price. It is the same value `POST /api/v1/bridging/quote` returns in its
+
+        `constraints` and enforces with `amountBelowMinimum`. `constraints.maximumAmount` is the
+
+        platform USD cap converted at the current price (enforced on `/quote` with `amountExceedsMaximum`);
+
+        the provider''s available liquidity may be lower and surfaces at quote time the same way.
+
+
+        **Typical flow:**
+
+        1. Discover routes (`routes/deposit` or `routes/withdrawal`) and fix `origin` + `destination`
+
+        (destination includes the recipient withdrawal address when applicable).
+
+        2. Call this endpoint with those values.
+
+        3. Show the deposit address, constraints (`minimumAmount`, `expirationTime`, `singleUseAddress`),
+
+        and warnings to whoever will broadcast the pay-in (end user or your custody system).
+
+        4. After the pay-in is sent on-chain, Mesh completes the bridge to the destination address.
+
+        5. Use `transferId` from `tracking` for webhooks or the transfer status API.
+
+
+        **Important:** the deposit address is single-use; do not reuse it.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBridgedAddressRequest'
+              description: 'Request body for `POST /api/v1/bridging/address`.
+
+
+
+                Used for both pay-in (deposit) and platform-led pay-in (withdrawal-style) bridging: the address returned
+
+                is always on `origin`; funds must be sent there before Mesh can deliver to `destination`.
+
+
+
+                This endpoint is idempotent per `transactionId` scoped to `userId` and B2B client/environment:
+
+                retries with the same origin, destination (network, asset, and `address`),
+
+                and route return the same deposit address. Reusing the same `transactionId` with any different origin or
+
+                destination (network, asset, or address) returns an error and does not create a second transfer preview.
+
+                '
+      responses:
+        '200':
+          description: Bridging deposit address created or retrieved (idempotent hit).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBridgedAddressResponseApiResult'
+        '400':
+          description: Request is missing required fields, the network is unknown, no route exists for the given origin/destination pair, or the `transactionId` was already used with a different origin, destination or address.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: Unauthorized — Client ID or Client Secret are missing or incorrect.
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Headless bridging is not enabled for this client (`permissionDenied`), or the API key does not have the write scope required for this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '409':
+          description: The `transactionId` was already used for a transfer that has since completed, failed or expired. Use a new `transactionId`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1BridgingAddress
+      x-operation-id-source: derived
+  /api/v1/bridging/quote:
+    post:
+      tags:
+      - Headless Bridging
+      summary: Get an indicative quote for bridging a given pay-in amount on a configured…
+      description: 'Stateless: no deposit address is minted and no transfer is created. Use this while the end user is
+
+        choosing an amount, then call `POST /api/v1/bridging/address` once they confirm.
+
+
+        `amount` is denominated in the `origin` asset (what will be sent to the deposit address).
+
+        The response returns `destination.estimatedAmount` (net of provider fees), `destination.minimumAmount`
+
+        (the provider''s indicative minimum for this quote at the configured slippage, when reported), and the fee
+
+        lines that produced the estimate. The quote is not bound to a later `/address` call, which obtains a
+
+        fresh quote that may differ.
+
+
+        `constraints.minimumAmount` is the smallest pay-in Mesh accepts on this route (in the origin asset);
+
+        an `amount` below it is rejected with `400 amountBelowMinimum` before the provider is consulted,
+
+        and the same value is returned by `POST /api/v1/bridging/address`. `constraints.maximumAmount` is
+
+        the platform USD cap converted at the current price; an amount above it, or above the provider''s available
+
+        liquidity, is rejected with `400 amountExceedsMaximum`.
+
+
+        **Important:** the estimate is indicative. The deposit address accepts any amount and the bridge is
+
+        priced on what actually arrives, so fees and rates can move between quoting and settlement.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/GetBridgingQuoteRequest'
+              description: 'Request body for `POST /api/v1/bridging/quote`.
+
+
+
+                Prices a bridge for a caller-supplied pay-in amount without minting a deposit address or creating a
+
+                transfer. Call it while the end user is still choosing an amount; call `POST /api/v1/bridging/address`
+
+                only once they confirm.
+
+
+
+                The result is indicative. The deposit address returned by `/address` accepts any amount and the
+
+                bridge provider prices what actually arrives at fill time.
+
+                '
+      responses:
+        '200':
+          description: Quote produced.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBridgingQuoteResponseApiResult'
+        '400':
+          description: Request is missing required fields, the network is unknown, no route exists for the given pair, or the amount is below the minimum (`amountBelowMinimum`) or above the maximum / provider's available liquidity (`amountExceedsMaximum`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+        '401':
+          description: Unauthorized — Client ID or Client Secret are missing or incorrect.
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: Headless bridging is not enabled for this client (`permissionDenied`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResult'
+              example:
+                status: ok
+                message: ''
+                errorHash: 1cbbee0c
+                teamCode: P4
+                errorType: ''
+      operationId: postApiV1BridgingQuote
+      x-operation-id-source: derived
+components:
+  schemas:
+    ApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+      additionalProperties: false
+    BridgingAddress:
+      required:
+      - address
+      type: object
+      properties:
+        address:
+          type:
+          - string
+          - 'null'
+          description: 'The on-chain deposit address to send source funds to.
+
+            This address is single-use — do not reuse it across transfers.'
+      additionalProperties: false
+      description: 'A one-time deposit address generated by the bridge provider.
+
+        The end user must send funds to this address on the correct source network.'
+    BridgingDestinationSpec:
+      required:
+      - asset
+      - network
+      type: object
+      properties:
+        network:
+          minLength: 1
+          type: string
+          description: 'CAIP-2 network identifier for the token''s network.
+
+
+            Examples: `eip155:1` (Ethereum Mainnet), `eip155:137` (Polygon),
+
+            `eip155:8453` (Base), `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` (Solana Mainnet).'
+        asset:
+          minLength: 1
+          type: string
+          description: Token symbol, case-insensitive (e.g. `USDC`, `ETH`, `MATIC`).
+      additionalProperties: false
+      description: Identifies a token on a specific network using a CAIP-2 network identifier.
+    CreateBridgedAddressResponse:
+      required:
+      - constraints
+      - selectedRoute
+      - tracking
+      - warnings
+      type: object
+      properties:
+        selectedRoute:
+          allOf:
+          - $ref: '#/components/schemas/HeadlessBridgingRouteWithAddress'
+          description: 'The confirmed route for this bridge: origin token/network, the deposit address to send to,
+
+            and the destination token/network/address that will receive the funds.'
+        constraints:
+          allOf:
+          - $ref: '#/components/schemas/BridgingAddressConstraintsDto'
+          description: 'Operational constraints for this deposit address — minimum amount, expiry, and address reuse policy.
+
+            Surface these before the pay-in is broadcast (end user or your custody system).'
+        tracking:
+          allOf:
+          - $ref: '#/components/schemas/BridgingTracking'
+          description: 'Internal IDs for tracking this bridge transfer. Store these to correlate webhook events
+
+            and status updates back to this specific transfer.'
+        warnings:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Operational warnings to show before the pay-in is sent (single-use address, correct source network, fees, minimums).
+      additionalProperties: false
+      description: 'Response body for `POST /api/v1/bridging/address`.
+
+
+
+        Contains the deposit address on the origin chain, constraints, tracking IDs, and warnings so you can
+
+        either guide an end user to broadcast the pay-in or have your platform/custody system broadcast the
+
+        pay-in to the origin-chain deposit address in a withdrawal-style flow, then track delivery to the
+
+        destination address to completion.
+
+        '
+    BridgingQuoteDestinationLeg:
+      required:
+      - address
+      - asset
+      - network
+      type: object
+      properties:
+        network:
+          type:
+          - string
+          - 'null'
+          description: CAIP-2 network identifier of the payout network.
+        asset:
+          type:
+          - string
+          - 'null'
+          description: Payout asset symbol.
+        address:
+          type:
+          - string
+          - 'null'
+          description: Recipient address the quote was priced for.
+        estimatedAmount:
+          type: number
+          description: 'Estimated amount the recipient receives, in the payout asset, net of provider fees.
+
+            Indicative only; the fill is priced on the amount that actually arrives.'
+          format: double
+        minimumAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Indicative minimum for this quote at the configured slippage tolerance, when the provider reports one.
+
+            This quote is not bound to a later `POST /api/v1/bridging/address` call, which obtains a fresh quote
+
+            that may differ; treat it as a snapshot, not a committed floor for settlement.'
+          format: double
+      additionalProperties: false
+      description: Payout leg of a headless bridging quote.
+    BridgingDestinationWithAddressSpec:
+      required:
+      - address
+      - asset
+      - network
+      type: object
+      properties:
+        network:
+          minLength: 1
+          type: string
+          description: 'CAIP-2 network identifier for the token''s network.
+
+
+            Examples: `eip155:1` (Ethereum Mainnet), `eip155:137` (Polygon),
+
+            `eip155:8453` (Base), `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` (Solana Mainnet).'
+        asset:
+          minLength: 1
+          type: string
+          description: Token symbol, case-insensitive (e.g. `USDC`, `ETH`, `MATIC`).
+        address:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: 'On-chain wallet address on the destination network that will receive the bridged funds.
+
+            Must be a valid address for the specified `network`.'
+      additionalProperties: false
+      description: 'A bridging destination (network and asset) together with the on-chain wallet address where
+
+        bridged funds should be delivered.'
+    BridgingAddressConstraintsDto:
+      type: object
+      properties:
+        minimumAmount:
+          type:
+          - string
+          - 'null'
+          description: 'Minimum amount the user must send, expressed as a decimal string in the source asset: the stricter of the
+
+            route''s configured minimum and the platform USD floor converted at the current price.
+
+            `"0"` when neither applies (e.g. price unavailable and no route minimum).'
+        maximumAmount:
+          type:
+          - string
+          - 'null'
+          description: 'Maximum amount the user may send, expressed as a decimal string in the source asset: the platform USD cap
+
+            converted at the current price. `null` if no maximum can be expressed, e.g. price unavailable
+
+            (serialized as JSON `null` despite global omit-null settings).'
+        expirationTime:
+          type:
+          - integer
+          - 'null'
+          description: 'Unix timestamp (seconds) at which the deposit address expires.
+
+            `null` if the address does not expire.
+
+            Funds sent after this time may not be processed.'
+          format: int64
+        singleUseAddress:
+          type: boolean
+          description: 'When `true`, this deposit address is single-use and must not be reused across transfers.
+
+            Sending funds to an already-used address may result in loss of funds.'
+      additionalProperties: false
+      description: 'Operational constraints that apply to a bridging deposit address.
+
+        Present these to the end user to avoid failed or stuck transfers.'
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      - unavailableForLegalReasons
+      type: string
+    BridgingQuoteOriginLeg:
+      required:
+      - asset
+      - network
+      type: object
+      properties:
+        network:
+          type:
+          - string
+          - 'null'
+          description: CAIP-2 network identifier of the pay-in network.
+        asset:
+          type:
+          - string
+          - 'null'
+          description: Pay-in asset symbol.
+        amount:
+          type: number
+          description: Amount the quote was priced for, in the pay-in asset.
+          format: double
+      additionalProperties: false
+      description: Pay-in leg of a headless bridging quote.
+    GetBridgingDepositRoutesRequest:
+      required:
+      - destinations
+      type: object
+      properties:
+        destinations:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/BridgingDestinationSpec'
+          description: 'Destination networks and assets Mesh should match against configured bridging directions
+
+            (CAIP-2 network + symbol per entry). At least one is required.'
+        optimized:
+          type: boolean
+          description: 'When true (default), return at most one <b>destination</b> per distinct
+
+            <b>source</b>. When false, return every matching origin→destination pair.'
+      additionalProperties: false
+      description: Request body for `POST /api/v1/bridging/routes/deposit` — discover pay-in (source) options for fixed payout destinations.
+    BridgingQuoteFeeItem:
+      required:
+      - asset
+      - label
+      type: object
+      properties:
+        kind:
+          enum:
+          - originGas
+          - destinationGas
+          - providerRelayerService
+          - providerRelayerGas
+          - providerLP
+          - providerPlatformFixed
+          - integrator
+          - subsidized
+          - providerAggregate
+          - other
+          allOf:
+          - $ref: '#/components/schemas/BridgingFeeKind'
+          description: Fee category.
+        label:
+          type:
+          - string
+          - 'null'
+          description: Provider label for this fee.
+        amount:
+          type:
+          - number
+          - 'null'
+          description: Fee amount in `asset` units, when the provider reports it.
+          format: double
+        asset:
+          type:
+          - string
+          - 'null'
+          description: Symbol the fee is denominated in.
+        amountUsd:
+          type:
+          - number
+          - 'null'
+          description: Fee amount in USD, when the provider reports it.
+          format: double
+        includedInEstimate:
+          type: boolean
+          description: "`true` when this fee is already deducted from\n            `destination.estimatedAmount`; `false` when it is informational\n            (e.g. origin gas paid by the sender)."
+      additionalProperties: false
+      description: One fee line of a headless bridging quote.
+    GetBridgingQuoteResponse:
+      required:
+      - constraints
+      - destination
+      - fees
+      - origin
+      - warnings
+      type: object
+      properties:
+        origin:
+          allOf:
+          - $ref: '#/components/schemas/BridgingQuoteOriginLeg'
+          description: The pay-in leg with the amount the quote was priced for.
+        destination:
+          allOf:
+          - $ref: '#/components/schemas/BridgingQuoteDestinationLeg'
+          description: The payout leg with the estimated and minimum amounts the recipient should receive.
+        fees:
+          allOf:
+          - $ref: '#/components/schemas/BridgingQuoteFees'
+          description: Provider fees that produce `destination.estimatedAmount`.
+        rate:
+          type: number
+          description: Destination units per one origin unit, net of fees (`estimatedAmount / amount`).
+          format: double
+        constraints:
+          allOf:
+          - $ref: '#/components/schemas/BridgingQuoteConstraintsDto'
+          description: 'Pay-in amount limits for this route. The same values are returned as `constraints` by
+
+            `POST /api/v1/bridging/address`; a quote below `constraints.minimumAmount`
+
+            is rejected with `amountBelowMinimum` before the provider is consulted.'
+        quotedAt:
+          type: integer
+          description: Unix timestamp (seconds) at which this quote was produced. Re-quote if the user lingers.
+          format: int64
+        warnings:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Human-readable caveats to surface alongside the estimate.
+      additionalProperties: false
+      description: 'Response body for `POST /api/v1/bridging/quote`.
+
+
+
+        An indicative price for bridging `origin` into `destination`. Nothing is
+
+        persisted and no deposit address is created. Amounts are in the respective leg''s asset.
+
+        '
+    GetBridgingQuoteResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/GetBridgingQuoteResponse'
+          description: 'Response body for `POST /api/v1/bridging/quote`.
+
+
+
+            An indicative price for bridging `origin` into `destination`. Nothing is
+
+            persisted and no deposit address is created. Amounts are in the respective leg''s asset.
+
+            '
+      additionalProperties: false
+    CreateBridgedAddressRequest:
+      required:
+      - destination
+      - origin
+      - transactionId
+      - userId
+      type: object
+      properties:
+        userId:
+          maxLength: 384
+          minLength: 1
+          type: string
+          description: 'Your platform''s unique identifier for the end user initiating this transfer.
+
+            Combined with `transactionId` to enforce idempotency.'
+        transactionId:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: 'Your platform''s unique identifier for this transfer attempt.
+
+            Use a stable, collision-free ID (e.g. an order ID or UUID).
+
+            Re-submitting the same value will return the previously created address rather than
+
+            generating a new one.'
+        origin:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationSpec'
+          description: 'The pay-in leg: network and asset whose single-use deposit address is returned.
+
+            In deposit flows this is usually the end-user’s wallet chain and token; in withdrawal-style flows
+
+            it is the omnibus source chosen from `POST /api/v1/bridging/routes/withdrawal`.
+
+            Must match a configured route from deposit or withdrawal route discovery.'
+        destination:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationWithAddressSpec'
+          description: 'The payout leg: network, asset, and address where bridged funds are delivered (e.g. user’s receive
+
+            address in a deposit flow, or their withdrawal address in a platform-led flow).
+
+            Must match a route from deposit or withdrawal route discovery together with `origin`.'
+      additionalProperties: false
+      description: 'Request body for `POST /api/v1/bridging/address`.
+
+
+
+        Used for both pay-in (deposit) and platform-led pay-in (withdrawal-style) bridging: the address returned
+
+        is always on `origin`; funds must be sent there before Mesh can deliver to `destination`.
+
+
+
+        This endpoint is idempotent per `transactionId` scoped to `userId` and B2B client/environment:
+
+        retries with the same origin, destination (network, asset, and `address`),
+
+        and route return the same deposit address. Reusing the same `transactionId` with any different origin or
+
+        destination (network, asset, or address) returns an error and does not create a second transfer preview.
+
+        '
+    CreateBridgedAddressResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/CreateBridgedAddressResponse'
+          description: 'Response body for `POST /api/v1/bridging/address`.
+
+
+
+            Contains the deposit address on the origin chain, constraints, tracking IDs, and warnings so you can
+
+            either guide an end user to broadcast the pay-in or have your platform/custody system broadcast the
+
+            pay-in to the origin-chain deposit address in a withdrawal-style flow, then track delivery to the
+
+            destination address to completion.
+
+            '
+      additionalProperties: false
+    BridgingTracking:
+      required:
+      - transactionId
+      - transferId
+      - userId
+      type: object
+      properties:
+        userId:
+          type:
+          - string
+          - 'null'
+          description: 'The end-user identifier supplied in the originating `POST /api/v1/bridging/address` request.
+
+            Echoed back for client-side reconciliation.'
+        transactionId:
+          type:
+          - string
+          - 'null'
+          description: 'The transfer identifier supplied in the originating `POST /api/v1/bridging/address` request.
+
+            Echoed back for client-side reconciliation.'
+        transferId:
+          type: string
+          description: 'Mesh-internal unique identifier for this transfer record.
+
+            Use this ID when querying transfer status or matching incoming webhook payloads.'
+          format: uuid
+      additionalProperties: false
+      description: 'Identifiers for tracking a headless bridge transfer through the Mesh platform.
+
+        Store these values to correlate webhook events and status polling with the transfer
+
+        initiated by `POST /api/v1/bridging/address`.'
+    HeadlessBridgingRouteWithAddress:
+      required:
+      - bridgingAddress
+      - destination
+      - origin
+      type: object
+      properties:
+        origin:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationSpec'
+          description: 'The pay-in token and network (deposit address is valid for this asset on this chain).
+
+            Who broadcasts the transfer depends on your product (end user or platform omnibus).'
+        bridgingAddress:
+          allOf:
+          - $ref: '#/components/schemas/BridgingAddress'
+          description: 'The one-time deposit address: the pay-in amount must be sent here on the origin network to initiate the bridge.'
+        destination:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationWithAddressSpec'
+          description: The destination token, network, and wallet address where bridged funds will be delivered.
+      additionalProperties: false
+      description: 'The confirmed bridging route for a created address: pay-in leg, one-time deposit address on that leg,
+
+        and delivery leg (network, asset, recipient address).'
+    GetBridgingRoutesResponse:
+      required:
+      - routes
+      type: object
+      properties:
+        routes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/HeadlessBridgingRouteInfo'
+          description: 'All available bridging routes that match the requested destinations.
+
+            Each route describes a unique source token/network combination and the destination
+
+            it can bridge into.
+
+
+            An empty list means no routes are currently available for the requested destinations.'
+      additionalProperties: false
+      description: Response body for `POST /api/v1/bridging/routes/deposit` and `POST /api/v1/bridging/routes/withdrawal`.
+    BridgingQuoteFees:
+      required:
+      - items
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BridgingQuoteFeeItem'
+          description: Individual fee lines reported by the bridge provider.
+        totalUsd:
+          type:
+          - number
+          - 'null'
+          description: Total provider fees in USD that are deducted from the payout, when the provider reports it.
+          format: double
+      additionalProperties: false
+      description: Fee breakdown for a headless bridging quote.
+    GetBridgingRoutesResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/GetBridgingRoutesResponse'
+          description: Response body for `POST /api/v1/bridging/routes/deposit` and `POST /api/v1/bridging/routes/withdrawal`.
+      additionalProperties: false
+    BridgingFeeKind:
+      enum:
+      - originGas
+      - destinationGas
+      - providerRelayerService
+      - providerRelayerGas
+      - providerLP
+      - providerPlatformFixed
+      - integrator
+      - subsidized
+      - providerAggregate
+      - other
+      type: string
+    GetBridgingQuoteRequest:
+      required:
+      - amount
+      - destination
+      - origin
+      type: object
+      properties:
+        origin:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationSpec'
+          description: 'The pay-in leg: network and asset that will be sent to the bridging address.
+
+            Must match a configured route from deposit or withdrawal route discovery.'
+        destination:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationWithAddressSpec'
+          description: 'The payout leg: network, asset, and the address that will receive the bridged funds.
+
+            Must match a route from deposit or withdrawal route discovery together with `origin`.'
+        amount:
+          maximum: 1000000000
+          minimum: 1.0e-18
+          type: number
+          description: 'Amount to be sent, denominated in the `origin` asset (e.g. `100` for 100 USDC).
+
+            Must be greater than zero and at most 1,000,000,000.'
+          format: double
+      additionalProperties: false
+      description: 'Request body for `POST /api/v1/bridging/quote`.
+
+
+
+        Prices a bridge for a caller-supplied pay-in amount without minting a deposit address or creating a
+
+        transfer. Call it while the end user is still choosing an amount; call `POST /api/v1/bridging/address`
+
+        only once they confirm.
+
+
+
+        The result is indicative. The deposit address returned by `/address` accepts any amount and the
+
+        bridge provider prices what actually arrives at fill time.
+
+        '
+    BridgingQuoteConstraintsDto:
+      required:
+      - minimumAmount
+      type: object
+      properties:
+        minimumAmount:
+          type:
+          - string
+          - 'null'
+          description: 'Minimum pay-in amount as a decimal string in the origin asset: the stricter of the route minimum and the
+
+            platform USD floor converted at the current price. `"0"` when neither applies.'
+        maximumAmount:
+          type:
+          - string
+          - 'null'
+          description: 'Maximum pay-in amount as a decimal string in the origin asset: the platform USD cap converted at the current
+
+            price. An `amount` above it is rejected with `amountExceedsMaximum`; the provider''s available
+
+            liquidity may be lower and is reported the same way. `null` when no platform maximum can be expressed
+
+            (serialized as JSON `null` despite global omit-null settings).'
+      additionalProperties: false
+      description: Pay-in amount limits attached to a headless bridging quote, in the origin asset.
+    HeadlessBridgingRouteInfo:
+      required:
+      - destination
+      - origin
+      type: object
+      properties:
+        origin:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationSpec'
+          description: 'The token and network for the pay-in (deposit address is on this leg).
+
+            Use these values in the `origin` field of `POST /api/v1/bridging/address`.'
+        destination:
+          allOf:
+          - $ref: '#/components/schemas/BridgingDestinationSpec'
+          description: The token and network that bridged funds will be delivered to.
+        displayName:
+          type:
+          - string
+          - 'null'
+          description: 'Human-readable label for the route, suitable for display in a UI.
+
+            Example: `USDC on Polygon → USDC on Base`.'
+      additionalProperties: false
+      description: 'A discovered bridging route returned by headless route discovery (`POST /api/v1/bridging/routes/deposit` or `POST /api/v1/bridging/routes/withdrawal`),
+
+        including a human-readable display name.'
+    GetBridgingWithdrawalRoutesRequest:
+      required:
+      - sources
+      type: object
+      properties:
+        sources:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/BridgingDestinationSpec'
+          description: Source networks and assets (e.g. Stake omnibus chain + token). At least one is required.
+        optimized:
+          type: boolean
+          description: 'When true (default), return at most one <b>source</b> per distinct
+
+            <b>destination</b>. When false, return every matching origin→destination pair.'
+      additionalProperties: false
+      description: 'Request body for `POST /api/v1/bridging/routes/withdrawal` — discover payout (destination) options
+
+        when funding from fixed omnibus (source) legs.'
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header

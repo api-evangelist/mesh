@@ -1,0 +1,373 @@
+openapi: 3.2.0
+info:
+  title: Mesh Connect Integration Blockchain Query API
+  description: 'Mesh allows users to connect accounts of financial institutions,
+
+    crypto exchanges, and self-custody wallets. Mesh handles credential
+
+    validation, MFA, and error handling for each integration. After
+
+    an account is connected, Mesh allows client applications to read holdings,
+
+    transaction history and balances and execute crypto transfers (with user approval).'
+  version: '1.0'
+servers:
+- url: https://integration-api.meshconnect.com
+- url: https://sandbox-integration-api.meshconnect.com
+security:
+- Client-Secret: []
+  Client-Id: []
+tags:
+- name: BlockchainQuery
+paths:
+  /api/v1/catalog/solana/getLatestBlockhash:
+    post:
+      tags:
+      - BlockchainQuery
+      parameters:
+      - name: chainId
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringApiResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      summary: Create api catalog solana get latest blockhash
+      x-summary-source: derived
+      operationId: postApiV1CatalogSolanaGetLatestBlockhash
+      x-operation-id-source: derived
+  /api/v1/catalog/solana/getTokenProgram:
+    post:
+      tags:
+      - BlockchainQuery
+      parameters:
+      - name: chainId
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringApiResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      summary: Create api catalog solana get token program
+      x-summary-source: derived
+      operationId: postApiV1CatalogSolanaGetTokenProgram
+      x-operation-id-source: derived
+  /api/v1/catalog/solana/isTokenAddressCreated:
+    post:
+      tags:
+      - BlockchainQuery
+      parameters:
+      - name: chainId
+        in: query
+        schema:
+          type: string
+      - name: address
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringApiResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      summary: Create api catalog solana is token address created
+      x-summary-source: derived
+      operationId: postApiV1CatalogSolanaIsTokenAddressCreated
+      x-operation-id-source: derived
+  /api/v1/catalog/ton/getTokenInfo:
+    post:
+      tags:
+      - BlockchainQuery
+      parameters:
+      - name: caipNetworkId
+        in: query
+        schema:
+          type: string
+      - name: tokenAddress
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TonTokenInfoResponseApiResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      summary: Create api catalog ton get token info
+      x-summary-source: derived
+      operationId: postApiV1CatalogTonGetTokenInfo
+      x-operation-id-source: derived
+components:
+  schemas:
+    ApiResultStatus:
+      enum:
+      - ok
+      - serverFailure
+      - permissionDenied
+      - badRequest
+      - notFound
+      - conflict
+      - tooManyRequest
+      - locked
+      - unavailableForLegalReasons
+      type: string
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    TonTokenInfoResponse:
+      type: object
+      properties:
+        totalSupply:
+          allOf:
+          - $ref: '#/components/schemas/BigInteger'
+        mintable:
+          type:
+          - boolean
+          - 'null'
+        adminAddress:
+          type:
+          - string
+          - 'null'
+        jettonContent:
+          allOf:
+          - $ref: '#/components/schemas/TonTokenInfoResponseJettonContent'
+        jettonWalletCode:
+          type:
+          - string
+          - 'null'
+        contractType:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BigInteger:
+      type: object
+      properties:
+        isPowerOfTwo:
+          type: boolean
+          readOnly: true
+        isZero:
+          type: boolean
+          readOnly: true
+        isOne:
+          type: boolean
+          readOnly: true
+        isEven:
+          type: boolean
+          readOnly: true
+        sign:
+          type: integer
+          format: int32
+          readOnly: true
+      additionalProperties: false
+    TonTokenInfoResponseApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          allOf:
+          - $ref: '#/components/schemas/TonTokenInfoResponse'
+      additionalProperties: false
+    TonTokenInfoResponseJettonContentData:
+      type: object
+      properties:
+        uri:
+          type:
+          - string
+          - 'null'
+        decimals:
+          allOf:
+          - $ref: '#/components/schemas/BigInteger'
+      additionalProperties: false
+    TonTokenInfoResponseJettonContent:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/TonTokenInfoResponseJettonContentData'
+      additionalProperties: false
+    StringApiResult:
+      type: object
+      properties:
+        status:
+          enum:
+          - ok
+          - serverFailure
+          - permissionDenied
+          - badRequest
+          - notFound
+          - conflict
+          - tooManyRequest
+          - locked
+          - unavailableForLegalReasons
+          allOf:
+          - $ref: '#/components/schemas/ApiResultStatus'
+          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
+          description: A message generated by the API
+        displayMessage:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display message that can be presented to the end user
+        errorHash:
+          type:
+          - string
+          - 'null'
+          description: An error grouping hash from string components and caller information. Used by bugsnag on FE for correct error grouping
+          readOnly: true
+        teamCode:
+          type:
+          - string
+          - 'null'
+          description: 'Opaque team code for error routing. Resolved from exception origin or caller file path via CODEOWNERS.
+
+            Format: 2-character code (e.g., "7K", "M2"). Use for alerting/routing, not display.'
+          readOnly: true
+        errorType:
+          type:
+          - string
+          - 'null'
+          description: 'Strictly-typed error type that is explaining the reason of an unsuccessful status of the operation.
+
+            All possible error types are available in the documentation.'
+        errorData:
+          readOnly: true
+        content:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Client-Secret:
+      type: apiKey
+      description: Contact Mesh to get client Secret
+      name: X-Client-Secret
+      in: header
+    Client-Id:
+      type: apiKey
+      description: Contact Mesh to get client Id
+      name: X-Client-Id
+      in: header
