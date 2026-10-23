@@ -611,6 +611,8 @@ apis:
   - type: x-sandbox-baseURL
     url: https://sandbox-integration-api.meshconnect.com
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/mesh/overview
 - type: Website
   url: https://meshconnect.com
 - type: CapabilityMap
