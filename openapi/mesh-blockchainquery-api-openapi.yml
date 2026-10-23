@@ -371,3 +371,9 @@ components:
       description: Contact Mesh to get client Id
       name: X-Client-Id
       in: header
+x-provenance:
+  method: harvested
+  publisher: Mesh
+  source: https://integration-api.meshconnect.com/swagger/v1/swagger.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
