@@ -1,1581 +1,1009 @@
 {
+  "info": {
+    "_postman_id": "69da62eb-b17d-4ce7-b444-b46fa2ad7442",
+    "name": "Mesh Connect Integration Managed Account Authentication API",
+    "description": "Mesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-22T01:27:03.000Z",
+    "updatedAt": "2026-10-22T01:27:03.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-69da62eb-b17d-4ce7-b444-b46fa2ad7442"
+  },
   "item": [
     {
-      "id": "43a63f5b-3516-4dca-8003-969510c303d0",
-      "name": "Managed Account Authentication",
-      "description": {
-        "content": "The recommended approach for account authentication. Front manages multiple authentication flows and handles all authentication steps such as MFA codes and OAuth redirect through our web and mobile SDKs.",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "1a3df498-5922-471f-a076-bbab8c0ab19a",
-          "name": "Get catalog link",
-          "request": {
-            "name": "Get catalog link",
-            "description": {
-              "content": "Get personalized catalog link for client",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "cataloglink"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "UserId",
-                  "value": "<string>",
-                  "description": "(Required) A unique Id representing the end user. Typically this will be a user Id from the\r\nclient application. Personally identifiable information, such as an email address or phone number,\r\nshould not be used. 50 characters length maximum."
-                },
-                {
-                  "disabled": false,
-                  "key": "BrokerType",
-                  "value": "<string>",
-                  "description": "Type of integration to redirect to. Will redirect to catalog if not provided.\r\nNot supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet."
-                },
-                {
-                  "disabled": false,
-                  "key": "EnableTransfers",
-                  "value": "<boolean>",
-                  "description": "Link Configuration identifier - an optional paramater for used configuration.\r\nIf not provided default configuration with all avaialbe integrations will be used."
-                },
-                {
-                  "disabled": false,
-                  "key": "RestrictMultipleAccounts",
-                  "value": "<boolean>",
-                  "description": "The final screen of Link allows users to “continue” back to your app or “Link another account.”\r\nIf this param is present then this button will be hidden."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "v1",
+          "item": [
             {
-              "id": "0638fd28-e348-4844-ad4c-f4ee7f70c20a",
-              "name": "Catalog link created.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "linktoken",
+              "item": [
+                {
+                  "name": "Get Link token",
+                  "id": "403e6c12-fad5-4a9a-8295-7d33a56e5630",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"<string>\",\n  \"brokerType\": \"kraken\",\n  \"restrictMultipleAccounts\": \"<boolean>\",\n  \"transferOptions\": {\n    \"toAddresses\": \"<array,null>\",\n    \"fromPairs\": \"<array,null>\",\n    \"amountInFiat\": \"<number,null-double>\",\n    \"transactionId\": \"<string,null>\",\n    \"clientFee\": \"<number,null-double>\",\n    \"transferType\": \"withdrawal\",\n    \"isInclusiveFeeEnabled\": \"<boolean>\",\n    \"description\": \"<string,null>\",\n    \"goodsDetails\": \"<array,null>\",\n    \"generatePayLink\": \"<boolean>\",\n    \"payLinkReturnUrl\": \"<string,null>\"\n  },\n  \"integrationId\": \"<string,null-uuid>\",\n  \"disableApiKeyGeneration\": \"<boolean>\",\n  \"verifyWalletOptions\": {\n    \"message\": \"<string,null>\",\n    \"verificationMethods\": \"<array,null>\",\n    \"addresses\": \"<array,null>\",\n    \"networkId\": \"<string,null-uuid>\",\n    \"networkType\": \"xpla\"\n  },\n  \"subClientId\": \"<string,null-uuid>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/linktoken",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "linktoken"
+                      ]
+                    },
+                    "description": "Get a short-lived, one-time use token for initializing a Link session using the client-side SDKs"
+                  },
+                  "response": [
                     {
-                      "key": "UserId",
-                      "value": "<string>"
+                      "id": "30d436a0-eaea-4c49-9aa0-ad22461a12eb",
+                      "name": "Link token created.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"userId\": \"<string>\",\n  \"brokerType\": \"kraken\",\n  \"restrictMultipleAccounts\": \"<boolean>\",\n  \"transferOptions\": {\n    \"toAddresses\": \"<array,null>\",\n    \"fromPairs\": \"<array,null>\",\n    \"amountInFiat\": \"<number,null-double>\",\n    \"transactionId\": \"<string,null>\",\n    \"clientFee\": \"<number,null-double>\",\n    \"transferType\": \"withdrawal\",\n    \"isInclusiveFeeEnabled\": \"<boolean>\",\n    \"description\": \"<string,null>\",\n    \"goodsDetails\": \"<array,null>\",\n    \"generatePayLink\": \"<boolean>\",\n    \"payLinkReturnUrl\": \"<string,null>\"\n  },\n  \"integrationId\": \"<string,null-uuid>\",\n  \"disableApiKeyGeneration\": \"<boolean>\",\n  \"verifyWalletOptions\": {\n    \"message\": \"<string,null>\",\n    \"verificationMethods\": \"<array,null>\",\n    \"addresses\": \"<array,null>\",\n    \"networkId\": \"<string,null-uuid>\",\n    \"networkType\": \"xpla\"\n  },\n  \"subClientId\": \"<string,null-uuid>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/linktoken",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "linktoken"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"linkToken\": \"<string,null>\",\n    \"paymentLink\": \"<string,null>\"\n  }\n}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-30d436a0-eaea-4c49-9aa0-ad22461a12eb"
                     },
                     {
-                      "key": "BrokerType",
-                      "value": "<string>"
+                      "id": "be807e5e-747d-4b32-b6af-ceed20c83217",
+                      "name": "BadRequest can happen in following cases:\n<list type=\"number\"><item><description>userId parameter not specified</description></item><item><description>Network not supported by the selected DeFi wallet.</description></item></list>",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"userId\": \"<string>\",\n  \"brokerType\": \"kraken\",\n  \"restrictMultipleAccounts\": \"<boolean>\",\n  \"transferOptions\": {\n    \"toAddresses\": \"<array,null>\",\n    \"fromPairs\": \"<array,null>\",\n    \"amountInFiat\": \"<number,null-double>\",\n    \"transactionId\": \"<string,null>\",\n    \"clientFee\": \"<number,null-double>\",\n    \"transferType\": \"withdrawal\",\n    \"isInclusiveFeeEnabled\": \"<boolean>\",\n    \"description\": \"<string,null>\",\n    \"goodsDetails\": \"<array,null>\",\n    \"generatePayLink\": \"<boolean>\",\n    \"payLinkReturnUrl\": \"<string,null>\"\n  },\n  \"integrationId\": \"<string,null-uuid>\",\n  \"disableApiKeyGeneration\": \"<boolean>\",\n  \"verifyWalletOptions\": {\n    \"message\": \"<string,null>\",\n    \"verificationMethods\": \"<array,null>\",\n    \"addresses\": \"<array,null>\",\n    \"networkId\": \"<string,null-uuid>\",\n    \"networkType\": \"xpla\"\n  },\n  \"subClientId\": \"<string,null-uuid>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/linktoken",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "linktoken"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-be807e5e-747d-4b32-b6af-ceed20c83217"
                     },
                     {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
+                      "id": "8554559d-ccef-4ae8-afa9-dbdc2f32939c",
+                      "name": "Unauthorized: Client ID or Client Secret are not correct or missing.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"userId\": \"<string>\",\n  \"brokerType\": \"kraken\",\n  \"restrictMultipleAccounts\": \"<boolean>\",\n  \"transferOptions\": {\n    \"toAddresses\": \"<array,null>\",\n    \"fromPairs\": \"<array,null>\",\n    \"amountInFiat\": \"<number,null-double>\",\n    \"transactionId\": \"<string,null>\",\n    \"clientFee\": \"<number,null-double>\",\n    \"transferType\": \"withdrawal\",\n    \"isInclusiveFeeEnabled\": \"<boolean>\",\n    \"description\": \"<string,null>\",\n    \"goodsDetails\": \"<array,null>\",\n    \"generatePayLink\": \"<boolean>\",\n    \"payLinkReturnUrl\": \"<string,null>\"\n  },\n  \"integrationId\": \"<string,null-uuid>\",\n  \"disableApiKeyGeneration\": \"<boolean>\",\n  \"verifyWalletOptions\": {\n    \"message\": \"<string,null>\",\n    \"verificationMethods\": \"<array,null>\",\n    \"addresses\": \"<array,null>\",\n    \"networkId\": \"<string,null-uuid>\",\n    \"networkType\": \"xpla\"\n  },\n  \"subClientId\": \"<string,null-uuid>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/linktoken",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "linktoken"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-8554559d-ccef-4ae8-afa9-dbdc2f32939c"
                     },
                     {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
+                      "id": "eb75e38d-e195-4ec9-ac67-455dc536c261",
+                      "name": "API Client not found.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"userId\": \"<string>\",\n  \"brokerType\": \"kraken\",\n  \"restrictMultipleAccounts\": \"<boolean>\",\n  \"transferOptions\": {\n    \"toAddresses\": \"<array,null>\",\n    \"fromPairs\": \"<array,null>\",\n    \"amountInFiat\": \"<number,null-double>\",\n    \"transactionId\": \"<string,null>\",\n    \"clientFee\": \"<number,null-double>\",\n    \"transferType\": \"withdrawal\",\n    \"isInclusiveFeeEnabled\": \"<boolean>\",\n    \"description\": \"<string,null>\",\n    \"goodsDetails\": \"<array,null>\",\n    \"generatePayLink\": \"<boolean>\",\n    \"payLinkReturnUrl\": \"<string,null>\"\n  },\n  \"integrationId\": \"<string,null-uuid>\",\n  \"disableApiKeyGeneration\": \"<boolean>\",\n  \"verifyWalletOptions\": {\n    \"message\": \"<string,null>\",\n    \"verificationMethods\": \"<array,null>\",\n    \"addresses\": \"<array,null>\",\n    \"networkId\": \"<string,null-uuid>\",\n    \"networkType\": \"xpla\"\n  },\n  \"subClientId\": \"<string,null-uuid>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/linktoken",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "linktoken"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-eb75e38d-e195-4ec9-ac67-455dc536c261"
                     }
                   ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "createdAt": "2026-10-22T01:27:03.000Z",
+                  "updatedAt": "2026-10-22T01:27:03.000Z",
+                  "uid": "35240-403e6c12-fad5-4a9a-8295-7d33a56e5630"
                 }
               ],
-              "body": "{\n  \"content\": {\n    \"url\": \"https://web.meshconnect.com/broker-connect?auth_code={authCode}\",\n    \"iFrameUrl\": \"https://web.meshconnect.com/b2b-iframe/{clientId}/broker-connect?auth_code={authCode}\"\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "d6b43cc4-8009-4bfd-8f15-0d4d3357d91b",
+              "createdAt": "2026-10-22T01:27:03.000Z",
+              "updatedAt": "2026-10-22T01:27:03.000Z",
+              "uid": "35240-d6b43cc4-8009-4bfd-8f15-0d4d3357d91b"
             },
             {
-              "id": "38571cb5-ace2-4acb-b02d-a5884482da18",
-              "name": "BadRequest can happen in following cases:\r\n<list type=\"number\"><item><description>userId parameter not specified</description></item><item><description>Callback url parameter is invalid</description></item><item><description>Client does not have callback url specified</description></item></list>",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "token",
+              "item": [
+                {
+                  "name": "refresh",
+                  "item": [
                     {
-                      "key": "UserId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "BrokerType",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
+                      "name": "Refresh auth token",
+                      "id": "fe5c46a1-e48e-4409-88b8-8a474d1b45d9",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"refreshToken\": \"<string>\",\n  \"type\": \"payPalConnect\",\n  \"createNewRefreshToken\": \"<boolean,null>\",\n  \"accessToken\": \"<string,null>\",\n  \"tradeToken\": \"<string,null>\",\n  \"mfaCode\": \"<string,null>\",\n  \"metadata\": \"<object,null>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/token/refresh",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "token",
+                            "refresh"
+                          ]
+                        },
+                        "description": "Refresh auth token of the connected institution.\nSome institutions do not require tokens to be refreshed.\n\nThe following institutions require custom flows:\n\nWeBull: AuthToken should be provided along with the RefreshToken\n\nVanguard: security settings may activate MFA, requiring user action.\nIf MFA is triggered, a second refresh request should be sent.\nSecond request should contain MFA code and access token obtained from initial response"
+                      },
+                      "response": [
+                        {
+                          "id": "284ad829-5755-4640-ba75-7a36677be10f",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"refreshToken\": \"<string>\",\n  \"type\": \"payPalConnect\",\n  \"createNewRefreshToken\": \"<boolean,null>\",\n  \"accessToken\": \"<string,null>\",\n  \"tradeToken\": \"<string,null>\",\n  \"mfaCode\": \"<string,null>\",\n  \"metadata\": \"<object,null>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/token/refresh",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "token",
+                                "refresh"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"permissionDenied\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"status\": \"failed\",\n    \"errorMessage\": \"<string,null>\",\n    \"account\": {\n      \"meshAccountId\": \"<uuid>\",\n      \"frontAccountId\": \"<uuid>\",\n      \"accountId\": \"<string,null>\",\n      \"accountName\": \"<string,null>\",\n      \"fund\": \"<number,null-double>\",\n      \"cash\": \"<number,null-double>\",\n      \"isReconnected\": \"<boolean,null>\",\n      \"balances\": \"<array,null>\"\n    },\n    \"accessToken\": \"<string,null>\",\n    \"refreshToken\": \"<string,null>\",\n    \"expiresInSeconds\": \"<integer,null>\",\n    \"refreshTokenExpiresInSeconds\": \"<integer,null>\",\n    \"brokerAccountTokens\": \"<array,null>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:03.000Z",
+                          "updatedAt": "2026-10-22T01:27:03.000Z",
+                          "uid": "35240-284ad829-5755-4640-ba75-7a36677be10f"
+                        },
+                        {
+                          "id": "13aac120-298a-40cc-85ae-4ee4af4919e6",
+                          "name": "Bad Request",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"refreshToken\": \"<string>\",\n  \"type\": \"payPalConnect\",\n  \"createNewRefreshToken\": \"<boolean,null>\",\n  \"accessToken\": \"<string,null>\",\n  \"tradeToken\": \"<string,null>\",\n  \"mfaCode\": \"<string,null>\",\n  \"metadata\": \"<object,null>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/token/refresh",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "token",
+                                "refresh"
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:03.000Z",
+                          "updatedAt": "2026-10-22T01:27:03.000Z",
+                          "uid": "35240-13aac120-298a-40cc-85ae-4ee4af4919e6"
+                        },
+                        {
+                          "id": "f63ea56c-9cc6-4a45-9f2f-cd568740218a",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"refreshToken\": \"<string>\",\n  \"type\": \"payPalConnect\",\n  \"createNewRefreshToken\": \"<boolean,null>\",\n  \"accessToken\": \"<string,null>\",\n  \"tradeToken\": \"<string,null>\",\n  \"mfaCode\": \"<string,null>\",\n  \"metadata\": \"<object,null>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/token/refresh",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "token",
+                                "refresh"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:27:03.000Z",
+                          "updatedAt": "2026-10-22T01:27:03.000Z",
+                          "uid": "35240-f63ea56c-9cc6-4a45-9f2f-cd568740218a"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-fe5c46a1-e48e-4409-88b8-8a474d1b45d9"
                     }
                   ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "9d789f18-9d9d-4efe-80da-4333620b09a8",
+                  "createdAt": "2026-10-22T01:27:03.000Z",
+                  "updatedAt": "2026-10-22T01:27:03.000Z",
+                  "uid": "35240-9d789f18-9d9d-4efe-80da-4333620b09a8"
                 }
               ],
-              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "66240293-5189-40a6-a1a8-5a298ff024c9",
+              "createdAt": "2026-10-22T01:27:03.000Z",
+              "updatedAt": "2026-10-22T01:27:03.000Z",
+              "uid": "35240-66240293-5189-40a6-a1a8-5a298ff024c9"
             },
             {
-              "id": "831a5986-cb92-493a-9abb-612f2d104e79",
-              "name": "Unauthorized: Client Id or Client Secret are not correct or missing.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "account",
+              "item": [
+                {
+                  "name": "Remove connection",
+                  "id": "b79cb4ab-b6ee-4c52-97b2-aeb60238e702",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"openSea\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/account",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "account"
+                      ]
+                    },
+                    "description": "Remove connection to the financial institution and erase all related data completely."
+                  },
+                  "response": [
                     {
-                      "key": "UserId",
-                      "value": "<string>"
+                      "id": "08fdbcd5-8a88-4c09-bd11-709e6385f490",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"openSea\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/account",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "account"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-08fdbcd5-8a88-4c09-bd11-709e6385f490"
                     },
                     {
-                      "key": "BrokerType",
-                      "value": "<string>"
+                      "id": "885b3f17-6fd0-4cd2-b8d5-5c0a49508665",
+                      "name": "Bad Request",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"openSea\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/account",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "account"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-885b3f17-6fd0-4cd2-b8d5-5c0a49508665"
                     },
                     {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
+                      "id": "7bd25bb0-6741-4fc9-9968-c7cf8c65e9d7",
+                      "name": "Unauthorized",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"openSea\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/account",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "account"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-7bd25bb0-6741-4fc9-9968-c7cf8c65e9d7"
                     }
                   ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "createdAt": "2026-10-22T01:27:03.000Z",
+                  "updatedAt": "2026-10-22T01:27:03.000Z",
+                  "uid": "35240-b79cb4ab-b6ee-4c52-97b2-aeb60238e702"
                 }
               ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "54ff334e-7e09-495e-a45a-a2c443b38ae7",
+              "createdAt": "2026-10-22T01:27:03.000Z",
+              "updatedAt": "2026-10-22T01:27:03.000Z",
+              "uid": "35240-54ff334e-7e09-495e-a45a-a2c443b38ae7"
             },
             {
-              "id": "072e2636-c8fd-4a17-9adc-eb9762f87043",
-              "name": "API Client not found.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "status",
+              "item": [
+                {
+                  "name": "Get integrations health status",
+                  "id": "c28dfeac-8367-452b-89a0-7e0032d1c325",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/status",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "status"
+                      ]
+                    },
+                    "description": "Get the list of supported institutions and their health statuses."
+                  },
+                  "response": [
                     {
-                      "key": "UserId",
-                      "value": "<string>"
+                      "id": "d6e08a80-93e6-4c57-97db-8ff18b8a65dc",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/status",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "status"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"status\": \"notFound\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": \"<array,null>\"\n}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-d6e08a80-93e6-4c57-97db-8ff18b8a65dc"
                     },
                     {
-                      "key": "BrokerType",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
+                      "id": "221a5631-ab63-4969-82a0-6d67052f4a66",
+                      "name": "Unauthorized",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/status",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "status"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-221a5631-ab63-4969-82a0-6d67052f4a66"
                     }
                   ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "createdAt": "2026-10-22T01:27:03.000Z",
+                  "updatedAt": "2026-10-22T01:27:03.000Z",
+                  "uid": "35240-c28dfeac-8367-452b-89a0-7e0032d1c325"
                 }
               ],
-              "body": "{\n  \"status\": \"notFound\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "247dadce-dc1b-4656-a2eb-da1d996fbd51",
+              "createdAt": "2026-10-22T01:27:03.000Z",
+              "updatedAt": "2026-10-22T01:27:03.000Z",
+              "uid": "35240-247dadce-dc1b-4656-a2eb-da1d996fbd51"
+            },
+            {
+              "name": "integrations",
+              "item": [
+                {
+                  "name": "Get available integrations",
+                  "id": "252f43ee-c91a-472f-9a1c-bf2e057d008a",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/integrations",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "integrations"
+                      ]
+                    },
+                    "description": "Returns a list of integrations with details including the integration ID, name, type,\nDeFi wallet provider ID, and categories."
+                  },
+                  "response": [
+                    {
+                      "id": "4e298116-28ff-48f2-9149-a3deca4d58df",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-Client-Secret",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/integrations",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "integrations"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"items\": \"<array,null>\"\n  }\n}",
+                      "createdAt": "2026-10-22T01:27:03.000Z",
+                      "updatedAt": "2026-10-22T01:27:03.000Z",
+                      "uid": "35240-4e298116-28ff-48f2-9149-a3deca4d58df"
+                    }
+                  ],
+                  "createdAt": "2026-10-22T01:27:03.000Z",
+                  "updatedAt": "2026-10-22T01:27:03.000Z",
+                  "uid": "35240-252f43ee-c91a-472f-9a1c-bf2e057d008a"
+                }
+              ],
+              "id": "3f89ecef-748e-490b-ba58-9428ddc58500",
+              "createdAt": "2026-10-22T01:27:03.000Z",
+              "updatedAt": "2026-10-22T01:27:03.000Z",
+              "uid": "35240-3f89ecef-748e-490b-ba58-9428ddc58500"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "c7ac527f-648a-4811-bd04-f4dadc92b475",
-          "name": "Get catalog link with parameters",
-          "request": {
-            "name": "Get catalog link with parameters",
-            "description": {
-              "content": "Get personalized catalog link for client supplying parameters for Link actions, such as transfers",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "cataloglink"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "UserId",
-                  "value": "<string>",
-                  "description": "(Required) A unique Id representing the end user. Typically this will be a user Id from the\r\nclient application. Personally identifiable information, such as an email address or phone number,\r\nshould not be used. 50 characters length maximum."
-                },
-                {
-                  "disabled": false,
-                  "key": "BrokerType",
-                  "value": "<string>",
-                  "description": "Type of integration to redirect to. Will redirect to catalog if not provided.\r\nNot supported types: DeFiWallet, CryptocurrencyAddress, CryptocurrencyWallet."
-                },
-                {
-                  "disabled": false,
-                  "key": "EnableTransfers",
-                  "value": "<boolean>",
-                  "description": "Link Configuration identifier - an optional paramater for used configuration.\r\nIf not provided default configuration with all avaialbe integrations will be used."
-                },
-                {
-                  "disabled": false,
-                  "key": "RestrictMultipleAccounts",
-                  "value": "<boolean>",
-                  "description": "The final screen of Link allows users to “continue” back to your app or “Link another account.”\r\nIf this param is present then this button will be hidden."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"toAddresses\": [\n    {\n      \"networkId\": \"<uuid>\",\n      \"symbol\": \"<string>\",\n      \"address\": \"<string>\",\n      \"addressTag\": \"<string>\",\n      \"amount\": \"<double>\"\n    },\n    {\n      \"networkId\": \"<uuid>\",\n      \"symbol\": \"<string>\",\n      \"address\": \"<string>\",\n      \"addressTag\": \"<string>\",\n      \"amount\": \"<double>\"\n    }\n  ],\n  \"amountInFiat\": \"<double>\",\n  \"transactionId\": \"<string>\",\n  \"clientFee\": \"<double>\",\n  \"transferType\": \"<string>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "35b2bc2c-eb05-4ecf-92bd-7e228cea8a5b",
-              "name": "Catalog link created.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "BrokerType",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"toAddresses\": [\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"ETH\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"MATIC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    }\n  ],\n  \"clientFee\": 0,\n  \"isCustomClientFeeProvided\": false,\n  \"isInclusiveFeeEnabled\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"content\": {\n    \"url\": \"https://web.meshconnect.com/broker-connect?auth_code={authCode}\",\n    \"iFrameUrl\": \"https://web.meshconnect.com/b2b-iframe/{clientId}/broker-connect?auth_code={authCode}\"\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "66f5ebe8-2b6b-40ce-8cf7-3b3adbe388f7",
-              "name": "BadRequest can happen in following cases:\r\n<list type=\"number\"><item><description>userId parameter not specified</description></item><item><description>Callback url parameter is invalid</description></item><item><description>Client does not have callback url specified</description></item></list>",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "BrokerType",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"toAddresses\": [\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"ETH\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"MATIC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    }\n  ],\n  \"clientFee\": 0,\n  \"isCustomClientFeeProvided\": false,\n  \"isInclusiveFeeEnabled\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "8952d35f-66b8-4d70-9357-678decb6cdaf",
-              "name": "Unauthorized: Client Id or Client Secret are not correct or missing.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "BrokerType",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"toAddresses\": [\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"ETH\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"MATIC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    }\n  ],\n  \"clientFee\": 0,\n  \"isCustomClientFeeProvided\": false,\n  \"isInclusiveFeeEnabled\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "53d8c742-99a1-45bb-9afe-1cb23a9ddf6a",
-              "name": "API Client not found.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cataloglink"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "BrokerType",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "EnableTransfers",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "RestrictMultipleAccounts",
-                      "value": "<boolean>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"toAddresses\": [\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"ETH\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"MATIC\",\n      \"address\": \"0x00000000000000000000000\"\n    },\n    {\n      \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n      \"symbol\": \"USDC\",\n      \"address\": \"0x00000000000000000000000\"\n    }\n  ],\n  \"clientFee\": 0,\n  \"isCustomClientFeeProvided\": false,\n  \"isInclusiveFeeEnabled\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"notFound\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "ab0a8ffc-9e8a-44c5-85ac-8d8d55b54372",
-          "name": "Get Link token with parameters",
-          "request": {
-            "name": "Get Link token with parameters",
-            "description": {
-              "content": "Get a short lived, one-time use token for initializing a Link session using the client-side SDKs",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "linktoken"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"userId\": \"<string>\",\n  \"brokerType\": \"<string>\",\n  \"restrictMultipleAccounts\": \"<boolean>\",\n  \"transferOptions\": {\n    \"toAddresses\": [\n      {\n        \"networkId\": \"<uuid>\",\n        \"symbol\": \"<string>\",\n        \"address\": \"<string>\",\n        \"addressTag\": \"<string>\",\n        \"amount\": \"<double>\"\n      },\n      {\n        \"networkId\": \"<uuid>\",\n        \"symbol\": \"<string>\",\n        \"address\": \"<string>\",\n        \"addressTag\": \"<string>\",\n        \"amount\": \"<double>\"\n      }\n    ],\n    \"amountInFiat\": \"<double>\",\n    \"transactionId\": \"<string>\",\n    \"clientFee\": \"<double>\",\n    \"transferType\": \"<string>\",\n    \"fundingOptions\": {\n      \"enabled\": \"<boolean>\"\n    },\n    \"isInclusiveFeeEnabled\": \"<boolean>\"\n  },\n  \"integrationId\": \"<uuid>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "38fdc8b3-4d16-4024-8da6-9adc4160810e",
-              "name": "Link token created.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "linktoken"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userId\": \"UserId\",\n  \"configurationId\": \"18a20b11-e47f-43b9-8546-94284e9ee547\",\n  \"restrictMultipleAccounts\": true,\n  \"transferOptions\": {\n    \"toAddresses\": [\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"ETH\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"MATIC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      }\n    ],\n    \"amountInFiat\": 10,\n    \"isInclusiveFeeEnabled\": false\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"content\": {\n    \"linkToken\": \"aHR0cHM6Ly93ZWIuZ2V0ZnJvbnQuY29tL2IyYi1pZnJhbWUve2NsaWVudElkfS9icm9rZXItY29ubmVjdD9hdXRoX2NvZGU9e2F1dGhDb2RlfQ==\"\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e6b4afbf-6e11-478e-bdf8-70b2ea9680cd",
-              "name": "BadRequest can happen in following cases:\r\n<list type=\"number\"><item><description>userId parameter not specified</description></item></list>",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "linktoken"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userId\": \"UserId\",\n  \"configurationId\": \"18a20b11-e47f-43b9-8546-94284e9ee547\",\n  \"restrictMultipleAccounts\": true,\n  \"transferOptions\": {\n    \"toAddresses\": [\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"ETH\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"MATIC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      }\n    ],\n    \"amountInFiat\": 10,\n    \"isInclusiveFeeEnabled\": false\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c53e0cb2-ea44-4b09-afbe-3eabf13f555e",
-              "name": "Unauthorized: Client Id or Client Secret are not correct or missing.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "linktoken"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userId\": \"UserId\",\n  \"configurationId\": \"18a20b11-e47f-43b9-8546-94284e9ee547\",\n  \"restrictMultipleAccounts\": true,\n  \"transferOptions\": {\n    \"toAddresses\": [\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"ETH\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"MATIC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      }\n    ],\n    \"amountInFiat\": 10,\n    \"isInclusiveFeeEnabled\": false\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6cccb8f0-94e7-457c-a2a0-9c6bafa2f998",
-              "name": "API Client not found.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "linktoken"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userId\": \"UserId\",\n  \"configurationId\": \"18a20b11-e47f-43b9-8546-94284e9ee547\",\n  \"restrictMultipleAccounts\": true,\n  \"transferOptions\": {\n    \"toAddresses\": [\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"ETH\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"e3c7fdd8-b1fc-4e51-85ae-bb276e075611\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"MATIC\",\n        \"address\": \"0x00000000000000000000000\"\n      },\n      {\n        \"networkId\": \"7436e9d0-ba42-4d2b-b4c0-8e4e606b2c12\",\n        \"symbol\": \"USDC\",\n        \"address\": \"0x00000000000000000000000\"\n      }\n    ],\n    \"amountInFiat\": 10,\n    \"isInclusiveFeeEnabled\": false\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"notFound\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "d9e80604-3d70-4f7a-9a0e-8a6de2e4b772",
-          "name": "Refresh auth token",
-          "request": {
-            "name": "Refresh auth token",
-            "description": {
-              "content": "Refresh auth token of the connected institution.\r\nSome institutions do not require tokens to be refreshed.\r\n            \r\nThe following institutions require custom flows:\r\n            \r\nWeBull: AuthToken should be provided along with the RefreshToken\r\n            \r\nVanguard: security settings may activate MFA, requiring user action.\r\nIf MFA is triggered, a second refresh request should be sent.\r\nSecond request should contain MFA code and access token obtained from initial response.\r\n            \r\nBitfinex Direct: Expired Access Token is used as Refresh token. Use this endpoint to\r\ntrade it for a new one",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "token",
-                "refresh"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"<string>\",\n  \"type\": \"<string>\",\n  \"createNewRefreshToken\": \"<boolean>\",\n  \"accessToken\": \"<string>\",\n  \"tradeToken\": \"<string>\",\n  \"mfaCode\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "e42eb042-dde0-4a91-8522-60376d281076",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "token",
-                    "refresh"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"refreshToken\": \"Secret refresh token\",\n  \"type\": \"coinbase\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"content\": {\n    \"status\": \"succeeded\",\n    \"expiresInSeconds\": 86400,\n    \"brokerAccountTokens\": [\n      {\n        \"accessToken\": \"New secret token\",\n        \"refreshToken\": \"New secret refresh token\"\n      }\n    ]\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "903d9008-6461-4707-b399-3d06360e1e10",
-              "name": "Bad Request",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "token",
-                    "refresh"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"refreshToken\": \"Secret refresh token\",\n  \"type\": \"coinbase\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Unauthorized token\",\n  \"displayMessage\": \"Could not refresh the authentication token. The provided data is not correct\",\n  \"errorType\": \"badRequest\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "974432c0-3cfd-43ef-9ea6-dd6f817644ea",
-              "name": "Unauthorized",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "token",
-                    "refresh"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"refreshToken\": \"Secret refresh token\",\n  \"type\": \"coinbase\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "baf9b98e-2140-449c-823f-3d4662338652",
-          "name": "Remove connection",
-          "request": {
-            "name": "Remove connection",
-            "description": {
-              "content": "Remove connection to the financial institution and erase all related data completely.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "account"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "19085562-7edf-46aa-8383-5cb2d91da354",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "account"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"robinhood\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2c683820-2a4d-4760-ac88-e1ae3f70cf0e",
-              "name": "Bad Request",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "account"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"robinhood\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e28ccf85-21a3-4c40-9cf5-7e84433e4cca",
-              "name": "Unauthorized",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "account"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"robinhood\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "009695cf-4ffa-48e1-af61-b5b07473d971",
-          "name": "Get health status",
-          "request": {
-            "name": "Get health status",
-            "description": {
-              "content": "Get the list of supported institutions and their health statuses.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "status"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "e974daaf-eec2-45de-811d-07694ef6d233",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"content\": [\n    {\n      \"type\": \"robinhood\",\n      \"name\": \"Robinhood\",\n      \"isUp\": true,\n      \"supportedProducts\": [\n        \"balance\",\n        \"holdings\",\n        \"identity\",\n        \"orders\",\n        \"transfers\"\n      ]\n    },\n    {\n      \"type\": \"celsius\",\n      \"name\": \"Celsius\",\n      \"isUp\": false,\n      \"description\": \"Temporarily disabled\",\n      \"downTimeStart\": 1655891444,\n      \"supportedProducts\": [\n        \"balance\",\n        \"orders\",\n        \"transfers\",\n        \"holdings\"\n      ]\n    },\n    {\n      \"type\": \"deFiWallet\",\n      \"name\": \"MetaMask\",\n      \"isUp\": false,\n      \"supportedProducts\": [\n        \"transfers\",\n        \"holdings\"\n      ],\n      \"deFiWalletData\": {\n        \"id\": \"00000000-0000-0000-0000-000000000000\",\n        \"name\": \"MetaMask\"\n      }\n    }\n  ],\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "76088842-7f5c-457d-a162-34826a0fe80c",
-              "name": "Unauthorized",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "1ff0e89c-4a5d-4970-9a75-740fd7b534fd",
-          "name": "Retrieve the list of all available integrations.",
-          "request": {
-            "name": "Retrieve the list of all available integrations.",
-            "description": {
-              "content": "Returns a list of integrations with details including the integration ID, name, type,\r\nDeFi wallet provider ID, and categories.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "integrations"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "11379ce0-b351-47b7-bb1e-b270668d91fb",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "integrations"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"content\": {\n    \"items\": [\n      {\n        \"id\": \"b7efa542-0b16-4a2a-8f89-00143298e615\",\n        \"name\": \"CoinbasePro\",\n        \"type\": \"coinbasePro\",\n        \"logo\": {\n          \"logoWhiteUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_White.svg\",\n          \"logoBlackUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_Black.svg\",\n          \"logoColorUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Logo_Color.svg\",\n          \"iconWhiteUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_White.svg\",\n          \"iconBlackUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_Black.svg\",\n          \"iconColorUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/Coinbase_Icon_Color.svg\"\n        },\n        \"cryptoTransfersSupported\": true\n      },\n      {\n        \"id\": \"3d8f5c31-9fc0-4b61-bdfb-00fb18cbb9ad\",\n        \"name\": \"CoinCircle\",\n        \"type\": \"deFiWallet\",\n        \"deFiWalletProviderId\": \"36d8d9c0c7fe2957149ce8e878f3a01...\",\n        \"categories\": [\n          \"deFiWallet\"\n        ],\n        \"logo\": {\n          \"logoColorUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/CoinCircle_Logo_Color.svg\",\n          \"iconColorUrl\": \"https://frontuserfilecdn.azureedge.net/public/logos/CoinCircle_Icon_Color.svg\"\n        },\n        \"cryptoTransfersSupported\": true\n      }\n    ]\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "2e2a51e4-ad12-4daf-be2b-d3f6def1c2eb",
+          "createdAt": "2026-10-22T01:27:03.000Z",
+          "updatedAt": "2026-10-22T01:27:03.000Z",
+          "uid": "35240-2e2a51e4-ad12-4daf-be2b-d3f6def1c2eb"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "type": "string",
-      "value": "https://integration-api.meshconnect.com",
-      "key": "baseUrl"
+      "id": "d0c3eb80-c6c9-4191-b670-3c3b8a84398d",
+      "createdAt": "2026-10-22T01:27:03.000Z",
+      "updatedAt": "2026-10-22T01:27:03.000Z",
+      "uid": "35240-d0c3eb80-c6c9-4191-b670-3c3b8a84398d"
     }
   ],
   "auth": {
@@ -1583,25 +1011,25 @@
     "apikey": [
       {
         "key": "key",
-        "value": "X-Client-Secret"
+        "value": "X-Client-Secret",
+        "type": "string"
       },
       {
         "key": "value",
-        "value": "{{apiKey}}"
+        "value": "{{apiKey}}",
+        "type": "string"
       },
       {
         "key": "in",
-        "value": "header"
+        "value": "header",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "9c48b112-6b6b-4f5a-a115-e059ed8d5240",
-    "name": "Mesh Connect Integration Assets Managed Account Authentication API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "\nMesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://integration-api.meshconnect.com"
     }
-  }
+  ]
 }

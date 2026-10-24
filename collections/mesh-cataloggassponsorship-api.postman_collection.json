@@ -1,0 +1,565 @@
+{
+  "info": {
+    "_postman_id": "2cff3ac2-9942-4e15-8268-6937e4800ec0",
+    "name": "Mesh Connect Integration Catalog Gas Sponsorship API",
+    "description": "Mesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-22T01:27:43.000Z",
+    "updatedAt": "2026-10-22T01:27:43.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-2cff3ac2-9942-4e15-8268-6937e4800ec0"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "sponsorship",
+              "item": [
+                {
+                  "name": "build",
+                  "item": [
+                    {
+                      "name": "Build a sponsored transaction payload for the client to sign",
+                      "id": "74c1bbfc-9e05-4ece-aaf1-1092d0fa6893",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"transferPreviewId\": \"<uuid>\",\n  \"fromAddress\": \"<string,null>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/sponsorship/build",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "sponsorship",
+                            "build"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "2eb1d402-bab6-4da6-96d3-b39825dba2fb",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"transferPreviewId\": \"<uuid>\",\n  \"fromAddress\": \"<string,null>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/sponsorship/build",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "sponsorship",
+                                "build"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"serverFailure\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"trackingId\": \"<uuid>\",\n    \"strategy\": \"alchemySolanaFeePayer\",\n    \"payload\": {\n      \"payloadType\": \"<string,null>\",\n      \"payloadBase64\": \"<string,null>\",\n      \"slotsRemainingToSign\": \"<array,null>\"\n    },\n    \"additionalPayloads\": \"<array,null>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:43.000Z",
+                          "updatedAt": "2026-10-22T01:27:43.000Z",
+                          "uid": "35240-2eb1d402-bab6-4da6-96d3-b39825dba2fb"
+                        },
+                        {
+                          "id": "4b14acd6-c407-4e12-bc74-e291af318525",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"transferPreviewId\": \"<uuid>\",\n  \"fromAddress\": \"<string,null>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/sponsorship/build",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "sponsorship",
+                                "build"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:27:43.000Z",
+                          "updatedAt": "2026-10-22T01:27:43.000Z",
+                          "uid": "35240-4b14acd6-c407-4e12-bc74-e291af318525"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:27:43.000Z",
+                      "updatedAt": "2026-10-22T01:27:43.000Z",
+                      "uid": "35240-74c1bbfc-9e05-4ece-aaf1-1092d0fa6893"
+                    }
+                  ],
+                  "id": "6c560532-ebb6-4bd4-946b-2d3e1a2f562c",
+                  "createdAt": "2026-10-22T01:27:43.000Z",
+                  "updatedAt": "2026-10-22T01:27:43.000Z",
+                  "uid": "35240-6c560532-ebb6-4bd4-946b-2d3e1a2f562c"
+                },
+                {
+                  "name": "submit",
+                  "item": [
+                    {
+                      "name": "Submit a client-signed sponsored transaction for broadcast",
+                      "id": "064bb435-7e92-42b8-86ca-aedb538a7ed9",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"trackingId\": \"<uuid>\",\n  \"signedPayload\": {\n    \"payloadType\": \"<string,null>\",\n    \"signedPayloadBase64\": \"<string,null>\"\n  },\n  \"additionalSignedPayloads\": \"<array,null>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/sponsorship/submit",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "sponsorship",
+                            "submit"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "79726dc8-add7-43dd-ba38-80be34e03056",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"trackingId\": \"<uuid>\",\n  \"signedPayload\": {\n    \"payloadType\": \"<string,null>\",\n    \"signedPayloadBase64\": \"<string,null>\"\n  },\n  \"additionalSignedPayloads\": \"<array,null>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/sponsorship/submit",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "sponsorship",
+                                "submit"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"conflict\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"status\": \"unknown\",\n    \"txHash\": \"<string,null>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:43.000Z",
+                          "updatedAt": "2026-10-22T01:27:43.000Z",
+                          "uid": "35240-79726dc8-add7-43dd-ba38-80be34e03056"
+                        },
+                        {
+                          "id": "99fe7a71-4b06-40e2-9f4b-cc9fdc818a11",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"trackingId\": \"<uuid>\",\n  \"signedPayload\": {\n    \"payloadType\": \"<string,null>\",\n    \"signedPayloadBase64\": \"<string,null>\"\n  },\n  \"additionalSignedPayloads\": \"<array,null>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/sponsorship/submit",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "sponsorship",
+                                "submit"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:27:43.000Z",
+                          "updatedAt": "2026-10-22T01:27:43.000Z",
+                          "uid": "35240-99fe7a71-4b06-40e2-9f4b-cc9fdc818a11"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:27:43.000Z",
+                      "updatedAt": "2026-10-22T01:27:43.000Z",
+                      "uid": "35240-064bb435-7e92-42b8-86ca-aedb538a7ed9"
+                    }
+                  ],
+                  "id": "56386465-e364-488b-9772-611285fd22d5",
+                  "createdAt": "2026-10-22T01:27:43.000Z",
+                  "updatedAt": "2026-10-22T01:27:43.000Z",
+                  "uid": "35240-56386465-e364-488b-9772-611285fd22d5"
+                },
+                {
+                  "name": "{trackingId}",
+                  "item": [
+                    {
+                      "name": "Get the current status of a sponsored transaction",
+                      "id": "0e07247c-02f7-4aca-9d5e-28f148bc1116",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/sponsorship/:trackingId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "sponsorship",
+                            ":trackingId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "590cd7cf-f0a0-4313-aba4-a70499283636",
+                              "key": "trackingId",
+                              "value": "<uuid>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "d6014291-5be2-4b2b-8f54-f61b886f2c03",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/sponsorship/:trackingId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "sponsorship",
+                                ":trackingId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "trackingId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"ok\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"trackingId\": \"<uuid>\",\n    \"strategy\": \"relayLinkEvmFeeSponsor\",\n    \"state\": \"confirmed\",\n    \"txHash\": \"<string,null>\",\n    \"confirmations\": \"<long>\",\n    \"error\": {\n      \"code\": \"<string,null>\",\n      \"message\": \"<string,null>\"\n    },\n    \"originTxHashes\": \"<array,null>\",\n    \"destinationTxHashes\": \"<array,null>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:43.000Z",
+                          "updatedAt": "2026-10-22T01:27:43.000Z",
+                          "uid": "35240-d6014291-5be2-4b2b-8f54-f61b886f2c03"
+                        },
+                        {
+                          "id": "03671174-11de-4364-a8bb-1eb2b3c20b90",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/sponsorship/:trackingId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "sponsorship",
+                                ":trackingId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "trackingId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:27:43.000Z",
+                          "updatedAt": "2026-10-22T01:27:43.000Z",
+                          "uid": "35240-03671174-11de-4364-a8bb-1eb2b3c20b90"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:27:43.000Z",
+                      "updatedAt": "2026-10-22T01:27:43.000Z",
+                      "uid": "35240-0e07247c-02f7-4aca-9d5e-28f148bc1116"
+                    }
+                  ],
+                  "id": "1d058539-fa66-472e-b496-6c2bf80c501e",
+                  "createdAt": "2026-10-22T01:27:43.000Z",
+                  "updatedAt": "2026-10-22T01:27:43.000Z",
+                  "uid": "35240-1d058539-fa66-472e-b496-6c2bf80c501e"
+                }
+              ],
+              "id": "db4d075f-9d13-4bc2-a93e-544c6613d359",
+              "createdAt": "2026-10-22T01:27:43.000Z",
+              "updatedAt": "2026-10-22T01:27:43.000Z",
+              "uid": "35240-db4d075f-9d13-4bc2-a93e-544c6613d359"
+            }
+          ],
+          "id": "608b01a6-5781-4a10-9b93-5df5c859782b",
+          "createdAt": "2026-10-22T01:27:43.000Z",
+          "updatedAt": "2026-10-22T01:27:43.000Z",
+          "uid": "35240-608b01a6-5781-4a10-9b93-5df5c859782b"
+        }
+      ],
+      "id": "559f9af1-754e-4cd2-8a30-519a6257e9a8",
+      "createdAt": "2026-10-22T01:27:43.000Z",
+      "updatedAt": "2026-10-22T01:27:43.000Z",
+      "uid": "35240-559f9af1-754e-4cd2-8a30-519a6257e9a8"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Secret",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://integration-api.meshconnect.com"
+    }
+  ]
+}

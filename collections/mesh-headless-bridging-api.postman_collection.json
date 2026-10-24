@@ -1,0 +1,1317 @@
+{
+  "info": {
+    "_postman_id": "f6c4bf4c-6052-43a6-b5cf-6d6c7a75bf0f",
+    "name": "Mesh Connect Integration Headless Bridging API",
+    "description": "Mesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-22T01:27:55.000Z",
+    "updatedAt": "2026-10-22T01:27:56.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-f6c4bf4c-6052-43a6-b5cf-6d6c7a75bf0f"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "bridging",
+              "item": [
+                {
+                  "name": "routes",
+                  "item": [
+                    {
+                      "name": "deposit",
+                      "item": [
+                        {
+                          "name": "Discover pay-in (source) bridging routes for one or more payout destinations",
+                          "id": "3c81dfdb-9d2e-4eb4-899e-0389d41979f6",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"destinations\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/routes/deposit",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "routes",
+                                "deposit"
+                              ]
+                            },
+                            "description": "Networks and assets use CAIP-2 + token symbol.\nUse `optimized` to collapse to one destination per distinct source (default) or return every matching origin\u2192destination pair."
+                          },
+                          "response": [
+                            {
+                              "id": "a84845ce-42d4-4fc1-bf51-df4f572e1eee",
+                              "name": "Routes retrieved successfully. An empty `routes` array means no routes are currently available for the given destinations.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"destinations\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/deposit",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "deposit"
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"permissionDenied\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"routes\": \"<array,null>\"\n  }\n}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-a84845ce-42d4-4fc1-bf51-df4f572e1eee"
+                            },
+                            {
+                              "id": "160bc05c-6086-42d8-9666-7773a72da8cd",
+                              "name": "Request is missing required fields or contains invalid data.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"destinations\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/deposit",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "deposit"
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-160bc05c-6086-42d8-9666-7773a72da8cd"
+                            },
+                            {
+                              "id": "ec9f9cb2-c62f-4ea2-b29c-69ce0528e0c0",
+                              "name": "Unauthorized \u2014 Client ID or Client Secret are missing or incorrect.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"destinations\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/deposit",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "deposit"
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-ec9f9cb2-c62f-4ea2-b29c-69ce0528e0c0"
+                            },
+                            {
+                              "id": "0abeb1ed-16cd-4a71-839a-cf61e0ad782b",
+                              "name": "Headless bridging is not enabled for this client (`permissionDenied`).",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"destinations\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/deposit",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "deposit"
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-0abeb1ed-16cd-4a71-839a-cf61e0ad782b"
+                            }
+                          ],
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-3c81dfdb-9d2e-4eb4-899e-0389d41979f6"
+                        }
+                      ],
+                      "id": "5ee918c5-5fd4-4a6d-b5b6-be4fe49b1b12",
+                      "createdAt": "2026-10-22T01:27:56.000Z",
+                      "updatedAt": "2026-10-22T01:27:56.000Z",
+                      "uid": "35240-5ee918c5-5fd4-4a6d-b5b6-be4fe49b1b12"
+                    },
+                    {
+                      "name": "withdrawal",
+                      "item": [
+                        {
+                          "name": "Discover payout (destination) bridging routes for fixed omnibus (source) legs",
+                          "id": "592b49ff-f0c8-4044-97dc-8660854e5c03",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"sources\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/routes/withdrawal",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "routes",
+                                "withdrawal"
+                              ]
+                            },
+                            "description": "Provide at least one `sources` entry (CAIP-2 network + asset). When `optimized` is `true` (default),\nreturns at most one source per distinct destination. Set `optimized` to `false`\nto list every matching origin\u2192destination pair for those sources."
+                          },
+                          "response": [
+                            {
+                              "id": "58b8b74f-762b-487d-9c66-27b54a4726d8",
+                              "name": "Routes retrieved successfully. An empty `routes` array means no routes are currently available for the given sources.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"sources\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/withdrawal",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "withdrawal"
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"permissionDenied\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"routes\": \"<array,null>\"\n  }\n}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-58b8b74f-762b-487d-9c66-27b54a4726d8"
+                            },
+                            {
+                              "id": "3b1ef265-e9ba-44db-b497-9c9b1f610177",
+                              "name": "Request is missing required fields or contains invalid data.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"sources\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/withdrawal",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "withdrawal"
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-3b1ef265-e9ba-44db-b497-9c9b1f610177"
+                            },
+                            {
+                              "id": "43745136-0c22-43ba-b323-15c309ca1cda",
+                              "name": "Unauthorized \u2014 Client ID or Client Secret are missing or incorrect.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"sources\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/withdrawal",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "withdrawal"
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-43745136-0c22-43ba-b323-15c309ca1cda"
+                            },
+                            {
+                              "id": "21ef7a72-d0ad-471e-aa2f-b656019cfb46",
+                              "name": "Headless bridging is not enabled for this client (`permissionDenied`).",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"sources\": [\n    {\n      \"asset\": \"<string>\",\n      \"network\": \"<string>\"\n    }\n  ],\n  \"optimized\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/bridging/routes/withdrawal",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "bridging",
+                                    "routes",
+                                    "withdrawal"
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                              "createdAt": "2026-10-22T01:27:56.000Z",
+                              "updatedAt": "2026-10-22T01:27:56.000Z",
+                              "uid": "35240-21ef7a72-d0ad-471e-aa2f-b656019cfb46"
+                            }
+                          ],
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-592b49ff-f0c8-4044-97dc-8660854e5c03"
+                        }
+                      ],
+                      "id": "4d045b7d-4ae7-4712-af2c-7e1b6576f6bc",
+                      "createdAt": "2026-10-22T01:27:56.000Z",
+                      "updatedAt": "2026-10-22T01:27:56.000Z",
+                      "uid": "35240-4d045b7d-4ae7-4712-af2c-7e1b6576f6bc"
+                    }
+                  ],
+                  "id": "5be35337-d014-4773-92ed-f5c434c20254",
+                  "createdAt": "2026-10-22T01:27:56.000Z",
+                  "updatedAt": "2026-10-22T01:27:56.000Z",
+                  "uid": "35240-5be35337-d014-4773-92ed-f5c434c20254"
+                },
+                {
+                  "name": "address",
+                  "item": [
+                    {
+                      "name": "Create a one-time bridging deposit address for a selected origin\u2192destination\u2026",
+                      "id": "c994b7e4-34a8-4f3e-b539-cc9a5a665782",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"transactionId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/bridging/address",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "bridging",
+                            "address"
+                          ]
+                        },
+                        "description": "Returns a single-use address on the origin network for the origin asset. Funds must be\nsent to that address on that chain; Mesh detects the deposit, executes the bridge, and delivers\nto `destination.address` on the destination network.\n\n**Deposit-style (user pay-in):** discover routes with `POST /api/v1/bridging/routes/deposit`.\nThe end user sends from their wallet to the returned deposit address.\n\n**Withdrawal-style (platform pay-in):** discover routes with `POST /api/v1/bridging/routes/withdrawal`\nto pair an omnibus `origin` with the user\u2019s chosen destination. Your platform sends the origin\nasset from that omnibus wallet to the deposit address; the user\u2019s withdrawal address is `destination.address`.\n\n**Idempotency:** a `transactionId` is single-use per `userId`. While the transfer is still\npending, re-submitting the same `transactionId` + `userId` with the same origin, destination and\naddress returns the previously created address unchanged (same `transferId`, same\n`expirationTime`) rather than generating a new one, so network-error retries are safe. Re-submitting\nwith a different origin, destination or address is a `400`. Once the transfer has reached a terminal\nstate (succeeded, failed or expired), the same `transactionId` returns `409`; use a new\n`transactionId` for a new address.\n\n**Expiry:** `constraints.expirationTime` is fixed at creation (6 hours by default) and is the point at\nwhich Mesh stops tracking the address. A transfer that has not been funded by then is marked failed; a\npay-in that arrives before then is bridged and the transfer moves to succeeded as soon as it settles. Do\nnot display or use the address after `expirationTime`: the provider may still bridge funds sent\nlater, but Mesh will not track them automatically.\n\n**Minimum amount:** `constraints.minimumAmount` is the smallest pay-in (in the origin asset) Mesh\naccepts on this route: the stricter of the route's configured minimum and the platform USD floor\nconverted at the current price. It is the same value `POST /api/v1/bridging/quote` returns in its\n`constraints` and enforces with `amountBelowMinimum`. `constraints.maximumAmount` is the\nplatform USD cap converted at the current price (enforced on `/quote` with `amountExceedsMaximum`);\nthe provider's available liquidity may be lower and surfaces at quote time the same way.\n\n**Typical flow:**\n1. Discover routes (`routes/deposit` or `routes/withdrawal`) and fix `origin` + `destination`\n(destination includes the recipient withdrawal address when applicable).\n2. Call this endpoint with those values.\n3. Show the deposit address, constraints (`minimumAmount`, `expirationTime`, `singleUseAddress`),\nand warnings to whoever will broadcast the pay-in (end user or your custody system).\n4. After the pay-in is sent on-chain, Mesh completes the bridge to the destination address.\n5. Use `transferId` from `tracking` for webhooks or the transfer status API.\n\n**Important:** the deposit address is single-use; do not reuse it."
+                      },
+                      "response": [
+                        {
+                          "id": "acac12d0-93d9-4e3a-b528-3217964f70af",
+                          "name": "Bridging deposit address created or retrieved (idempotent hit).",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"transactionId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/address",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "address"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"ok\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"constraints\": {\n      \"minimumAmount\": \"<string,null>\",\n      \"maximumAmount\": \"<string,null>\",\n      \"expirationTime\": \"<integer,null-int64>\",\n      \"singleUseAddress\": \"<boolean>\"\n    },\n    \"selectedRoute\": {\n      \"bridgingAddress\": {\n        \"address\": \"<string,null>\"\n      },\n      \"destination\": {\n        \"address\": \"<string>\",\n        \"asset\": \"<string>\",\n        \"network\": \"<string>\"\n      },\n      \"origin\": {\n        \"asset\": \"<string>\",\n        \"network\": \"<string>\"\n      }\n    },\n    \"tracking\": {\n      \"transactionId\": \"<string,null>\",\n      \"transferId\": \"<uuid>\",\n      \"userId\": \"<string,null>\"\n    },\n    \"warnings\": \"<array,null>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-acac12d0-93d9-4e3a-b528-3217964f70af"
+                        },
+                        {
+                          "id": "b17ddcfb-cb06-477c-927a-ea4f87b7e19c",
+                          "name": "Request is missing required fields, the network is unknown, no route exists for the given origin/destination pair, or the `transactionId` was already used with a different origin, destination or address.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"transactionId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/address",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "address"
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-b17ddcfb-cb06-477c-927a-ea4f87b7e19c"
+                        },
+                        {
+                          "id": "a662cbfa-c18d-44f3-a6af-e97e7ea963de",
+                          "name": "Unauthorized \u2014 Client ID or Client Secret are missing or incorrect.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"transactionId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/address",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "address"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-a662cbfa-c18d-44f3-a6af-e97e7ea963de"
+                        },
+                        {
+                          "id": "c080ef9b-9a19-4270-ac2c-aa109d8d51af",
+                          "name": "Headless bridging is not enabled for this client (`permissionDenied`), or the API key does not have the write scope required for this endpoint.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"transactionId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/address",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "address"
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-c080ef9b-9a19-4270-ac2c-aa109d8d51af"
+                        },
+                        {
+                          "id": "8e7169b8-fb81-483a-a87a-0a3cb17d604c",
+                          "name": "The `transactionId` was already used for a transfer that has since completed, failed or expired. Use a new `transactionId`.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"transactionId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/address",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "address"
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-8e7169b8-fb81-483a-a87a-0a3cb17d604c"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:27:56.000Z",
+                      "updatedAt": "2026-10-22T01:27:56.000Z",
+                      "uid": "35240-c994b7e4-34a8-4f3e-b539-cc9a5a665782"
+                    }
+                  ],
+                  "id": "6f18b313-36f3-4d00-9fcd-a8f50dfa4bab",
+                  "createdAt": "2026-10-22T01:27:56.000Z",
+                  "updatedAt": "2026-10-22T01:27:56.000Z",
+                  "uid": "35240-6f18b313-36f3-4d00-9fcd-a8f50dfa4bab"
+                },
+                {
+                  "name": "quote",
+                  "item": [
+                    {
+                      "name": "Get an indicative quote for bridging a given pay-in amount on a configured\u2026",
+                      "id": "30cca1d9-f25d-4fa7-a410-6ff604830f67",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"amount\": \"<double>\",\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/bridging/quote",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "bridging",
+                            "quote"
+                          ]
+                        },
+                        "description": "Stateless: no deposit address is minted and no transfer is created. Use this while the end user is\nchoosing an amount, then call `POST /api/v1/bridging/address` once they confirm.\n\n`amount` is denominated in the `origin` asset (what will be sent to the deposit address).\nThe response returns `destination.estimatedAmount` (net of provider fees), `destination.minimumAmount`\n(the provider's indicative minimum for this quote at the configured slippage, when reported), and the fee\nlines that produced the estimate. The quote is not bound to a later `/address` call, which obtains a\nfresh quote that may differ.\n\n`constraints.minimumAmount` is the smallest pay-in Mesh accepts on this route (in the origin asset);\nan `amount` below it is rejected with `400 amountBelowMinimum` before the provider is consulted,\nand the same value is returned by `POST /api/v1/bridging/address`. `constraints.maximumAmount` is\nthe platform USD cap converted at the current price; an amount above it, or above the provider's available\nliquidity, is rejected with `400 amountExceedsMaximum`.\n\n**Important:** the estimate is indicative. The deposit address accepts any amount and the bridge is\npriced on what actually arrives, so fees and rates can move between quoting and settlement."
+                      },
+                      "response": [
+                        {
+                          "id": "eb2091a5-2bb4-4a98-9186-53e33037eec2",
+                          "name": "Quote produced.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"amount\": \"<double>\",\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/quote",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "quote"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"serverFailure\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"constraints\": {\n      \"minimumAmount\": \"<string,null>\",\n      \"maximumAmount\": \"<string,null>\"\n    },\n    \"destination\": {\n      \"address\": \"<string,null>\",\n      \"asset\": \"<string,null>\",\n      \"network\": \"<string,null>\",\n      \"estimatedAmount\": \"<double>\",\n      \"minimumAmount\": \"<number,null-double>\"\n    },\n    \"fees\": {\n      \"items\": \"<array,null>\",\n      \"totalUsd\": \"<number,null-double>\"\n    },\n    \"origin\": {\n      \"asset\": \"<string,null>\",\n      \"network\": \"<string,null>\",\n      \"amount\": \"<double>\"\n    },\n    \"warnings\": \"<array,null>\",\n    \"rate\": \"<double>\",\n    \"quotedAt\": \"<long>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-eb2091a5-2bb4-4a98-9186-53e33037eec2"
+                        },
+                        {
+                          "id": "06caed7e-8d57-431f-a36b-71584e3721e6",
+                          "name": "Request is missing required fields, the network is unknown, no route exists for the given pair, or the amount is below the minimum (`amountBelowMinimum`) or above the maximum / provider's available liquidity (`amountExceedsMaximum`).",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"amount\": \"<double>\",\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/quote",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "quote"
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-06caed7e-8d57-431f-a36b-71584e3721e6"
+                        },
+                        {
+                          "id": "969affa3-4104-4d88-ac97-7c4a8fda606f",
+                          "name": "Unauthorized \u2014 Client ID or Client Secret are missing or incorrect.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"amount\": \"<double>\",\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/quote",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "quote"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-969affa3-4104-4d88-ac97-7c4a8fda606f"
+                        },
+                        {
+                          "id": "0773f459-67ff-43f7-a806-d29bd9130091",
+                          "name": "Headless bridging is not enabled for this client (`permissionDenied`).",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"amount\": \"<double>\",\n  \"destination\": {\n    \"address\": \"<string>\",\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  },\n  \"origin\": {\n    \"asset\": \"<string>\",\n    \"network\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bridging/quote",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bridging",
+                                "quote"
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"tooManyRequest\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:27:56.000Z",
+                          "updatedAt": "2026-10-22T01:27:56.000Z",
+                          "uid": "35240-0773f459-67ff-43f7-a806-d29bd9130091"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:27:56.000Z",
+                      "updatedAt": "2026-10-22T01:27:56.000Z",
+                      "uid": "35240-30cca1d9-f25d-4fa7-a410-6ff604830f67"
+                    }
+                  ],
+                  "id": "a6956f61-fe8e-4f43-95f4-b1cdb008f4a8",
+                  "createdAt": "2026-10-22T01:27:56.000Z",
+                  "updatedAt": "2026-10-22T01:27:56.000Z",
+                  "uid": "35240-a6956f61-fe8e-4f43-95f4-b1cdb008f4a8"
+                }
+              ],
+              "id": "a433fdf5-0012-48ad-acd7-2e5240143c61",
+              "createdAt": "2026-10-22T01:27:56.000Z",
+              "updatedAt": "2026-10-22T01:27:56.000Z",
+              "uid": "35240-a433fdf5-0012-48ad-acd7-2e5240143c61"
+            }
+          ],
+          "id": "b396c302-7db0-414b-94b1-e359ca643d34",
+          "createdAt": "2026-10-22T01:27:56.000Z",
+          "updatedAt": "2026-10-22T01:27:56.000Z",
+          "uid": "35240-b396c302-7db0-414b-94b1-e359ca643d34"
+        }
+      ],
+      "id": "5c6b5886-965c-4a8c-96ba-27bdfa7fa9ff",
+      "createdAt": "2026-10-22T01:27:56.000Z",
+      "updatedAt": "2026-10-22T01:27:56.000Z",
+      "uid": "35240-5c6b5886-965c-4a8c-96ba-27bdfa7fa9ff"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Secret",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://integration-api.meshconnect.com"
+    }
+  ]
+}

@@ -1,0 +1,917 @@
+{
+  "info": {
+    "_postman_id": "ac9b519a-89b2-4a59-9e39-6aef045a3f0f",
+    "name": "Mesh Connect Integration Blockchain Query API",
+    "description": "Mesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-22T01:27:36.000Z",
+    "updatedAt": "2026-10-22T01:27:36.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-ac9b519a-89b2-4a59-9e39-6aef045a3f0f"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "catalog",
+              "item": [
+                {
+                  "name": "solana",
+                  "item": [
+                    {
+                      "name": "getLatestBlockhash",
+                      "item": [
+                        {
+                          "name": "Create api catalog solana get latest blockhash",
+                          "id": "4e0b3bc5-e90d-4c38-8f0d-6069417cbc0e",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/catalog/solana/getLatestBlockhash?chainId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "catalog",
+                                "solana",
+                                "getLatestBlockhash"
+                              ],
+                              "query": [
+                                {
+                                  "key": "chainId",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "7864249d-fad6-4b31-8eba-60bb72edba20",
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/getLatestBlockhash?chainId=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "getLatestBlockhash"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"permissionDenied\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": \"<string,null>\"\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-7864249d-fad6-4b31-8eba-60bb72edba20"
+                            },
+                            {
+                              "id": "f8c87ed1-3f3b-4dee-bd23-1fdfb26ee51b",
+                              "name": "Bad Request",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/getLatestBlockhash?chainId=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "getLatestBlockhash"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string,null>\",\n  \"title\": \"<string,null>\",\n  \"status\": \"<integer,null>\",\n  \"detail\": \"<string,null>\",\n  \"instance\": \"<string,null>\",\n  \"ut_f\": {}\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-f8c87ed1-3f3b-4dee-bd23-1fdfb26ee51b"
+                            },
+                            {
+                              "id": "ca326af0-9362-419c-8e8c-bc22a3c14fb5",
+                              "name": "Internal Server Error",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/getLatestBlockhash?chainId=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "getLatestBlockhash"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-ca326af0-9362-419c-8e8c-bc22a3c14fb5"
+                            }
+                          ],
+                          "createdAt": "2026-10-22T01:27:36.000Z",
+                          "updatedAt": "2026-10-22T01:27:36.000Z",
+                          "uid": "35240-4e0b3bc5-e90d-4c38-8f0d-6069417cbc0e"
+                        }
+                      ],
+                      "id": "2e359ba1-24ef-47fb-bf72-531ba8227bdf",
+                      "createdAt": "2026-10-22T01:27:36.000Z",
+                      "updatedAt": "2026-10-22T01:27:36.000Z",
+                      "uid": "35240-2e359ba1-24ef-47fb-bf72-531ba8227bdf"
+                    },
+                    {
+                      "name": "getTokenProgram",
+                      "item": [
+                        {
+                          "name": "Create api catalog solana get token program",
+                          "id": "e37143f3-1345-46c3-a23c-d177670c1a2e",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/catalog/solana/getTokenProgram?chainId=<string>&token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "catalog",
+                                "solana",
+                                "getTokenProgram"
+                              ],
+                              "query": [
+                                {
+                                  "key": "chainId",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "token",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "6d00d073-d5c8-4c1d-addc-ec9fc360e79e",
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/getTokenProgram?chainId=<string>&token=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "getTokenProgram"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "token",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"permissionDenied\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": \"<string,null>\"\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-6d00d073-d5c8-4c1d-addc-ec9fc360e79e"
+                            },
+                            {
+                              "id": "a0971941-d611-4a8b-aa9b-bccc8f340d24",
+                              "name": "Bad Request",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/getTokenProgram?chainId=<string>&token=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "getTokenProgram"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "token",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string,null>\",\n  \"title\": \"<string,null>\",\n  \"status\": \"<integer,null>\",\n  \"detail\": \"<string,null>\",\n  \"instance\": \"<string,null>\",\n  \"ut_f\": {}\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-a0971941-d611-4a8b-aa9b-bccc8f340d24"
+                            },
+                            {
+                              "id": "907a6f1e-2c9e-488c-ba53-6ed8a6b32e1b",
+                              "name": "Internal Server Error",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/getTokenProgram?chainId=<string>&token=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "getTokenProgram"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "token",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-907a6f1e-2c9e-488c-ba53-6ed8a6b32e1b"
+                            }
+                          ],
+                          "createdAt": "2026-10-22T01:27:36.000Z",
+                          "updatedAt": "2026-10-22T01:27:36.000Z",
+                          "uid": "35240-e37143f3-1345-46c3-a23c-d177670c1a2e"
+                        }
+                      ],
+                      "id": "54a47d10-2467-43c8-bddc-25c098956578",
+                      "createdAt": "2026-10-22T01:27:36.000Z",
+                      "updatedAt": "2026-10-22T01:27:36.000Z",
+                      "uid": "35240-54a47d10-2467-43c8-bddc-25c098956578"
+                    },
+                    {
+                      "name": "isTokenAddressCreated",
+                      "item": [
+                        {
+                          "name": "Create api catalog solana is token address created",
+                          "id": "2b0bdae6-4670-43fd-beaa-afee6ef937e0",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/catalog/solana/isTokenAddressCreated?chainId=<string>&address=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "catalog",
+                                "solana",
+                                "isTokenAddressCreated"
+                              ],
+                              "query": [
+                                {
+                                  "key": "chainId",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "address",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "c1122599-b4e0-43fc-8a69-39917718d1b6",
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/isTokenAddressCreated?chainId=<string>&address=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "isTokenAddressCreated"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "address",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"permissionDenied\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": \"<string,null>\"\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-c1122599-b4e0-43fc-8a69-39917718d1b6"
+                            },
+                            {
+                              "id": "6aad5874-9930-434f-be92-3720dcc90829",
+                              "name": "Bad Request",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/isTokenAddressCreated?chainId=<string>&address=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "isTokenAddressCreated"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "address",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string,null>\",\n  \"title\": \"<string,null>\",\n  \"status\": \"<integer,null>\",\n  \"detail\": \"<string,null>\",\n  \"instance\": \"<string,null>\",\n  \"ut_f\": {}\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-6aad5874-9930-434f-be92-3720dcc90829"
+                            },
+                            {
+                              "id": "9363753f-be55-47d2-bd40-50201bddf6ac",
+                              "name": "Internal Server Error",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/solana/isTokenAddressCreated?chainId=<string>&address=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "solana",
+                                    "isTokenAddressCreated"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "chainId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "address",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-9363753f-be55-47d2-bd40-50201bddf6ac"
+                            }
+                          ],
+                          "createdAt": "2026-10-22T01:27:36.000Z",
+                          "updatedAt": "2026-10-22T01:27:36.000Z",
+                          "uid": "35240-2b0bdae6-4670-43fd-beaa-afee6ef937e0"
+                        }
+                      ],
+                      "id": "afc77af3-abe4-4e0b-bbdf-cd0d742979ca",
+                      "createdAt": "2026-10-22T01:27:36.000Z",
+                      "updatedAt": "2026-10-22T01:27:36.000Z",
+                      "uid": "35240-afc77af3-abe4-4e0b-bbdf-cd0d742979ca"
+                    }
+                  ],
+                  "id": "7908f972-4809-479d-a846-ae70d1479238",
+                  "createdAt": "2026-10-22T01:27:36.000Z",
+                  "updatedAt": "2026-10-22T01:27:36.000Z",
+                  "uid": "35240-7908f972-4809-479d-a846-ae70d1479238"
+                },
+                {
+                  "name": "ton",
+                  "item": [
+                    {
+                      "name": "getTokenInfo",
+                      "item": [
+                        {
+                          "name": "Create api catalog ton get token info",
+                          "id": "10448c54-4ac8-4adf-96ef-c2b5583f3b5f",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/catalog/ton/getTokenInfo?caipNetworkId=<string>&tokenAddress=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "catalog",
+                                "ton",
+                                "getTokenInfo"
+                              ],
+                              "query": [
+                                {
+                                  "key": "caipNetworkId",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "tokenAddress",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "0de7231e-13d7-4767-92ae-c20a26724443",
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/ton/getTokenInfo?caipNetworkId=<string>&tokenAddress=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "ton",
+                                    "getTokenInfo"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "caipNetworkId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "tokenAddress",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"status\": \"conflict\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"totalSupply\": {\n      \"isPowerOfTwo\": \"<boolean>\",\n      \"isZero\": \"<boolean>\",\n      \"isOne\": \"<boolean>\",\n      \"isEven\": \"<boolean>\",\n      \"sign\": \"<integer>\"\n    },\n    \"mintable\": \"<boolean,null>\",\n    \"adminAddress\": \"<string,null>\",\n    \"jettonContent\": {\n      \"type\": \"<string,null>\",\n      \"data\": {\n        \"uri\": \"<string,null>\",\n        \"decimals\": {\n          \"isPowerOfTwo\": \"<boolean>\",\n          \"isZero\": \"<boolean>\",\n          \"isOne\": \"<boolean>\",\n          \"isEven\": \"<boolean>\",\n          \"sign\": \"<integer>\"\n        }\n      }\n    },\n    \"jettonWalletCode\": \"<string,null>\",\n    \"contractType\": \"<string,null>\"\n  }\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-0de7231e-13d7-4767-92ae-c20a26724443"
+                            },
+                            {
+                              "id": "dbe25bf6-3696-41a2-ba61-fc1cde42cf92",
+                              "name": "Bad Request",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/ton/getTokenInfo?caipNetworkId=<string>&tokenAddress=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "ton",
+                                    "getTokenInfo"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "caipNetworkId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "tokenAddress",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string,null>\",\n  \"title\": \"<string,null>\",\n  \"status\": \"<integer,null>\",\n  \"detail\": \"<string,null>\",\n  \"instance\": \"<string,null>\",\n  \"ut_f\": {}\n}",
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-dbe25bf6-3696-41a2-ba61-fc1cde42cf92"
+                            },
+                            {
+                              "id": "5969c97c-de1d-48ad-ba4d-057488746ec1",
+                              "name": "Internal Server Error",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "X-Client-Secret",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/catalog/ton/getTokenInfo?caipNetworkId=<string>&tokenAddress=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "catalog",
+                                    "ton",
+                                    "getTokenInfo"
+                                  ],
+                                  "query": [
+                                    {
+                                      "key": "caipNetworkId",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "tokenAddress",
+                                      "value": "<string>"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-22T01:27:36.000Z",
+                              "updatedAt": "2026-10-22T01:27:36.000Z",
+                              "uid": "35240-5969c97c-de1d-48ad-ba4d-057488746ec1"
+                            }
+                          ],
+                          "createdAt": "2026-10-22T01:27:36.000Z",
+                          "updatedAt": "2026-10-22T01:27:36.000Z",
+                          "uid": "35240-10448c54-4ac8-4adf-96ef-c2b5583f3b5f"
+                        }
+                      ],
+                      "id": "87996118-1ff9-4a77-b8ed-474e4c342d94",
+                      "createdAt": "2026-10-22T01:27:36.000Z",
+                      "updatedAt": "2026-10-22T01:27:36.000Z",
+                      "uid": "35240-87996118-1ff9-4a77-b8ed-474e4c342d94"
+                    }
+                  ],
+                  "id": "0c8d0435-2291-41dd-a7b3-124e02203ac3",
+                  "createdAt": "2026-10-22T01:27:36.000Z",
+                  "updatedAt": "2026-10-22T01:27:36.000Z",
+                  "uid": "35240-0c8d0435-2291-41dd-a7b3-124e02203ac3"
+                }
+              ],
+              "id": "5ccd23dc-3597-4235-b264-8967d172b5ea",
+              "createdAt": "2026-10-22T01:27:36.000Z",
+              "updatedAt": "2026-10-22T01:27:36.000Z",
+              "uid": "35240-5ccd23dc-3597-4235-b264-8967d172b5ea"
+            }
+          ],
+          "id": "83a81506-b475-4638-a0d0-87dfde36f8a2",
+          "createdAt": "2026-10-22T01:27:36.000Z",
+          "updatedAt": "2026-10-22T01:27:36.000Z",
+          "uid": "35240-83a81506-b475-4638-a0d0-87dfde36f8a2"
+        }
+      ],
+      "id": "959337f1-a723-4b31-bae4-19084e8ee93e",
+      "createdAt": "2026-10-22T01:27:36.000Z",
+      "updatedAt": "2026-10-22T01:27:36.000Z",
+      "uid": "35240-959337f1-a723-4b31-bae4-19084e8ee93e"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Secret",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://integration-api.meshconnect.com"
+    }
+  ]
+}

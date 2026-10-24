@@ -1,539 +1,592 @@
 {
+  "info": {
+    "_postman_id": "4d1c09ce-aebe-4082-87b7-fe7b16d0d5ad",
+    "name": "Mesh Connect Integration Balance API",
+    "description": "Mesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-22T01:26:56.000Z",
+    "updatedAt": "2026-10-22T01:26:56.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-4d1c09ce-aebe-4082-87b7-fe7b16d0d5ad"
+  },
   "item": [
     {
-      "id": "c7920eb0-2607-4e01-9f37-40a032f8f0c1",
-      "name": "Balance",
-      "description": {
-        "content": "\n\n### Supported integrations:\n```Robinhood```\n```ETrade```\n```Alpaca```\n```WeBull```\n```Stash```\n```InteractiveBrokers```\n```Public```\n```Coinbase```\n```Kraken```\n```CoinbasePro```\n```CryptoCom```\n```Binance```\n```Gemini```\n```OkCoin```\n```KuCoin```\n```Etoro```\n```CexIo```\n```BinanceInternational```\n```Bitstamp```\n```GateIo```\n```Acorns```\n```Okx```\n```BitFlyer```\n```Coinlist```\n```Huobi```\n```Bitfinex```\n```KrakenDirect```\n```Vanguard```\n```BinanceInternationalDirect```\n```BitfinexDirect```\n```Bybit```\n```Paxos```\n```CoinbasePrime```\n",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "89ba4d91-2fdb-4856-b9a5-367433d845b6",
-          "name": "Get account balance",
-          "request": {
-            "name": "Get account balance",
-            "description": {
-              "content": "Get real-time account fiat balances.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "balance",
-                "get"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"<string>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "v1",
+          "item": [
             {
-              "id": "be226197-aa1c-4526-ac6d-af35b49a8b36",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "get"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "balance",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "get",
+                  "item": [
+                    {
+                      "name": "Get fiat holdings",
+                      "id": "1fd8d9bf-d0c1-49e8-8881-7643cb0de70e",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"bitFlyer\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/balance/get",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "balance",
+                            "get"
+                          ]
+                        },
+                        "description": "Get real-time account fiat balances."
+                      },
+                      "response": [
+                        {
+                          "id": "de0fd402-12ff-4ddd-830e-243dccb4a6d5",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"bitFlyer\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/get",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "get"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"balances\": \"<array,null>\",\n    \"totalCashUsdValue\": \"<number,null-double>\",\n    \"totalBuyingPowerUsdValue\": \"<number,null-double>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-de0fd402-12ff-4ddd-830e-243dccb4a6d5"
+                        },
+                        {
+                          "id": "a1966706-1960-4063-aa63-c52addff1f99",
+                          "name": "Bad Request",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"bitFlyer\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/get",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "get"
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-a1966706-1960-4063-aa63-c52addff1f99"
+                        },
+                        {
+                          "id": "32651da6-e8f8-40bb-9bb2-d6f9ec4ab664",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"bitFlyer\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/get",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "get"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-32651da6-e8f8-40bb-9bb2-d6f9ec4ab664"
+                        },
+                        {
+                          "id": "9af07301-3177-455a-bdc5-2426dca05a8c",
+                          "name": "The API key used does not have read permission to call this Mesh endpoint.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"authToken\": \"<string>\",\n  \"type\": \"bitFlyer\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/get",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "get"
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-9af07301-3177-455a-bdc5-2426dca05a8c"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:26:57.000Z",
+                      "updatedAt": "2026-10-22T01:26:57.000Z",
+                      "uid": "35240-1fd8d9bf-d0c1-49e8-8881-7643cb0de70e"
+                    }
+                  ],
+                  "id": "ecd4523e-99ac-4b94-a305-eb21fd000298",
+                  "createdAt": "2026-10-22T01:26:57.000Z",
+                  "updatedAt": "2026-10-22T01:26:57.000Z",
+                  "uid": "35240-ecd4523e-99ac-4b94-a305-eb21fd000298"
+                },
+                {
+                  "name": "portfolio",
+                  "item": [
+                    {
+                      "name": "Get aggregated portfolio fiat balances",
+                      "id": "891cff8f-89c8-4448-a38d-0c092740cd32",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/balance/portfolio?UserId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "balance",
+                            "portfolio"
+                          ],
+                          "query": [
+                            {
+                              "description": "End user ID to get the aggregated portfolio for.",
+                              "key": "UserId",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "description": "Get cached aggregated fiat balances from all connected integrations."
+                      },
+                      "response": [
+                        {
+                          "id": "e5805485-ec25-4b83-a3fd-7f66f7f45aaf",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/portfolio?UserId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "portfolio"
+                              ],
+                              "query": [
+                                {
+                                  "description": "End user ID to get the aggregated portfolio for.",
+                                  "key": "UserId",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"ok\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  },\n  \"content\": {\n    \"fiatBalances\": \"<array,null>\"\n  }\n}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-e5805485-ec25-4b83-a3fd-7f66f7f45aaf"
+                        },
+                        {
+                          "id": "384f6119-5352-4098-8fe1-b16a82d38343",
+                          "name": "Bad Request",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/portfolio?UserId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "portfolio"
+                              ],
+                              "query": [
+                                {
+                                  "description": "End user ID to get the aggregated portfolio for.",
+                                  "key": "UserId",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"status\": \"unavailableForLegalReasons\",\n  \"message\": \"<string,null>\",\n  \"displayMessage\": \"<string,null>\",\n  \"errorHash\": \"<string,null>\",\n  \"teamCode\": \"<string,null>\",\n  \"errorType\": \"<string,null>\",\n  \"errorData\": {\n    \"readOnly\": true\n  }\n}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-384f6119-5352-4098-8fe1-b16a82d38343"
+                        },
+                        {
+                          "id": "76c88f53-4a0d-4e7b-86bd-951696aa1597",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/portfolio?UserId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "portfolio"
+                              ],
+                              "query": [
+                                {
+                                  "description": "End user ID to get the aggregated portfolio for.",
+                                  "key": "UserId",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-76c88f53-4a0d-4e7b-86bd-951696aa1597"
+                        },
+                        {
+                          "id": "c31d1d5a-01ff-405f-abc3-fd89a37339de",
+                          "name": "The API key used does not have read permission to call this Mesh endpoint.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-Client-Secret",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/balance/portfolio?UserId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "balance",
+                                "portfolio"
+                              ],
+                              "query": [
+                                {
+                                  "description": "End user ID to get the aggregated portfolio for.",
+                                  "key": "UserId",
+                                  "value": "<string>"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-10-22T01:26:57.000Z",
+                          "updatedAt": "2026-10-22T01:26:57.000Z",
+                          "uid": "35240-c31d1d5a-01ff-405f-abc3-fd89a37339de"
+                        }
+                      ],
+                      "createdAt": "2026-10-22T01:26:57.000Z",
+                      "updatedAt": "2026-10-22T01:26:57.000Z",
+                      "uid": "35240-891cff8f-89c8-4448-a38d-0c092740cd32"
+                    }
+                  ],
+                  "id": "97e74175-82e1-44da-8f5e-9339577876ae",
+                  "createdAt": "2026-10-22T01:26:57.000Z",
+                  "updatedAt": "2026-10-22T01:26:57.000Z",
+                  "uid": "35240-97e74175-82e1-44da-8f5e-9339577876ae"
                 }
               ],
-              "body": "{\n  \"content\": {\n    \"balances\": [\n      {\n        \"cash\": 158.5,\n        \"buyingPower\": 258.5,\n        \"currencyCode\": \"USD\"\n      },\n      {\n        \"cash\": 10,\n        \"buyingPower\": 10,\n        \"currencyCode\": \"EUR\"\n      }\n    ],\n    \"totalCashUsdValue\": 10,\n    \"totalBuyingPowerUsdValue\": 10\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2d712092-cfaf-48e6-8c07-bedf45f7ce0e",
-              "name": "Bad Request",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "get"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2470ff5d-cb7f-4c9f-a937-9524c785a6ff",
-              "name": "Unauthorized",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "get"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ce5be157-1f7c-47f5-a20f-4a1c2a41a650",
-              "name": "The API key used does not have read permission to call this Mesh endpoint.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "get"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"authToken\": \"Secret authentication token\",\n  \"type\": \"binanceInternationalDirect\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "a2214df7-0238-4705-bf42-2b18107800e9",
+              "createdAt": "2026-10-22T01:26:57.000Z",
+              "updatedAt": "2026-10-22T01:26:57.000Z",
+              "uid": "35240-a2214df7-0238-4705-bf42-2b18107800e9"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "b88f2064-d94a-4b53-87c1-d95df445c137",
-          "name": "Get aggregated portfolio fiat balances",
-          "request": {
-            "name": "Get aggregated portfolio fiat balances",
-            "description": {
-              "content": "Get cached aggregated fiat balances from all connected integrations.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v1",
-                "balance",
-                "portfolio"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "UserId",
-                  "value": "<string>",
-                  "description": "End user ID to get the aggregated portfolio for."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "922129e5-e527-436a-8296-d9a858c29bc5",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "portfolio"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"content\": {\n    \"fiatBalances\": [\n      {\n        \"symbol\": \"USD\",\n        \"cash\": 3.099,\n        \"buyingPower\": 3.099\n      },\n      {\n        \"symbol\": \"EUR\",\n        \"cash\": -102.88,\n        \"buyingPower\": 1293.596\n      }\n    ]\n  },\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"errorType\": \"\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3b13fbfe-5b54-4d7b-b30c-809351d7c455",
-              "name": "Bad Request",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "portfolio"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"status\": \"badRequest\",\n  \"message\": \"Error message\",\n  \"displayMessage\": \"Optional display message\",\n  \"errorType\": \"missingField\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e49d1772-75f3-4cb6-9189-816b5add315b",
-              "name": "Unauthorized",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "portfolio"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "46685ae4-d4c3-40b2-bf60-3421c9ecdd3a",
-              "name": "The API key used does not have read permission to call this Mesh endpoint.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "balance",
-                    "portfolio"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "UserId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "X-Client-Secret",
-                    "value": "<API Key>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "c9567071-8bbf-43f5-8e0d-59ebde40bb22",
+          "createdAt": "2026-10-22T01:26:57.000Z",
+          "updatedAt": "2026-10-22T01:26:57.000Z",
+          "uid": "35240-c9567071-8bbf-43f5-8e0d-59ebde40bb22"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "type": "string",
-      "value": "https://integration-api.meshconnect.com",
-      "key": "baseUrl"
+      "id": "e5ae725f-4e01-46c5-ae76-c3eda2ee14b5",
+      "createdAt": "2026-10-22T01:26:57.000Z",
+      "updatedAt": "2026-10-22T01:26:57.000Z",
+      "uid": "35240-e5ae725f-4e01-46c5-ae76-c3eda2ee14b5"
     }
   ],
   "auth": {
@@ -541,25 +594,25 @@
     "apikey": [
       {
         "key": "key",
-        "value": "X-Client-Secret"
+        "value": "X-Client-Secret",
+        "type": "string"
       },
       {
         "key": "value",
-        "value": "{{apiKey}}"
+        "value": "{{apiKey}}",
+        "type": "string"
       },
       {
         "key": "in",
-        "value": "header"
+        "value": "header",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "b67f9cc5-1579-4c3c-ae39-4b189ce9a394",
-    "name": "Mesh Connect Integration Assets Balance API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "\nMesh allows users to connect accounts of financial institutions,\ncrypto exchanges, and self-custody wallets. Mesh handles credential\nvalidation, MFA, and error handling for each integration. After\nan account is connected, Mesh allows client applications to read holdings,\ntransaction history and balances and execute crypto transfers (with user approval).",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://integration-api.meshconnect.com"
     }
-  }
+  ]
 }
