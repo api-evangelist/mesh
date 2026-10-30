@@ -64,6 +64,137 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Mesh is a company surfaced as a portfolio company of anthemis, general-catalyst and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Mesh is the first global crypto payments network, connecting hundreds of exchanges, wallets, and financial platforms into a single, unified infrastructure layer so businesses can let users pay, get paid, deposit, and transfer digital assets from any wallet on any chain. The Mesh Connect Integration API lets developers programmatically generate Link tokens for Mesh's hosted connection UX, initiate managed crypto transfers (deposit, payment, onramp, withdrawal), read holdings, balances, and transaction history across connected exchange and self-custody accounts, verify wallet ownership, and receive HMAC-signed transfer-status webhooks. Mesh handles credential validation, MFA, OAuth, and per-integration error handling on the developer's behalf. Formerly Front Finance. SOC 2 Type II certified. Backed by Anthemis and General Catalyst.
 
-Backed by: anthemis, general-catalyst
+**Areas:** Company · Cryptocurrency · Payments · Digital Assets · Financial Services · Wallets · Exchange · Transfers · Stablecoins · Embedded Finance · Fintech · On-Ramp
+
+## Mesh on APIs.io
+
+Everything profiled for Mesh is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/mesh/](https://apis.io/providers/mesh/)** — or go straight to one of the APIs or properties below.
+
+### APIs (9)
+
+- [Mesh Assets API](https://apis.io/apis/mesh/mesh-assets-api/) — The Assets API from Mesh — 2 operation(s) for assets.
+- [Mesh Balance API](https://apis.io/apis/mesh/mesh-balance-api/) — ### Supported integrations: ```Robinhood``` ```ETrade``` ```Alpaca``` ```WeBull``` ```Stash``` ```InteractiveBrokers``` ```Public``` ```Coinbase```…
+- [Mesh BrokerAccountDetail API](https://apis.io/apis/mesh/mesh-brokeraccountdetail-api/) — The BrokerAccountDetail API from Mesh — 1 operation(s) for brokeraccountdetail.
+- [Mesh Managed Account Authentication API](https://apis.io/apis/mesh/mesh-managed-account-authentication-api/) — The recommended approach for account authentication. Front manages multiple authentication flows and handles all authentication steps such as MFA codes and…
+- [Mesh Managed Transfers API](https://apis.io/apis/mesh/mesh-managed-transfers-api/) — The Managed Transfers API from Mesh — 10 operation(s) for managed transfers.
+- [Mesh Portfolio API](https://apis.io/apis/mesh/mesh-portfolio-api/) — ### Supported integrations: ```Robinhood``` ```ETrade``` ```Alpaca``` ```WeBull``` ```Stash``` ```InteractiveBrokers``` ```Public``` ```Coinbase```…
+- [Mesh Self Managed Account Authentication API](https://apis.io/apis/mesh/mesh-self-managed-account-authentication-api/) — Not recommended approach. Using this approach, the API client is responsible for handling multiple authentication flows and supporting future updates and…
+- [Mesh Transactions API](https://apis.io/apis/mesh/mesh-transactions-api/) — ### Supported integrations: ```Robinhood``` ```ETrade``` ```Alpaca``` ```WeBull``` ```Stash``` ```InteractiveBrokers``` ```Public``` ```Coinbase```…
+- [Mesh Transfers API](https://apis.io/apis/mesh/mesh-transfers-api/) — ### Supported integrations: ```Robinhood``` ```Coinbase``` ```Kraken``` ```CoinbasePro``` ```CryptoCom``` ```Binance``` ```Gemini``` ```OkCoin```…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Mesh Transfers Webhooks](https://apis.io/asyncapis/mesh/mesh-transfers-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [mesh](https://apis.io/servers/mesh/mesh/)
+
+#### Collections (9)
+
+Postman and Open Collection request collections.
+
+- [Mesh Connect Integration Assets API](https://apis.io/collections/mesh/open-mesh-assets-api/)
+- [Mesh Connect Integration Assets Balance API](https://apis.io/collections/mesh/open-mesh-balance-api/)
+- [Mesh Connect Integration Assets BrokerAccountDetail API](https://apis.io/collections/mesh/open-mesh-brokeraccountdetail-api/)
+- [Mesh Connect Integration Assets Managed Account Authentication API](https://apis.io/collections/mesh/open-mesh-managed-account-authentication-api/)
+- [Mesh Connect Integration Assets Managed Transfers API](https://apis.io/collections/mesh/open-mesh-managed-transfers-api/)
+- [Mesh Connect Integration Assets Portfolio API](https://apis.io/collections/mesh/open-mesh-portfolio-api/)
+- [Mesh Connect Integration Assets Self Managed Account Authentication API](https://apis.io/collections/mesh/open-mesh-self-managed-account-authentication-api/)
+- [Mesh Connect Integration Assets Transactions API](https://apis.io/collections/mesh/open-mesh-transactions-api/)
+- [Mesh Connect Integration Assets Transfers API](https://apis.io/collections/mesh/open-mesh-transfers-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Mesh Integration Api Overlay](https://apis.io/overlays/mesh/mesh-integration-api-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Mesh Authentication](https://apis.io/security/mesh/mesh-authentication/)
+- [Mesh Domain Security](https://apis.io/security/mesh/mesh-domain-security/)
+- [Mesh Trust Center](https://apis.io/security/mesh/mesh-trust-center/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://meshconnect.com)
+- [Documentation](https://docs.meshconnect.com/overview)
+- [Getting started](https://docs.meshconnect.com/build/15min-quickstart)
+- [API reference](https://docs.meshconnect.com/api-reference/managed-transfers/get-integrations)
+- [Blog](https://www.meshpay.com/blog)
+- [Compliance](https://www.meshpay.com/security)
+- [Trust centre](https://www.meshpay.com/security)
+- [Terms of service](https://www.meshpay.com/terms-of-service)
+- [Privacy policy](https://www.meshpay.com/privacy-policy)
+- [GitHub](https://github.com/FrontFin)
+- [Status](https://status.meshconnect.com/)
+
+## API Evangelist rating
+
+**Kin Score 52.4** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 58.8 |
+| Contract governance | 18.2 |
+| Operational transparency | 42.1 |
+| Developer ergonomics | 68.5 |
+| Access clarity | 43.4 |
+
+**Agent readiness 34.6** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 26.8** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/mesh/](https://apis.io/providers/mesh/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Mesh: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/mesh/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
